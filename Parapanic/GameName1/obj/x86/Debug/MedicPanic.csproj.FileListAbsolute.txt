@@ -23,3 +23,5 @@ C:\Users\mama\Documents\Visual Studio 2013\Projects\GameName1\GameName1\bin\Wind
 C:\Users\mama\Documents\Visual Studio 2013\Projects\GameName1\GameName1\obj\x86\Debug\MedicPanic.csprojResolveAssemblyReference.cache
 C:\Users\mama\Documents\Visual Studio 2013\Projects\GameName1\GameName1\obj\x86\Debug\GameName1.exe
 C:\Users\mama\Documents\Visual Studio 2013\Projects\GameName1\GameName1\obj\x86\Debug\GameName1.pdb
+C:\Users\mama\Documents\GitHub\Parapanic\Parapanic\GameName1\obj\x86\Debug\GameName1.exe
+C:\Users\mama\Documents\GitHub\Parapanic\Parapanic\GameName1\obj\x86\Debug\GameName1.pdb

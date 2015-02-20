@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 #endregion
 
-namespace MedicPanic
+namespace Parapanic
 {
 #if WINDOWS || LINUX
     /// <summary>
@@ -18,7 +18,7 @@ namespace MedicPanic
         [STAThread]
         static void Main()
         {
-            using (var game = new MedicPanic())
+            using (var game = new Parapanic())
                 game.Run();
         }
     }

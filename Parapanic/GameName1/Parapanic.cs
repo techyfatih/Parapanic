@@ -9,17 +9,17 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 #endregion
 
-namespace MedicPanic
+namespace Parapanic
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class MedicPanic : Game
+    public class Parapanic : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public MedicPanic()
+        public Parapanic()
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
