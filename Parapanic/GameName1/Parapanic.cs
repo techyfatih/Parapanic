@@ -18,6 +18,8 @@ namespace Parapanic
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private Ambulance ambulance;
+        private Texture2D ambulancePic;
 
         public Parapanic()
             : base()
@@ -35,6 +37,7 @@ namespace Parapanic
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            ambulance = new Ambulance(100, 100, 50, 50, 300, 10, 0.1, 0.95);
 
             base.Initialize();
         }
@@ -47,6 +50,8 @@ namespace Parapanic
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            ambulancePic = Content.Load<Texture2D>("Ambulance.png");
 
             // TODO: use this.Content to load your game content here
         }
@@ -69,6 +74,7 @@ namespace Parapanic
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            ambulance.Update(gameTime);
 
             // TODO: Add your update logic here
 
@@ -84,6 +90,11 @@ namespace Parapanic
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(ambulancePic, ambulance.getRectangle(), Color.White);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
