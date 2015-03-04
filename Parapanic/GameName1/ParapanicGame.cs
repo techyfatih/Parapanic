@@ -37,6 +37,7 @@ namespace Parapanic
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            this.IsMouseVisible = true;
             ambulance = new Ambulance(100, 100, 50, 50, 300, 10, 0.1, 0.95);
 
             base.Initialize();
@@ -72,7 +73,7 @@ namespace Parapanic
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             ambulance.Update(gameTime);
 
@@ -91,8 +92,10 @@ namespace Parapanic
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+            Vector2 origin = new Vector2(25,25);
 
-            spriteBatch.Draw(ambulancePic, ambulance.getRectangle(), Color.White);
+            //spriteBatch.Draw(ambulancePic, ambulance.getRectangle(), Color.White);
+            spriteBatch.Draw(ambulancePic, ambulance.getVector(), null, Color.White, MathHelper.ToRadians((float)ambulance.getDirection()), origin, 1.0f, SpriteEffects.None, 1.0f);
 
             spriteBatch.End();
 

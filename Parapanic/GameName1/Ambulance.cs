@@ -41,6 +41,11 @@ namespace Parapanic
             return carRect;
         }
 
+        public Vector2 getVector()
+        {
+            return new Vector2(carRect.X, carRect.Y);
+        }
+
         public double getDirection()
         {
             return direction;
@@ -104,7 +109,7 @@ namespace Parapanic
 
             direction = NormAngle(direction);
 
-            //direction = mouseDirection;
+            direction = mouseDirection;
 
 
 
