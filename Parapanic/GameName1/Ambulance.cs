@@ -98,18 +98,19 @@ namespace Parapanic
             if (Math.Abs(mouseDirection - direction) > turnrate)
             {
                 if (Math.Abs(NormAngle(mouseDirection + 180) - direction) < 180)
+                //if(Math.Abs(mouseDirection-direction) < 180)
                 {
-                    direction += turnrate;
+                    direction += (direction > 180)?turnrate:-turnrate;
                 }
                 else
                 {
-                    direction -= turnrate;
+                    direction -= (direction > 180)?turnrate:-turnrate;
                 }
             }
 
             direction = NormAngle(direction);
 
-            direction = mouseDirection;
+            //direction = mouseDirection;
 
 
 
