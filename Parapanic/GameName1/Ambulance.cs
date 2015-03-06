@@ -93,18 +93,25 @@ namespace Parapanic
             //mouseDirection = MathHelper.ToDegrees((float)(Math.Atan2((Mouse.GetState().Y - (carRect.Y + carRect.Height + 500)), (Mouse.GetState().X - (carRect.X + carRect.Width + 500)))));
 
             mouseDirection = NormAngle(mouseDirection);
-
+            Console.WriteLine(direction);
 
             if (Math.Abs(mouseDirection - direction) > turnrate)
             {
-                if (Math.Abs(NormAngle(mouseDirection + 180) - direction) < 180)
+                double refDir = direction;
+                if (direction >= 180)
+                {
+                    refDir -= 180;
+                    mouseDirection = NormAngle(mouseDirection-180);
+                }
+                if (mouseDirection > refDir && mouseDirection < refDir + 180)
+                //if(Math.Abs(mouseDirection - direction) < Math.Abs(mouseDirection - 360 + direction))
                 //if(Math.Abs(mouseDirection-direction) < 180)
                 {
-                    direction += (direction > 180)?turnrate:-turnrate;
+                    direction += turnrate;//(direction > 180)?turnrate:-turnrate;
                 }
                 else
                 {
-                    direction -= (direction > 180)?turnrate:-turnrate;
+                    direction -= turnrate;//(direction > 180)?turnrate:-turnrate;
                 }
             }
 
