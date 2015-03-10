@@ -21,7 +21,7 @@ namespace Parapanic
         public double mouseDirection;
         double speed = 0;
 
-        double turnrate = 3;
+        double maxTurnrate = 3;
 
 
         public Ambulance(int X, int Y, int width, int height, double direction, double ts, double a, double f)
@@ -58,6 +58,7 @@ namespace Parapanic
                 
             }*/
 
+
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 if (speed + acceleration < topSpeed)
@@ -88,6 +89,8 @@ namespace Parapanic
                     }
                 }
             }
+
+            double turnrate = (speed > 1)?((maxTurnrate / topSpeed) * speed):0;
 
             mouseDirection = MathHelper.ToDegrees((float)(Math.Atan2((Mouse.GetState().Y - (carRect.Y + carRect.Height / 2)), (Mouse.GetState().X - (carRect.X + carRect.Width / 2)))));
             //mouseDirection = MathHelper.ToDegrees((float)(Math.Atan2((Mouse.GetState().Y - (carRect.Y + carRect.Height + 500)), (Mouse.GetState().X - (carRect.X + carRect.Width + 500)))));
