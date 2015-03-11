@@ -30,8 +30,8 @@ namespace Parapanic
         {
             position = new Vector2(x, y);
             this.direction = direction;
-            origin = new Vector2(25,25);
-            carRect = new Rectangle(x, y, 50, 50);
+            origin = new Vector2(48, 32);
+            carRect = new Rectangle(x, y, 96, 96);
             this.topSpeed = topSpeed;
             this.acceleration = acceleration;
             this.friction = friction;
@@ -64,10 +64,11 @@ namespace Parapanic
             }
 
             //Mouse Direction - Turning
-            double turnrate = (Math.Abs(speed) > 1) ? ((maxTurnrate / topSpeed) * speed) : 0; //Don't turn when not moving
+            double turnrate = (Math.Abs(speed) > 1) ? ((maxTurnrate / topSpeed) * Math.Abs(speed)) : 0; //Don't turn when not moving
 
-            mouseDirection = GeometryUtils.NormAngle(MathHelper.ToDegrees((float)(Math.Atan2((Mouse.GetState().Y - (carRect.Y + carRect.Height / 2)), 
-                                                                                             (Mouse.GetState().X - (carRect.X + carRect.Width / 2))))));
+            mouseDirection = MathHelper.ToDegrees((float)(Math.Atan2((Mouse.GetState().Y - (position.Y - Camera.position.Y)), 
+                                                                     (Mouse.GetState().X - (position.X - Camera.position.X)))));
+            mouseDirection = GeometryUtils.NormAngle(mouseDirection);
 
             if (Math.Abs(mouseDirection - direction) > turnrate)
             {

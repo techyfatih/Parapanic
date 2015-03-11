@@ -50,3 +50,5 @@ E:\OGPC\Parapanic\Parapanic\GameName1\bin\Windows\Debug\SharpDX.XInput.xml
 E:\OGPC\Parapanic\Parapanic\GameName1\bin\Windows\Debug\SharpDX.RawInput.xml
 E:\OGPC\Parapanic\Parapanic\GameName1\bin\Windows\Debug\SharpDX.Direct3D9.xml
 E:\OGPC\Parapanic\Parapanic\GameName1\obj\x86\Debug\ParapanicGame.csprojResolveAssemblyReference.cache
+C:\Users\mama\Documents\GitHub\Parapanic\Parapanic\GameName1\bin\Windows\Debug\Content\wall.png
+C:\Users\mama\Documents\GitHub\Parapanic\Parapanic\GameName1\bin\Windows\Debug\Content\floor.png

@@ -18,14 +18,15 @@ namespace Parapanic
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private Ambulance ambulance;
-        private Texture2D ambulancePic;
-        private Texture2D blockPic;
+        Ambulance ambulance;
+        World world;
 
         public Parapanic()
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 600;
             Content.RootDirectory = "Content";
         }
 
@@ -40,6 +41,8 @@ namespace Parapanic
             // TODO: Add your initialization logic here
             this.IsMouseVisible = true;
             ambulance = new Ambulance(100, 100, 0, 10, 0.1, 0.95);
+            world = new World(25, 25);
+            Camera.Initialize(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             base.Initialize();
         }
@@ -53,10 +56,8 @@ namespace Parapanic
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ambulancePic = Content.Load<Texture2D>("Ambulance.png");
-            blockPic = Content.Load<Texture2D>("wall.png");
-
             // TODO: use this.Content to load your game content here
+            Textures.LoadContent(Content);
         }
 
         /// <summary>
@@ -81,6 +82,7 @@ namespace Parapanic
             // TODO: Add your update logic here
 
             ambulance.Update(gameTime);
+            Camera.Update(gameTime, ambulance, world);
 
             base.Update(gameTime);
         }
@@ -94,11 +96,7 @@ namespace Parapanic
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-
-            spriteBatch.Draw(ambulancePic, ambulance.position, null, Color.White, ambulance.rotation, ambulance.origin, 1.0f, SpriteEffects.None, 1.0f);
-
-            spriteBatch.End();
+            Camera.DrawScreen(spriteBatch, ambulance, world);
 
             base.Draw(gameTime);
         }

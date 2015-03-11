@@ -9,9 +9,8 @@ namespace Parapanic
 {
     abstract class Block
     {
-        public static int size = 32;
+        public static int size = 64;
         public Vector2 position;
-        public Texture2D texture;
 
         public Block(int x, int y)
         {

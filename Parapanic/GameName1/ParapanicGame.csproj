@@ -42,6 +42,7 @@
     <Compile Include="ParapanicGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Textures.cs" />
     <Compile Include="WallBlock.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
@@ -56,8 +57,12 @@
     <Content Include="Content\Ambulance.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\floor.png" />
-    <Content Include="Content\wall.png" />
+    <Content Include="Content\floor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\wall.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup />
