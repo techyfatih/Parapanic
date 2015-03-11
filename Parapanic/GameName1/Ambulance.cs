@@ -13,90 +13,61 @@ namespace Parapanic
 {
     class Ambulance
     {
+        public Vector2 position;
+        public float rotation;
+        public Vector2 origin;
+
         Rectangle carRect;
         double topSpeed;
         double acceleration;
+        double direction;
         double friction;
-        public double direction;
-        public double mouseDirection;
-        double speed = 0;
+        double mouseDirection;
+        double speed;
+        const double maxTurnrate = 3;
 
-        double maxTurnrate = 3;
-
-
-        public Ambulance(int X, int Y, int width, int height, double direction, double ts, double a, double f)
+        public Ambulance(int x, int y, double direction, double topSpeed, double acceleration, double friction)
         {
-            carRect.X = X;
-            carRect.Y = Y;
-            carRect.Width = width;
-            carRect.Height = height;
+            position = new Vector2(x, y);
             this.direction = direction;
-            topSpeed = ts;
-            acceleration = a;
-            friction = f;
-        }
-
-        public Rectangle getRectangle()
-        {
-            return carRect;
-        }
-
-        public Vector2 getVector()
-        {
-            return new Vector2(carRect.X, carRect.Y);
-        }
-
-        public double getDirection()
-        {
-            return direction;
+            origin = new Vector2(25,25);
+            carRect = new Rectangle(x, y, 50, 50);
+            this.topSpeed = topSpeed;
+            this.acceleration = acceleration;
+            this.friction = friction;
+            speed = 0;
         }
 
         public void Update(GameTime gameTime)
         {
-            /*if ((Keyboard.GetState().IsKeyDown(Keys.W)))
-            {
-                
-            }*/
-
-
+            //Left Click - Acceleration
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 if (speed + acceleration < topSpeed)
-                {
                     speed += acceleration;
-                }
                 else
-                {
                     speed = topSpeed;
-                }
             }
 
+            //Right Click - Brake/Reverse
             if (Mouse.GetState().RightButton == ButtonState.Pressed)
             {
                 if (speed - acceleration > 0)
-                {
                     speed -= acceleration;
-                }
                 else
                 {
                     if (speed - acceleration > -topSpeed / 2)
-                    {
                         speed -= acceleration / 2;
-                    }
                     else
-                    {
                         speed = -topSpeed / 2;
-                    }
                 }
             }
 
-            double turnrate = (speed > 1)?((maxTurnrate / topSpeed) * speed):0;
+            //Mouse Direction - Turning
+            double turnrate = (Math.Abs(speed) > 1) ? ((maxTurnrate / topSpeed) * speed) : 0; //Don't turn when not moving
 
-            mouseDirection = MathHelper.ToDegrees((float)(Math.Atan2((Mouse.GetState().Y - (carRect.Y + carRect.Height / 2)), (Mouse.GetState().X - (carRect.X + carRect.Width / 2)))));
-            //mouseDirection = MathHelper.ToDegrees((float)(Math.Atan2((Mouse.GetState().Y - (carRect.Y + carRect.Height + 500)), (Mouse.GetState().X - (carRect.X + carRect.Width + 500)))));
-
-            mouseDirection = NormAngle(mouseDirection);
-            Console.WriteLine(direction);
+            mouseDirection = GeometryUtils.NormAngle(MathHelper.ToDegrees((float)(Math.Atan2((Mouse.GetState().Y - (carRect.Y + carRect.Height / 2)), 
+                                                                                             (Mouse.GetState().X - (carRect.X + carRect.Width / 2))))));
 
             if (Math.Abs(mouseDirection - direction) > turnrate)
             {
@@ -104,51 +75,28 @@ namespace Parapanic
                 if (direction >= 180)
                 {
                     refDir -= 180;
-                    mouseDirection = NormAngle(mouseDirection-180);
+                    mouseDirection = GeometryUtils.NormAngle(mouseDirection - 180);
                 }
                 if (mouseDirection > refDir && mouseDirection < refDir + 180)
-                //if(Math.Abs(mouseDirection - direction) < Math.Abs(mouseDirection - 360 + direction))
-                //if(Math.Abs(mouseDirection-direction) < 180)
-                {
-                    direction += turnrate;//(direction > 180)?turnrate:-turnrate;
-                }
+                    direction = GeometryUtils.NormAngle(direction + turnrate);
                 else
-                {
-                    direction -= turnrate;//(direction > 180)?turnrate:-turnrate;
-                }
+                    direction = GeometryUtils.NormAngle(direction - turnrate);
             }
 
-            direction = NormAngle(direction);
-
-            //direction = mouseDirection;
-
-
-
+            //Slide according to friction is nothing is pressed
             if (Mouse.GetState().LeftButton == ButtonState.Released && Mouse.GetState().RightButton == ButtonState.Released)
-            {
                 speed *= friction;
-            }
 
-            Vector2 a = new Vector2((float)(Math.Sin((float)MathHelper.ToRadians((float)direction))), (float)Math.Cos(MathHelper.ToRadians((float)direction)));
+            Vector2 a = new Vector2((float)Math.Sin(MathHelper.ToRadians((float)direction)),
+                                    (float)Math.Cos(MathHelper.ToRadians((float)direction)));
             a.Normalize();
 
+            position.Y += (int)(a.X * speed);
+            position.X += (int)(a.Y * speed);
             carRect.Y += (int)(a.X * speed);
             carRect.X += (int)(a.Y * speed);
 
-        }
-
-        public double NormAngle(double a)
-        {
-            double b = a;
-            while (b > 360)
-            {
-                b -= 360;
-            }
-            while (b < 0)
-            {
-                b += 360;
-            }
-            return b;
+            rotation = MathHelper.ToRadians((float)direction);
         }
 
     }
