@@ -38,6 +38,7 @@
     <Compile Include="Ambulance.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="FloorBlock.cs" />
     <Compile Include="GeometryUtils.cs" />
     <Compile Include="ParapanicGame.cs" />
     <Compile Include="Program.cs" />
@@ -54,7 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Ambulance.png">
+    <Content Include="Content\ambulance.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\floor.png">

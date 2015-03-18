@@ -38,7 +38,7 @@ namespace Parapanic
             speed = 0;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, World world)
         {
             //Left Click - Acceleration
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
@@ -92,13 +92,25 @@ namespace Parapanic
                                     (float)Math.Cos(MathHelper.ToRadians((float)direction)));
             a.Normalize();
 
-            position.Y += (int)(a.X * speed);
-            position.X += (int)(a.Y * speed);
-            carRect.Y += (int)(a.X * speed);
-            carRect.X += (int)(a.Y * speed);
-
+            int newY = (int)(position.Y + a.X * speed);
+            int newX = (int)(position.X + a.Y * speed);
+            foreach (Block b in world.grid)
+            {
+                if (b.GetType().Equals(typeof(WallBlock)))
+                {
+                    if (newY >= b.position.Y && newY <= b.position.Y + Block.size)
+                        if (newX >= b.position.X && newX <= b.position.X + Block.size)
+                            newX = (int)position.X;
+                    if (newX >= b.position.X && newX <= b.position.X + Block.size)
+                        if (newY >= b.position.Y && newY <= b.position.Y + Block.size)
+                            newY = (int)position.Y;
+                }
+            }
+            position.Y = newY;
+            position.X = newX;
+            carRect.Y = newY;
+            carRect.X = newX;
             rotation = MathHelper.ToRadians((float)direction);
         }
-
     }
 }

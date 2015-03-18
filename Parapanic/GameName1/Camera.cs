@@ -39,7 +39,10 @@ namespace Parapanic
 
             foreach (Block b in world.grid)
             {
-                spriteBatch.Draw(Textures.block, b.position - position, Color.White);
+                Texture2D texture = Textures.ambulance;
+                if (b.GetType().Equals(typeof(WallBlock))) texture = Textures.wall;
+                else if (b.GetType().Equals(typeof(FloorBlock))) texture = Textures.floor;
+                spriteBatch.Draw(texture, b.position - position, Color.White);
             }
             spriteBatch.Draw(Textures.ambulance, ambulance.position - position, null, Color.White, ambulance.rotation, ambulance.origin, 1, SpriteEffects.None, 1);
             

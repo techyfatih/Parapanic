@@ -40,7 +40,7 @@ namespace Parapanic
         {
             // TODO: Add your initialization logic here
             this.IsMouseVisible = true;
-            ambulance = new Ambulance(100, 100, 0, 10, 0.1, 0.95);
+            ambulance = new Ambulance(200, 200, 0, 10, 0.1, 0.95);
             world = new World(25, 25);
             Camera.Initialize(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -81,7 +81,7 @@ namespace Parapanic
 
             // TODO: Add your update logic here
 
-            ambulance.Update(gameTime);
+            ambulance.Update(gameTime, world);
             Camera.Update(gameTime, ambulance, world);
 
             base.Update(gameTime);
