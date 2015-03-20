@@ -21,6 +21,8 @@ namespace Parapanic
         World world;
         Minimap.GPS Minimap;
 
+        DateTime lastDateTime;
+
         public Parapanic()
             : base()
         {
@@ -28,6 +30,7 @@ namespace Parapanic
             graphics.PreferredBackBufferWidth = 1000;
             graphics.PreferredBackBufferHeight = 600;
             Content.RootDirectory = "Content";
+            lastDateTime = DateTime.Now;
         }
 
         /// <summary>
@@ -103,6 +106,15 @@ namespace Parapanic
             Minimap.Draw(spriteBatch, this, world);
 
             base.Draw(gameTime);
+
+
+            DateTime endDateTime = DateTime.Now;
+            long nanoSecCounter = endDateTime.Ticks - lastDateTime.Ticks;
+            float fps = 10000000 / (float)nanoSecCounter;
+            float msecCounter = (float)nanoSecCounter / 10000;
+
+            Console.WriteLine("{0} fps @ {1} ms", fps, msecCounter);
+            lastDateTime = endDateTime;
         }
     }
 }
