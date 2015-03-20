@@ -82,12 +82,13 @@ namespace Parapanic
             if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-
-            ambulance.Update(gameTime, world);
-            Camera.Update(gameTime, ambulance, world);
-
-            base.Update(gameTime);
+            if (IsActive) //Primitive way to pause the game on minimize, would like to improve later
+            {
+                ambulance.Update(gameTime, world);
+                Camera.Update(gameTime, ambulance, world);
+                
+                base.Update(gameTime);
+            }
         }
 
         /// <summary>
