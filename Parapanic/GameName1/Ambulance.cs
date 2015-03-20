@@ -42,11 +42,10 @@ namespace Parapanic
             //Left Click - Acceleration
                 Console.WriteLine(speed);
 
-                bool nobutton = true;
+                //bool nobutton = true;
 
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                nobutton = false;
                 if (speed + acceleration < topSpeed)
                     speed += acceleration;
                 else
@@ -56,7 +55,6 @@ namespace Parapanic
             //Right Click - Brake/Reverse
             if (Mouse.GetState().RightButton == ButtonState.Pressed)
             {
-                nobutton = false;
                 if (speed - acceleration > 0)
                     speed -= acceleration;
                 else
@@ -66,11 +64,6 @@ namespace Parapanic
                     else
                         speed = -topSpeed / 2;
                 }
-            }
-
-            if (nobutton && Math.Abs(speed) < .5)
-            {
-                speed = 0;
             }
 
             //Mouse Direction - Turning
@@ -102,24 +95,24 @@ namespace Parapanic
                                     (float)Math.Cos(MathHelper.ToRadians((float)direction)));
             a.Normalize();
 
-            int newY = (int)(position.Y + a.X * speed);
-            int newX = (int)(position.X + a.Y * speed);
+            float newY = position.Y + (int)(a.X * speed);
+            float newX = position.X + (int)(a.Y * speed);
             foreach (Block b in world.grid)
             {
                 if (b.GetType().Equals(typeof(WallBlock)))
                 {
                     if (newY >= b.position.Y && newY <= b.position.Y + Block.size)
                         if (newX >= b.position.X && newX <= b.position.X + Block.size)
-                            newX = (int)position.X;
+                            newX = position.X;
                     if (newX >= b.position.X && newX <= b.position.X + Block.size)
                         if (newY >= b.position.Y && newY <= b.position.Y + Block.size)
-                            newY = (int)position.Y;
+                            newY = position.Y;
                 }
             }
             position.Y = newY;
             position.X = newX;
-            carRect.Y = newY;
-            carRect.X = newX;
+            carRect.Y = (int)newY;
+            carRect.X = (int)newX;
             rotation = MathHelper.ToRadians((float)direction);
         }
     }
