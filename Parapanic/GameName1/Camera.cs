@@ -35,8 +35,6 @@ namespace Parapanic
 
         public static void DrawScreen(SpriteBatch spriteBatch, Ambulance ambulance, World world)
         {
-            spriteBatch.Begin();
-
             foreach (Block b in world.grid)
             {
                 Texture2D texture = Textures.ambulance;
@@ -45,8 +43,6 @@ namespace Parapanic
                 spriteBatch.Draw(texture, b.position - position, Color.White);
             }
             spriteBatch.Draw(Textures.ambulance, ambulance.position - position, null, Color.White, ambulance.rotation, ambulance.origin, 1, SpriteEffects.None, 1);
-            
-            spriteBatch.End();
         }
     }
 }

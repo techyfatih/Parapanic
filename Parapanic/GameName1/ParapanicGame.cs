@@ -102,9 +102,10 @@ namespace Parapanic
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
             Camera.DrawScreen(spriteBatch, ambulance, world);
             Minimap.Draw(spriteBatch, this, world);
-
+            spriteBatch.End();
             base.Draw(gameTime);
 
 

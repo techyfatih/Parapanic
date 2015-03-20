@@ -32,8 +32,6 @@ namespace Parapanic.Minimap
 
         public void Draw(SpriteBatch batch, Parapanic game, World world)
         {
-            batch.Begin();
-
             Rectangle gameBounds = new Rectangle();
             gameBounds.X = (int)Camera.position.X;
             gameBounds.Y = (int)Camera.position.Y;
@@ -41,8 +39,6 @@ namespace Parapanic.Minimap
             gameBounds.Height = gamePortHeight;
 
             batch.Draw(map.GetMapTexture(game, world), screenPort, gameBounds, Color.White);
-
-            batch.End();
         }
     }
 }
