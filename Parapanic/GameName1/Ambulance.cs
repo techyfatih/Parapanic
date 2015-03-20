@@ -40,8 +40,13 @@ namespace Parapanic
         public void Update(GameTime gameTime, World world)
         {
             //Left Click - Acceleration
+                Console.WriteLine(speed);
+
+                bool nobutton = true;
+
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
+                nobutton = false;
                 if (speed + acceleration < topSpeed)
                     speed += acceleration;
                 else
@@ -51,6 +56,7 @@ namespace Parapanic
             //Right Click - Brake/Reverse
             if (Mouse.GetState().RightButton == ButtonState.Pressed)
             {
+                nobutton = false;
                 if (speed - acceleration > 0)
                     speed -= acceleration;
                 else
@@ -60,6 +66,11 @@ namespace Parapanic
                     else
                         speed = -topSpeed / 2;
                 }
+            }
+
+            if (nobutton && Math.Abs(speed) < .5)
+            {
+                speed = 0;
             }
 
             //Mouse Direction - Turning
