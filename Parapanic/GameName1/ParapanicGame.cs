@@ -19,6 +19,7 @@ namespace Parapanic
         SpriteBatch spriteBatch;
         Ambulance ambulance;
         World world;
+        Minimap.GPS Minimap;
 
         public Parapanic()
             : base()
@@ -37,12 +38,15 @@ namespace Parapanic
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            int width = graphics.PreferredBackBufferWidth;
+            int height = graphics.PreferredBackBufferHeight;
+
             this.IsMouseVisible = true;
             ambulance = new Ambulance(200, 200, 0, 10, 0.1, 0.95);
             world = new World(25, 25);
-            Camera.Initialize(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            Camera.Initialize(width, height);
 
+            Minimap = new Minimap.GPS(width, height, new Rectangle(width - 150, height - 120, 120, 90));
             base.Initialize();
         }
 
@@ -94,8 +98,8 @@ namespace Parapanic
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             Camera.DrawScreen(spriteBatch, ambulance, world);
+            Minimap.Draw(spriteBatch, this, world);
 
             base.Draw(gameTime);
         }
