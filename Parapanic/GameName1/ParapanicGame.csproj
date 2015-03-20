@@ -38,6 +38,7 @@
     <Compile Include="Ambulance.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="Car.cs" />
     <Compile Include="FloorBlock.cs" />
     <Compile Include="GeometryUtils.cs" />
     <Compile Include="Minimap\GPS.cs" />
