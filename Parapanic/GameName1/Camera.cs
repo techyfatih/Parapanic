@@ -19,7 +19,7 @@ namespace Parapanic
             view = new Rectangle(0, 0, width, height);
         }
 
-        public static void Update(GameTime gameTime, Ambulance ambulance, World world)
+        public static void Update(Ambulance ambulance, World world)
         {
             int newX = (int)ambulance.position.X - view.Width / 2;
             if (newX < 0) newX = 0;
@@ -83,6 +83,10 @@ namespace Parapanic
                     texture = Textures.wall;
                 else if (b.GetType().Equals(typeof(FloorBlock)))
                     texture = Textures.floor;
+                else if (b.GetType().Equals(typeof(PatientBlock))) 
+                    texture = Textures.patient;
+                else if (b.GetType().Equals(typeof(HospitalBlock))) 
+                    texture = Textures.hospital;
 
 
                 Vector3 rearTopLeft = new Vector3(0, 0, 0) + new Vector3(b.position, 0);
@@ -171,7 +175,7 @@ namespace Parapanic
 
 
                 VertexPositionColorTexture[] vs = new VertexPositionColorTexture[6];
-                Matrix rotationMatrix = Matrix.CreateRotationZ(ambulance.rotation);
+                Matrix rotationMatrix = Matrix.CreateRotationZ(ambulance.direction);
 
                 Vector3 v1 = (Matrix.Identity
                     * Matrix.CreateTranslation(new Vector3(p1, 0)) 

@@ -19,10 +19,7 @@ namespace Parapanic
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Ambulance ambulance;
-        World world;
-        Minimap.GPS Minimap;
-
+        Level level;
         DateTime lastDateTime;
 
         public Parapanic()
@@ -43,15 +40,8 @@ namespace Parapanic
         /// </summary>
         protected override void Initialize()
         {
-            int width = graphics.PreferredBackBufferWidth;
-            int height = graphics.PreferredBackBufferHeight;
-
             this.IsMouseVisible = true;
-            ambulance = new Ambulance(200, 200, 0, 10, 0.1, 0.95);
-            world = new World(25, 25);
-            Camera.Initialize(width, height);
-
-            Minimap = new Minimap.GPS(width, height, new Rectangle(width - 150, height - 120, 120, 90));
+            level = new Level(graphics);
             base.Initialize();
         }
 
@@ -89,9 +79,7 @@ namespace Parapanic
 
             if (IsActive) //Primitive way to pause the game on minimize, would like to improve later
             {
-                ambulance.Update(gameTime, world);
-                Camera.Update(gameTime, ambulance, world);
-                
+                level.Update();
                 base.Update(gameTime);
             }
         }
@@ -104,12 +92,12 @@ namespace Parapanic
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             
-            Camera.DrawScreen(this, ambulance, world);
             base.Draw(gameTime);
 
             spriteBatch.Begin();
-            Minimap.Draw(spriteBatch, this, world);
+            level.Draw(spriteBatch, this);
             spriteBatch.End();
+            base.Draw(gameTime);
 
             DateTime endDateTime = DateTime.Now;
             long nanoSecCounter = endDateTime.Ticks - lastDateTime.Ticks;

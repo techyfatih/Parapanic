@@ -15,12 +15,6 @@ namespace Parapanic.Minimap
         Rectangle screenPort;
 
         Map map;
-        
-        public bool DirtyFlag
-        {
-            get { return map.DirtyFlag; }
-            set { map.DirtyFlag = value; }
-        }
 
         public GPS(int gamePortWidth, int gamePortHeight, Rectangle screenPort)
         {

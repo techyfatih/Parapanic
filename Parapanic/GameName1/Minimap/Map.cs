@@ -17,7 +17,7 @@ namespace Parapanic.Minimap
         //upon world modification, this flag is set.
         //this makes it so we don't have to generate the map
         //every frame;
-        public bool DirtyFlag = true;
+        public static bool DirtyFlag = true;
 
         public Texture2D GetMapTexture(Parapanic game, World world)
         {
@@ -60,6 +60,8 @@ namespace Parapanic.Minimap
                     batch.Draw(texToDraw, drawArea, Color.Blue);
                     continue;
                 }
+
+                //todo: fix weird issues on redraw
                 //todo: other blocks
             }
 
@@ -72,7 +74,6 @@ namespace Parapanic.Minimap
                                             //or does it even matter?
             DirtyFlag = false;
             return mapTexture;
-        
         }
     }
 }

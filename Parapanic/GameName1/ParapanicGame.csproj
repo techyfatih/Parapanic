@@ -36,18 +36,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Ambulance.cs" />
-    <Compile Include="Block.cs" />
+    <Compile Include="Blocks\Block.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Car.cs" />
-    <Compile Include="FloorBlock.cs" />
-    <Compile Include="GeometryUtils.cs" />
+    <Compile Include="Blocks\FloorBlock.cs" />
+    <Compile Include="Utilities.cs" />
+    <Compile Include="Blocks\HospitalBlock.cs" />
+    <Compile Include="Level.cs" />
     <Compile Include="Minimap\GPS.cs" />
     <Compile Include="Minimap\Map.cs" />
     <Compile Include="ParapanicGame.cs" />
+    <Compile Include="Blocks\PatientBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Textures.cs" />
-    <Compile Include="WallBlock.cs" />
+    <Compile Include="Blocks\WallBlock.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +65,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\floor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Hospital.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Patient.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\TestPicture.png">
