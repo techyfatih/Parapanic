@@ -53,12 +53,18 @@ namespace Parapanic.Minimap
                 if (b.GetType().Equals(typeof(WallBlock)))
                 {
                     batch.Draw(texToDraw, drawArea, Color.Green);
-                    continue;
                 }
                 else if (b.GetType().Equals(typeof(FloorBlock)))
                 {
                     batch.Draw(texToDraw, drawArea, Color.Blue);
-                    continue;
+                }
+                else if (b.GetType().Equals(typeof(HospitalBlock)))
+                {
+                    batch.Draw(texToDraw, drawArea, Color.Yellow);
+                }
+                else if (b.GetType().Equals(typeof(PatientBlock)))
+                {
+                    batch.Draw(texToDraw, drawArea, Color.Pink);
                 }
 
                 //todo: fix weird issues on redraw
