@@ -18,7 +18,7 @@ namespace Parapanic
             view = new Rectangle(0, 0, width, height);
         }
 
-        public static void Update(GameTime gameTime, Ambulance ambulance, World world)
+        public static void Update(Ambulance ambulance, World world)
         {
             int newX = (int)ambulance.position.X - view.Width / 2;
             if (newX < 0) newX = 0;
@@ -40,9 +40,11 @@ namespace Parapanic
                 Texture2D texture = Textures.ambulance;
                 if (b.GetType().Equals(typeof(WallBlock))) texture = Textures.wall;
                 else if (b.GetType().Equals(typeof(FloorBlock))) texture = Textures.floor;
+                else if (b.GetType().Equals(typeof(PatientBlock))) texture = Textures.patient;
+                else if (b.GetType().Equals(typeof(HospitalBlock))) texture = Textures.hospital;
                 spriteBatch.Draw(texture, b.position - position, Color.White);
             }
-            spriteBatch.Draw(Textures.ambulance, ambulance.position - position, null, Color.White, ambulance.rotation, ambulance.origin, 1, SpriteEffects.None, 1);
+            spriteBatch.Draw(Textures.ambulance, ambulance.position - position, null, Color.White, ambulance.direction, ambulance.origin, 1, SpriteEffects.None, 1);
         }
     }
 }

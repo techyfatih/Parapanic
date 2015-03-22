@@ -11,10 +11,12 @@ namespace Parapanic
     {
         public static int size = 64;
         public Vector2 position;
+        public Rectangle boundary;
 
         public Block(int x, int y)
         {
             position = new Vector2(x, y);
+            boundary = new Rectangle(x, y, size, size);
         }
     }
 }
