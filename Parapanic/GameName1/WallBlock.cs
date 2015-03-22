@@ -7,6 +7,9 @@ namespace Parapanic
 {
     class WallBlock : Block
     {
-        public WallBlock(int x, int y) : base(x, y) { }
+        public WallBlock(int x, int y) : base(x, y) 
+        {
+            depth = Parapanic.Random.Next(1, 10);
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace Parapanic
     /// </summary>
     public class Parapanic : Game
     {
+        public static Random Random = new Random();
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Ambulance ambulance;
@@ -101,13 +103,13 @@ namespace Parapanic
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            spriteBatch.Begin();
-            Camera.DrawScreen(spriteBatch, ambulance, world);
-            Minimap.Draw(spriteBatch, this, world);
-            spriteBatch.End();
+            
+            Camera.DrawScreen(this, ambulance, world);
             base.Draw(gameTime);
 
+            spriteBatch.Begin();
+            Minimap.Draw(spriteBatch, this, world);
+            spriteBatch.End();
 
             DateTime endDateTime = DateTime.Now;
             long nanoSecCounter = endDateTime.Ticks - lastDateTime.Ticks;

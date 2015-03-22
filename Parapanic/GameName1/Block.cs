@@ -16,5 +16,8 @@ namespace Parapanic
         {
             position = new Vector2(x, y);
         }
+
+        //used for 3D code
+        public int depth;
     }
 }
