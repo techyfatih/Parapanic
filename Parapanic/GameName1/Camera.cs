@@ -13,6 +13,8 @@ namespace Parapanic
         public static Vector2 position;
         static Rectangle view;
 
+        static float scale = 1f;
+
         public static void Initialize(int width, int height)
         {
             position = new Vector2();
@@ -44,6 +46,8 @@ namespace Parapanic
         {
             //This whole method can probably be optimized a TON, so if we ever have speed problems this should be the first place to check.
 
+            scale = Math.Abs((float)ambulance.speed) * -.25f / (float)ambulance.topSpeed + 1.25f;
+
             Vector2 TopLeft = new Vector2(0, 0);
             Vector2 BottomLeft = new Vector2(0, 1);
             Vector2 BottomRight = new Vector2(1, 1);
@@ -57,7 +61,7 @@ namespace Parapanic
             Matrix view = Matrix.CreateLookAt(new Vector3(position.X + width/2, -position.Y - height/2, 100), 
                                               new Vector3(position.X + width/2, -position.Y - height/2, 0), 
                                               new Vector3(0, 1, 0));
-            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 1.26f, (float)width/height, 0.01f, 1000);
+            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 1.26f/scale, (float)width/height, 0.01f, 1000);
                 
             BasicEffect effect = new BasicEffect(graphics);
 
@@ -77,90 +81,93 @@ namespace Parapanic
             
             foreach (Block b in world.grid)
             {
-                Texture2D texture = Textures.ambulance;
-                Color c = Color.White;
-                if (b.GetType().Equals(typeof(WallBlock))) 
-                    texture = Textures.wall;
-                else if (b.GetType().Equals(typeof(FloorBlock)))
-                    texture = Textures.floor;
-                else if (b.GetType().Equals(typeof(PatientBlock))) 
-                    texture = Textures.patient;
-                else if (b.GetType().Equals(typeof(HospitalBlock))) 
-                    texture = Textures.hospital;
-
-
-                Vector3 rearTopLeft = new Vector3(0, 0, 0) + new Vector3(b.position, 0);
-                Vector3 rearBottomLeft = new Vector3(0, Block.size, 0) + new Vector3(b.position, 0);
-                Vector3 rearBottomRight = new Vector3(Block.size, Block.size, 0) + new Vector3(b.position, 0);
-                Vector3 rearTopRight = new Vector3(Block.size, 0, 0) + new Vector3(b.position, 0);
-
-                Vector3 frontTopLeft = new Vector3(0, 0, -b.depth) + new Vector3(b.position, 0);
-                Vector3 frontBottomLeft = new Vector3(0, Block.size, -b.depth) + new Vector3(b.position, 0);
-                Vector3 frontBottomRight = new Vector3(Block.size, Block.size, -b.depth) + new Vector3(b.position, 0);
-                Vector3 frontTopRight = new Vector3(Block.size, 0, -b.depth) + new Vector3(b.position, 0);
-
-                VertexPositionColorTexture[] vs;
-
-                if (b.depth != 0)
+                if (Math.Abs((b.position - position).LengthSquared()) < 2000000)
                 {
-                    vs = new VertexPositionColorTexture[36];
-                    vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
-                    vs[1] = new VertexPositionColorTexture(rearTopLeft, c, TopLeft);
-                    vs[2] = new VertexPositionColorTexture(rearBottomRight, c, BottomRight);
-                    vs[3] = new VertexPositionColorTexture(rearTopRight, c, TopRight);
-                    vs[4] = vs[2];
-                    vs[5] = vs[1];
+                    Texture2D texture = Textures.ambulance;
+                    Color c = Color.White;
+                    if (b.GetType().Equals(typeof(WallBlock)))
+                        texture = Textures.wall;
+                    else if (b.GetType().Equals(typeof(FloorBlock)))
+                        texture = Textures.floor;
+                    else if (b.GetType().Equals(typeof(PatientBlock)))
+                        texture = Textures.patient;
+                    else if (b.GetType().Equals(typeof(HospitalBlock)))
+                        texture = Textures.hospital;
 
-                    vs[6] = new VertexPositionColorTexture(rearBottomLeft, c, BottomRight);
-                    vs[7] = new VertexPositionColorTexture(rearTopLeft, c, BottomLeft);
-                    vs[8] = new VertexPositionColorTexture(frontTopLeft, c, TopLeft);
-                    vs[9] = new VertexPositionColorTexture(frontBottomLeft, c, TopRight);
-                    vs[10] = vs[8];
-                    vs[11] = vs[6];
 
-                    vs[12] = new VertexPositionColorTexture(rearBottomRight, c, BottomLeft);
-                    vs[13] = new VertexPositionColorTexture(rearTopRight, c, BottomRight);
-                    vs[14] = new VertexPositionColorTexture(frontTopRight, c, TopRight);
-                    vs[15] = new VertexPositionColorTexture(frontBottomRight, c, TopLeft);
-                    vs[16] = vs[14];
-                    vs[17] = vs[12];
+                    Vector3 rearTopLeft = new Vector3(0, 0, 0) + new Vector3(b.position, 0);
+                    Vector3 rearBottomLeft = new Vector3(0, Block.size, 0) + new Vector3(b.position, 0);
+                    Vector3 rearBottomRight = new Vector3(Block.size, Block.size, 0) + new Vector3(b.position, 0);
+                    Vector3 rearTopRight = new Vector3(Block.size, 0, 0) + new Vector3(b.position, 0);
 
-                    vs[18] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
-                    vs[19] = new VertexPositionColorTexture(frontBottomLeft, c, TopLeft);
-                    vs[20] = new VertexPositionColorTexture(rearBottomRight, c, BottomRight);
-                    vs[21] = new VertexPositionColorTexture(frontBottomRight, c, TopRight);
-                    vs[22] = vs[20];
-                    vs[23] = vs[19];
+                    Vector3 frontTopLeft = new Vector3(0, 0, -b.depth) + new Vector3(b.position, 0);
+                    Vector3 frontBottomLeft = new Vector3(0, Block.size, -b.depth) + new Vector3(b.position, 0);
+                    Vector3 frontBottomRight = new Vector3(Block.size, Block.size, -b.depth) + new Vector3(b.position, 0);
+                    Vector3 frontTopRight = new Vector3(Block.size, 0, -b.depth) + new Vector3(b.position, 0);
 
-                    vs[24] = new VertexPositionColorTexture(rearTopRight, c, BottomLeft);
-                    vs[25] = new VertexPositionColorTexture(frontTopRight, c, TopLeft);
-                    vs[26] = new VertexPositionColorTexture(rearTopLeft, c, BottomRight);
-                    vs[27] = new VertexPositionColorTexture(frontTopLeft, c, TopRight);
-                    vs[28] = vs[26];
-                    vs[29] = vs[25];
+                    VertexPositionColorTexture[] vs;
 
-                    vs[30] = new VertexPositionColorTexture(frontBottomLeft, c, BottomLeft);
-                    vs[31] = new VertexPositionColorTexture(frontTopLeft, c, TopLeft);
-                    vs[32] = new VertexPositionColorTexture(frontBottomRight, c, BottomRight);
-                    vs[33] = new VertexPositionColorTexture(frontTopRight, c, TopRight);
-                    vs[34] = vs[32];
-                    vs[35] = vs[31];
+                    if (b.depth != 0)
+                    {
+                        vs = new VertexPositionColorTexture[36];
+                        vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
+                        vs[1] = new VertexPositionColorTexture(rearTopLeft, c, TopLeft);
+                        vs[2] = new VertexPositionColorTexture(rearBottomRight, c, BottomRight);
+                        vs[3] = new VertexPositionColorTexture(rearTopRight, c, TopRight);
+                        vs[4] = vs[2];
+                        vs[5] = vs[1];
+
+                        vs[6] = new VertexPositionColorTexture(rearBottomLeft, c, BottomRight);
+                        vs[7] = new VertexPositionColorTexture(rearTopLeft, c, BottomLeft);
+                        vs[8] = new VertexPositionColorTexture(frontTopLeft, c, TopLeft);
+                        vs[9] = new VertexPositionColorTexture(frontBottomLeft, c, TopRight);
+                        vs[10] = vs[8];
+                        vs[11] = vs[6];
+
+                        vs[12] = new VertexPositionColorTexture(rearBottomRight, c, BottomLeft);
+                        vs[13] = new VertexPositionColorTexture(rearTopRight, c, BottomRight);
+                        vs[14] = new VertexPositionColorTexture(frontTopRight, c, TopRight);
+                        vs[15] = new VertexPositionColorTexture(frontBottomRight, c, TopLeft);
+                        vs[16] = vs[14];
+                        vs[17] = vs[12];
+
+                        vs[18] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
+                        vs[19] = new VertexPositionColorTexture(frontBottomLeft, c, TopLeft);
+                        vs[20] = new VertexPositionColorTexture(rearBottomRight, c, BottomRight);
+                        vs[21] = new VertexPositionColorTexture(frontBottomRight, c, TopRight);
+                        vs[22] = vs[20];
+                        vs[23] = vs[19];
+
+                        vs[24] = new VertexPositionColorTexture(rearTopRight, c, BottomLeft);
+                        vs[25] = new VertexPositionColorTexture(frontTopRight, c, TopLeft);
+                        vs[26] = new VertexPositionColorTexture(rearTopLeft, c, BottomRight);
+                        vs[27] = new VertexPositionColorTexture(frontTopLeft, c, TopRight);
+                        vs[28] = vs[26];
+                        vs[29] = vs[25];
+
+                        vs[30] = new VertexPositionColorTexture(frontBottomLeft, c, BottomLeft);
+                        vs[31] = new VertexPositionColorTexture(frontTopLeft, c, TopLeft);
+                        vs[32] = new VertexPositionColorTexture(frontBottomRight, c, BottomRight);
+                        vs[33] = new VertexPositionColorTexture(frontTopRight, c, TopRight);
+                        vs[34] = vs[32];
+                        vs[35] = vs[31];
+                    }
+                    else
+                    {
+                        vs = new VertexPositionColorTexture[6];
+
+                        vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
+                        vs[1] = new VertexPositionColorTexture(rearTopLeft, c, TopLeft);
+                        vs[2] = new VertexPositionColorTexture(rearBottomRight, c, BottomRight);
+                        vs[3] = new VertexPositionColorTexture(rearTopRight, c, TopRight);
+                        vs[4] = vs[2];
+                        vs[5] = vs[1];
+                    }
+
+
+                    RenderItem r = new RenderItem { Verts = vs, Texture = texture };
+                    renderItems.Add(r);
                 }
-                else
-                {
-                    vs = new VertexPositionColorTexture[6];
-                    
-                    vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
-                    vs[1] = new VertexPositionColorTexture(rearTopLeft, c, TopLeft);
-                    vs[2] = new VertexPositionColorTexture(rearBottomRight, c, BottomRight);
-                    vs[3] = new VertexPositionColorTexture(rearTopRight, c, TopRight);
-                    vs[4] = vs[2];
-                    vs[5] = vs[1];
-                }
-
-
-                RenderItem r = new RenderItem { Verts = vs, Texture = texture };
-                renderItems.Add(r);
             }
             {
                 Color c = Color.White;
@@ -179,21 +186,25 @@ namespace Parapanic
 
                 Vector3 v1 = (Matrix.Identity
                     * Matrix.CreateTranslation(new Vector3(p1, 0)) 
+                    * Matrix.CreateScale(ambulance.scale)
                     * rotationMatrix
                     * itemWorld
                     ).Translation;
                 Vector3 v2 = (Matrix.Identity
-                    * Matrix.CreateTranslation(new Vector3(p2, 0)) 
+                    * Matrix.CreateTranslation(new Vector3(p2, 0))
+                    * Matrix.CreateScale(ambulance.scale)
                     * rotationMatrix
                     * itemWorld
                     ).Translation;
                 Vector3 v3 = (Matrix.Identity
-                    * Matrix.CreateTranslation(new Vector3(p3, 0)) 
+                    * Matrix.CreateTranslation(new Vector3(p3, 0))
+                    * Matrix.CreateScale(ambulance.scale)
                     * rotationMatrix
                     * itemWorld
                     ).Translation;
                 Vector3 v4 = (Matrix.Identity
-                    * Matrix.CreateTranslation(new Vector3(p4, 0)) 
+                    * Matrix.CreateTranslation(new Vector3(p4, 0))
+                    * Matrix.CreateScale(ambulance.scale)
                     * rotationMatrix
                     * itemWorld
                     ).Translation;

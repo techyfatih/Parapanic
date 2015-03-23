@@ -12,14 +12,16 @@ namespace Parapanic.Minimap
     {
         int gamePortWidth;
         int gamePortHeight;
+        float gamePortScale;
         Rectangle screenPort;
 
         Map map;
 
-        public GPS(int gamePortWidth, int gamePortHeight, Rectangle screenPort)
+        public GPS(int gamePortWidth, int gamePortHeight, float gamePortScale, Rectangle screenPort)
         {
             this.gamePortHeight = gamePortHeight;
             this.gamePortWidth = gamePortWidth;
+            this.gamePortScale = gamePortScale;
             this.screenPort = screenPort;
             map = new Map();
         }
@@ -27,10 +29,10 @@ namespace Parapanic.Minimap
         public void Draw(SpriteBatch batch, Parapanic game, World world)
         {
             Rectangle gameBounds = new Rectangle();
-            gameBounds.X = (int)Camera.position.X;
-            gameBounds.Y = (int)Camera.position.Y;
-            gameBounds.Width = gamePortWidth;
-            gameBounds.Height = gamePortHeight;
+            gameBounds.X = (int)(Camera.position.X - gamePortWidth * (gamePortScale - gamePortScale / 2));
+            gameBounds.Y = (int)(Camera.position.Y - gamePortHeight * (gamePortScale - gamePortScale / 2));
+            gameBounds.Width = (int)(gamePortWidth * (gamePortScale + 1));
+            gameBounds.Height = (int)(gamePortHeight * (gamePortScale + 1));
 
             batch.Draw(map.GetMapTexture(game, world), screenPort, gameBounds, Color.White);
         }

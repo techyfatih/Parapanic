@@ -91,8 +91,6 @@ namespace Parapanic
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
-            base.Draw(gameTime);
 
             spriteBatch.Begin();
             level.Draw(spriteBatch, this);

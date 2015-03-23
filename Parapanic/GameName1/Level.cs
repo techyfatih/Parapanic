@@ -18,11 +18,11 @@ namespace Parapanic
             int width = g.PreferredBackBufferWidth;
             int height = g.PreferredBackBufferHeight;
 
-            ambulance = new Ambulance(200, 200, 0, 10, 0.1, 0.95);
-            world = new World(25, 25);
+            ambulance = new Ambulance(350, 350, 0, 10, 0.1, 0.95);
+            world = new World(100, 100);
             Camera.Initialize(width, height);
 
-            minimap = new Minimap.GPS(width, height, new Rectangle(width - 150, height - 120, 120, 90));
+            minimap = new Minimap.GPS(width, height, 2.5f, new Rectangle(width - 150, height - 120, 120, 90));
         }
 
         public void Update()

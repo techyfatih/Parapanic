@@ -12,10 +12,11 @@ namespace Parapanic
         public float direction;
         public Vector2 origin;
 
-        protected double speed;
-        protected double topSpeed;
+        public double speed { get; protected set; }
+        public double topSpeed { get; protected set; }
         protected double acceleration;
         protected double friction;
+        public float scale { get; protected set; }
 
         protected double[] cornerAngles;
         protected double diagonal;
@@ -24,8 +25,9 @@ namespace Parapanic
 
         public Car(int x, int y, double speed, float direction, double topSpeed, double acceleration, double friction)
         {
-            int width = 96;
-            int height = 64;
+            scale = 0.25f;
+            int width = (int)(96*scale);
+            int height = (int)(64*scale);
 
             position = new Vector2(x, y);
             this.direction = direction;
