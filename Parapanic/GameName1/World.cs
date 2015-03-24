@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -11,6 +11,7 @@ namespace Parapanic
         public Block[,] grid;
         public int Width;
         public int Height;
+        public List<Vector2> PointsOfInterest = new List<Vector2>();
 
         #region GenerationConstants
 
@@ -70,15 +71,18 @@ namespace Parapanic
 
             grid[patientX, patientY] =
                 new PatientBlock(patientX * Block.size, patientY * Block.size);
+            PointsOfInterest.Add(new Vector2(patientX * Block.size, patientY * Block.size));
 
             grid[hospitalX, hospitalY] =
                 new HospitalBlock(hospitalX * Block.size, hospitalY * Block.size);
+            PointsOfInterest.Add(new Vector2(hospitalX * Block.size, hospitalY * Block.size));
 
             //fill up any remaining spots
             for (int i = 0; i < grid.GetLength(0); i++)
                 for (int u = 0; u < grid.GetLength(1); u++)
                     if (grid[i, u] == null)
                         grid[i, u] = new FloorBlock(i * Block.size, u * Block.size);
+            
             /*int patientX = r.Next(width/2);
             int patientY = r.Next(height);
             int hospitalX = r.Next(width/2, width);

@@ -34,7 +34,31 @@ namespace Parapanic.Minimap
             gameBounds.Width = (int)(gamePortWidth * (gamePortScale + 1));
             gameBounds.Height = (int)(gamePortHeight * (gamePortScale + 1));
 
+            Texture2D gpsBackground = game.Content.Load<Texture2D>("gps");
+            
+            Rectangle backgroundBounds = screenPort;
+            backgroundBounds.X -= 10;
+            backgroundBounds.Width += 20;
+            backgroundBounds.Y -= 50;
+            backgroundBounds.Height += 60;
+            batch.Draw(gpsBackground, backgroundBounds, Color.White);
             batch.Draw(map.GetMapTexture(game, world), screenPort, gameBounds, Color.White);
+
+            //we probably don't need to keep reloading this texture every frame.
+            //todo: look into speed impacts of reloading this vs memory impact of keeping a reference
+            Texture2D alertTex = game.Content.Load<Texture2D>("alert");
+            Vector2 origin = new Vector2(alertTex.Width/2, alertTex.Height/2);
+
+            foreach (Vector2 i in world.PointsOfInterest)
+            {
+                Vector2 posToDraw = new Vector2();
+                posToDraw.X = MathHelper.Clamp(i.X - gameBounds.X, 0, gameBounds.Width) / gameBounds.Width * screenPort.Width;
+                posToDraw.Y = MathHelper.Clamp(i.Y - gameBounds.Y, 0, gameBounds.Height) / gameBounds.Height * screenPort.Height;
+                posToDraw += screenPort.Location.ToVector2();
+
+                batch.Draw(alertTex, posToDraw, null, Color.White, 0, origin, .25f, SpriteEffects.None, 0);
+            }
+
         }
     }
 }
