@@ -12,7 +12,6 @@ namespace Parapanic
     {
         public static Vector2 position;
         static Rectangle view;
-        
 
         static float scale = 1f;
 
@@ -40,16 +39,9 @@ namespace Parapanic
         struct RenderItem
         {
             public VertexPositionColorTexture[] Verts;
-            public int VertexIndex;
-            public int NumPolys;
             public Texture2D Texture;
         }
 
-        static DynamicVertexBuffer buffer;
-        static BasicEffect effect;
-        static List<RenderItem> renderItems;
-        static List<VertexPositionColorTexture> vertices;
-        static VertexPositionColorTexture[] vs = new VertexPositionColorTexture[30];
         public static void DrawScreen(Parapanic game, Ambulance ambulance, World world)
         {
             //This whole method can probably be optimized a TON, so if we ever have speed problems this should be the first place to check.
@@ -63,14 +55,6 @@ namespace Parapanic
 
             GraphicsDevice graphics = game.GraphicsDevice;
 
-            if (buffer == null)
-                buffer = new DynamicVertexBuffer(graphics, typeof(VertexPositionColorTexture), 1 << 20, BufferUsage.WriteOnly);
-            if (effect == null)
-                effect = new BasicEffect(graphics);
-            if (renderItems == null)
-                renderItems = new List<RenderItem>();
-            if (vertices == null)
-                vertices = new List<VertexPositionColorTexture>();
             
             int width = graphics.Viewport.Width;
             int height = graphics.Viewport.Height;
@@ -78,7 +62,8 @@ namespace Parapanic
                                               new Vector3(position.X + width/2, -position.Y - height/2, 0), 
                                               new Vector3(0, 1, 0));
             Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 1.26f/scale, (float)width/height, 0.01f, 1000);
-            
+                
+            BasicEffect effect = new BasicEffect(graphics);
 
             effect.World = Matrix.CreateRotationX(MathHelper.Pi); 
             effect.View = view;
@@ -86,9 +71,13 @@ namespace Parapanic
             effect.VertexColorEnabled = true;
             effect.TextureEnabled = true;
 
-            graphics.RasterizerState = RasterizerState.CullNone;
+            RasterizerState rs = new RasterizerState();
+            rs.CullMode = CullMode.None;
+            graphics.RasterizerState = rs;
 
             graphics.DepthStencilState = DepthStencilState.Default;
+
+            List<RenderItem> renderItems = new List<RenderItem>();
             
             foreach (Block b in world.grid)
             {
@@ -116,17 +105,17 @@ namespace Parapanic
                     Vector3 frontBottomRight = new Vector3(Block.size, Block.size, -b.depth) + new Vector3(b.position, 0);
                     Vector3 frontTopRight = new Vector3(Block.size, 0, -b.depth) + new Vector3(b.position, 0);
 
-                    int numVerts;
+                    VertexPositionColorTexture[] vs;
+
                     if (b.depth != 0)
                     {
-                        numVerts = 30;
-                        
-                        /*vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
+                        vs = new VertexPositionColorTexture[36];
+                        vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
                         vs[1] = new VertexPositionColorTexture(rearTopLeft, c, TopLeft);
                         vs[2] = new VertexPositionColorTexture(rearBottomRight, c, BottomRight);
                         vs[3] = new VertexPositionColorTexture(rearTopRight, c, TopRight);
                         vs[4] = vs[2];
-                        vs[5] = vs[1];*/
+                        vs[5] = vs[1];
 
                         vs[6] = new VertexPositionColorTexture(rearBottomLeft, c, BottomRight);
                         vs[7] = new VertexPositionColorTexture(rearTopLeft, c, BottomLeft);
@@ -156,16 +145,16 @@ namespace Parapanic
                         vs[28] = vs[26];
                         vs[29] = vs[25];
 
-                        vs[0] = new VertexPositionColorTexture(frontBottomLeft, c, BottomLeft);
-                        vs[1] = new VertexPositionColorTexture(frontTopLeft, c, TopLeft);
-                        vs[2] = new VertexPositionColorTexture(frontBottomRight, c, BottomRight);
-                        vs[3] = new VertexPositionColorTexture(frontTopRight, c, TopRight);
-                        vs[4] = vs[2];
-                        vs[5] = vs[1];
+                        vs[30] = new VertexPositionColorTexture(frontBottomLeft, c, BottomLeft);
+                        vs[31] = new VertexPositionColorTexture(frontTopLeft, c, TopLeft);
+                        vs[32] = new VertexPositionColorTexture(frontBottomRight, c, BottomRight);
+                        vs[33] = new VertexPositionColorTexture(frontTopRight, c, TopRight);
+                        vs[34] = vs[32];
+                        vs[35] = vs[31];
                     }
                     else
                     {
-                        numVerts = 6;
+                        vs = new VertexPositionColorTexture[6];
 
                         vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
                         vs[1] = new VertexPositionColorTexture(rearTopLeft, c, TopLeft);
@@ -176,20 +165,11 @@ namespace Parapanic
                     }
 
 
-                    RenderItem r = new RenderItem 
-                    { Verts = vs, VertexIndex = vertices.Count, NumPolys = numVerts / 3, Texture = texture };
-                    
+                    RenderItem r = new RenderItem { Verts = vs, Texture = texture };
                     renderItems.Add(r);
-
-                    for (int i = 0; i < numVerts; i++)
-                    {
-                        vertices.Add(vs[i]);
-                    }
-                    //vertices.AddRange(vs);
                 }
             }
             {
-                int numVerts = 6;
                 Color c = Color.White;
                 Texture2D texture = Textures.ambulance;
                 Vector2 p1 = new Vector2(-texture.Width / 2, -texture.Height / 2);
@@ -200,6 +180,8 @@ namespace Parapanic
                 Matrix itemWorld = Matrix.CreateTranslation(new Vector3(ambulance.position, 0));
 
 
+
+                VertexPositionColorTexture[] vs = new VertexPositionColorTexture[6];
                 Matrix rotationMatrix = Matrix.CreateRotationZ(ambulance.direction);
 
                 Vector3 v1 = (Matrix.Identity
@@ -234,22 +216,10 @@ namespace Parapanic
                 vs[4] = vs[2];
                 vs[5] = vs[1];
 
-                RenderItem r = new RenderItem() 
-                { Verts = vs, VertexIndex = vertices.Count, NumPolys = numVerts / 3, Texture = texture };
-
+                RenderItem r = new RenderItem() { Verts = vs, Texture = texture };
                 renderItems.Add(r);
-
-                for (int i = 0; i < numVerts; i++)
-                {
-                    vertices.Add(vs[i]);
-                }
-                //vertices.AddRange(vs);
             }
-
-
-            buffer.SetData<VertexPositionColorTexture>(vertices.ToArray());
-
-            graphics.SetVertexBuffer(buffer);
+            
 
             foreach (RenderItem item in renderItems)
             {
@@ -258,13 +228,9 @@ namespace Parapanic
                 foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                 {
                     pass.Apply();
-                    graphics.DrawPrimitives(PrimitiveType.TriangleList, item.VertexIndex, item.NumPolys);
-                    //graphics.DrawUserPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleList, item.Verts, 0, item.Verts.Length / 3);
+                    graphics.DrawUserPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleList, item.Verts, 0, item.Verts.Length / 3);
                 }
             }
-
-            vertices.Clear();
-            renderItems.Clear();
         }
     }
 }
