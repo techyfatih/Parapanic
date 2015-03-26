@@ -49,7 +49,7 @@ namespace Parapanic.Minimap
             Texture2D alertTex = game.Content.Load<Texture2D>("alert");
             Vector2 origin = new Vector2(alertTex.Width/2, alertTex.Height/2);
 
-            foreach (Vector2 i in world.PointsOfInterest)
+            foreach (Vector2 i in world.pointsOfInterest)
             {
                 Vector2 posToDraw = new Vector2();
                 posToDraw.X = MathHelper.Clamp(i.X - gameBounds.X, 0, gameBounds.Width) / gameBounds.Width * screenPort.Width;

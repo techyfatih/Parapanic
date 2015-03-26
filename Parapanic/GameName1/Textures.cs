@@ -19,7 +19,7 @@ namespace Parapanic
         {
             ambulance = Content.Load<Texture2D>("Ambulance.png");
             floor = Content.Load<Texture2D>("floor.png");
-            wall = Content.Load<Texture2D>("wall.png");
+            wall = Content.Load<Texture2D>("building.png");
             patient = Content.Load<Texture2D>("Patient.png");
             hospital = Content.Load<Texture2D>("Hospital.png");
         }

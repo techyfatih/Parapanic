@@ -102,7 +102,7 @@ namespace Parapanic
             float fps = 10000000 / (float)nanoSecCounter;
             float msecCounter = (float)nanoSecCounter / 10000;
 
-            Console.WriteLine("{0} fps @ {1} ms", fps, msecCounter);
+            //Console.WriteLine("{0} fps @ {1} ms", fps, msecCounter);
             lastDateTime = endDateTime;
         }
     }
