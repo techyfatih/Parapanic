@@ -21,7 +21,7 @@ namespace Parapanic
         protected double[] cornerAngles;
         protected double diagonal;
 
-        protected const double MAX_TURN_RATE = 0.05;
+        protected const double MAX_TURN_RATE = 0.07;
 
         public Car(int x, int y, double speed, float direction, double topSpeed, double acceleration, double friction)
         {
@@ -69,6 +69,7 @@ namespace Parapanic
             foreach (Block b in world.grid)
             {
                 if (b.GetType().Equals(typeof(WallBlock)))
+
                 {
                     if ((position.X > b.position.X && position.X < b.position.X + Block.size) && Utilities.CheckCollisionY(boundingBox, b.boundary))
                     {

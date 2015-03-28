@@ -42,25 +42,7 @@ namespace Parapanic
                 }
             }
 
-            //Mouse Direction - Turning
-            double turnrate = (Math.Abs(speed) > 1) ? ((MAX_TURN_RATE / topSpeed) * Math.Abs(speed)) : 0; //Don't turn when not moving
-
-            double mouseDirection = Utilities.NormAngle(Math.Atan2(Mouse.GetState().Y - position.Y + Camera.position.Y, 
-                                                                   Mouse.GetState().X - position.X + Camera.position.X));
-
-            if (Math.Abs(mouseDirection - direction) > turnrate)
-            {
-                double refDir = direction;
-                if (direction >= Math.PI)
-                {
-                    refDir -= Math.PI;
-                    mouseDirection = Utilities.NormAngle(mouseDirection - Math.PI);
-                }
-                if (mouseDirection > refDir && mouseDirection < refDir + Math.PI)
-                    direction = (float)Utilities.NormAngle(direction + turnrate);
-                else
-                    direction = (float)Utilities.NormAngle(direction - turnrate);
-            }
+            
 
             //Slide according to friction is nothing is pressed
             if (Mouse.GetState().LeftButton == ButtonState.Released && Mouse.GetState().RightButton == ButtonState.Released)
@@ -83,6 +65,8 @@ namespace Parapanic
             int boundHeight = Utilities.Maximum(newY) - boundY;
 
             Rectangle boundingBox = new Rectangle(boundX, boundY, boundWidth, boundHeight);
+
+            bool intersected = false;
 
             for (int x = 0; x < world.grid.GetLength(0); x++)
             {
@@ -115,15 +99,50 @@ namespace Parapanic
                     {
                         if ((position.X > world.grid[x, y].position.X && position.X < world.grid[x, y].position.X + Block.size)
                             && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
+                        {
                             speedV.Y = 0;
+                            intersected = true;
+                        }
                         if ((position.Y > world.grid[x, y].position.Y && position.Y < world.grid[x, y].position.Y + Block.size)
-                            && Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary))
+                         && Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary))
+                        {
                             speedV.X = 0;
+                            intersected = true;
+                        }
                     }
                 }
             }
+
+            //Console.WriteLine(intersected);
+
             position.X += speedV.X;
             position.Y += speedV.Y;
+
+            //Console.WriteLine(position.X + " " + position.Y);
+            //Console.WriteLine(Utilities.round(101.12345f, 4));
+
+            //Console.WriteLine(speedV.X + " " + speedV.Y);
+            speed = (speed > 0) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X);
+
+            //Mouse Direction - Turning
+            double turnrate = (Math.Abs(speed) > 1) ? ((MAX_TURN_RATE / topSpeed) * Math.Abs(speed)) : 0; //Don't turn when not moving
+
+            double mouseDirection = Utilities.NormAngle(Math.Atan2(Mouse.GetState().Y - position.Y + Camera.position.Y,
+                                                                   Mouse.GetState().X - position.X + Camera.position.X));
+
+            if (Math.Abs(mouseDirection - direction) > turnrate && !intersected)
+            {
+                double refDir = direction;
+                if (direction >= Math.PI)
+                {
+                    refDir -= Math.PI;
+                    mouseDirection = Utilities.NormAngle(mouseDirection - Math.PI);
+                }
+                if (mouseDirection > refDir && mouseDirection < refDir + Math.PI)
+                    direction = (float)Utilities.NormAngle(direction + turnrate);
+                else
+                    direction = (float)Utilities.NormAngle(direction - turnrate);
+            }
         }
     }
 }
