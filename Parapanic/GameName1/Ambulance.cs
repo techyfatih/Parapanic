@@ -115,8 +115,13 @@ namespace Parapanic
 
             //Console.WriteLine(intersected);
 
-            position.X += speedV.X;
-            position.Y += speedV.Y;
+            position.X += Utilities.Round(speedV.X,2);
+            position.Y += Utilities.Round(speedV.Y,2);
+
+            Console.WriteLine(position.X + " " + position.Y);
+            Console.WriteLine(speedV.X + " " + speedV.Y);
+            Console.WriteLine(Utilities.Round(speedV.X, 3) + " " + Utilities.Round(speedV.Y, 3));
+            Console.WriteLine(intersected);
 
             //Console.WriteLine(position.X + " " + position.Y);
             //Console.WriteLine(Utilities.round(101.12345f, 4));

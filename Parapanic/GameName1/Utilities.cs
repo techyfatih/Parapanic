@@ -49,5 +49,22 @@ namespace Parapanic
             int bottom = Math.Min(r1.Bottom, r2.Bottom);
             return top < bottom;
         }
+
+        public static float Round(float x, int places)
+        {
+            int tempf = (int)(x * (float)Math.Pow(10, places));
+            return tempf / (float)Math.Pow(10, places);
+
+        }
+
+        public static Vector2 speedToVector(float speed, float direction)
+        {
+            return new Vector2((float)(Math.Cos(direction) * speed), (float)(Math.Sin(direction) * speed));
+        }
+
+        public static float speedToFloat(Vector2 speedV, bool positive)
+        {
+            return (float)((positive) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X));
+        }
     }
 }
