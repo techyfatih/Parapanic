@@ -183,7 +183,7 @@ namespace Parapanic
             List<Vector2> empties = new List<Vector2>();
             foreach (Block b in grid)
                 if (b.GetType().Equals(typeof(FloorBlock))) empties.Add(b.position);
-            return empties[r.Next(empties.Capacity)];
+            return empties[r.Next(empties.Count)];
         }
     }
 }

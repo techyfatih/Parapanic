@@ -7,6 +7,9 @@ namespace Parapanic
 {
     class PatientBlock : Block
     {
-        public PatientBlock(int x, int y) : base(x, y) { }
+        public PatientBlock(int x, int y) : base(x, y) 
+        {
+            solid = false;
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace Parapanic
         public FloorBlock(int x, int y) : base(x, y) 
         {
             depth = 0;
+            solid = false;
         }
     }
 }

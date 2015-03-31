@@ -13,14 +13,18 @@ namespace Parapanic
     class Ambulance : Car
     {
         bool hasPatient;
+        bool intersected;
+        const double MAX_TURN_RATE = 0.07;
 
         public Ambulance(int x, int y, float direction, double topSpeed, double acceleration, double friction)
             : base(x, y, 0, direction, topSpeed, acceleration, friction) { hasPatient = false; }
 
         public override void Update(World world)
         {
+            intersected = false;
+            MouseState mouse = Mouse.GetState();
             //Left Click - Acceleration
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (mouse.LeftButton == ButtonState.Pressed)
             {
                 if (speed + acceleration < topSpeed)
                     speed += acceleration;
@@ -29,7 +33,7 @@ namespace Parapanic
             }
 
             //Right Click - Brake/Reverse
-            if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            if (mouse.RightButton == ButtonState.Pressed)
             {
                 if (speed - acceleration > 0)
                     speed -= acceleration;
@@ -42,98 +46,16 @@ namespace Parapanic
                 }
             }
 
-            
 
-            //Slide according to friction is nothing is pressed
-            if (Mouse.GetState().LeftButton == ButtonState.Released && Mouse.GetState().RightButton == ButtonState.Released)
-                speed *= friction;
+            base.Update(world);
 
-            Vector2 speedV = new Vector2((float)(Math.Cos(direction) * speed), (float)(Math.Sin(direction) * speed));
-
-            int[] newX = new int[4];
-            int[] newY = new int[4];
-            for (int i = 0; i < 4; i++)
-            {
-                cornerAngles[i] = Utilities.NormAngle(cornerAngles[i] + direction);
-                newX[i] = (int)(Math.Cos(cornerAngles[i]) * diagonal + position.X + speedV.X);
-                newY[i] = (int)(Math.Sin(cornerAngles[i]) * diagonal + position.Y + speedV.Y);
-            }
-
-            int boundX = Utilities.Minimum(newX);
-            int boundY = Utilities.Minimum(newY);
-            int boundWidth = Utilities.Maximum(newX) - boundX;
-            int boundHeight = Utilities.Maximum(newY) - boundY;
-
-            Rectangle boundingBox = new Rectangle(boundX, boundY, boundWidth, boundHeight);
-
-            bool intersected = false;
-
-            for (int x = 0; x < world.grid.GetLength(0); x++)
-            {
-                for (int y = 0; y < world.grid.GetLength(1); y++)
-                {
-                    if (world.grid[x, y].GetType().Equals(typeof(PatientBlock))
-                        && (Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary)
-                        && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary)))
-                    {
-                        hasPatient = true;
-                        int xPos = (int)world.grid[x,y].position.X;
-                        int yPos = (int)world.grid[x,y].position.Y;
-                        world.pointsOfInterest.Remove(world.grid[x, y].position);
-                        world.grid[x, y] = new FloorBlock(xPos, yPos);
-                        Minimap.Map.DirtyFlag = true;
-                    }
-                    else if (world.grid[x, y].GetType().Equals(typeof(HospitalBlock))
-                        && (Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary)
-                        && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
-                        && hasPatient)
-                    {
-                        hasPatient = false;
-                        int xPos = (int)world.grid[x, y].position.X;
-                        int yPos = (int)world.grid[x, y].position.Y;
-                        world.pointsOfInterest.Remove(world.grid[x, y].position);
-                        world.grid[x, y] = new FloorBlock(xPos, yPos);
-                        Minimap.Map.DirtyFlag = true;
-                    }
-                    else if (world.grid[x, y].GetType().Equals(typeof(WallBlock)))
-                    {
-                        if ((position.X > world.grid[x, y].position.X && position.X < world.grid[x, y].position.X + Block.size)
-                            && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
-                        {
-                            speedV.Y = 0;
-                            intersected = true;
-                        }
-                        if ((position.Y > world.grid[x, y].position.Y && position.Y < world.grid[x, y].position.Y + Block.size)
-                         && Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary))
-                        {
-                            speedV.X = 0;
-                            intersected = true;
-                        }
-                    }
-                }
-            }
-
-            //Console.WriteLine(intersected);
-
-            position.X += Utilities.Round(speedV.X,2);
-            position.Y += Utilities.Round(speedV.Y,2);
-
-            Console.WriteLine(position.X + " " + position.Y);
-            Console.WriteLine(speedV.X + " " + speedV.Y);
-            Console.WriteLine(Utilities.Round(speedV.X, 3) + " " + Utilities.Round(speedV.Y, 3));
             Console.WriteLine(intersected);
-
-            //Console.WriteLine(position.X + " " + position.Y);
-            //Console.WriteLine(Utilities.round(101.12345f, 4));
-
-            //Console.WriteLine(speedV.X + " " + speedV.Y);
-            speed = (speed > 0) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X);
-
+            
             //Mouse Direction - Turning
             double turnrate = (Math.Abs(speed) > 1) ? ((MAX_TURN_RATE / topSpeed) * Math.Abs(speed)) : 0; //Don't turn when not moving
 
-            double mouseDirection = Utilities.NormAngle(Math.Atan2(Mouse.GetState().Y - position.Y + Camera.position.Y,
-                                                                   Mouse.GetState().X - position.X + Camera.position.X));
+            double mouseDirection = Utilities.NormAngle(Math.Atan2(mouse.Y - position.Y + Camera.position.Y,
+                                                                   mouse.X - position.X + Camera.position.X));
 
             if (Math.Abs(mouseDirection - direction) > turnrate && !intersected)
             {
@@ -148,6 +70,38 @@ namespace Parapanic
                 else
                     direction = (float)Utilities.NormAngle(direction - turnrate);
             }
+
+        }
+
+        protected override void OnCollision(World world, int xCoord, int yCoord)
+        {
+            Block block = world.grid[xCoord, yCoord];
+
+            if (block.GetType().Equals(typeof(WallBlock)))
+                intersected = true;
+            else if (block.GetType().Equals(typeof(PatientBlock)) &&
+                     !hasPatient)
+            {
+                hasPatient = true;
+                int xPos = (int)world.grid[xCoord, yCoord].position.X;
+                int yPos = (int)world.grid[xCoord, yCoord].position.Y;
+                world.pointsOfInterest.Remove(world.grid[xCoord, yCoord].position);
+                world.grid[xCoord, yCoord] = new FloorBlock(xPos, yPos);
+                Minimap.Map.DirtyFlag = true;
+            }
+            else if (block.GetType().Equals(typeof(HospitalBlock)) &&
+                     hasPatient)
+            {
+                hasPatient = false;
+                int xPos = (int)world.grid[xCoord, yCoord].position.X;
+                int yPos = (int)world.grid[xCoord, yCoord].position.Y;
+                world.pointsOfInterest.Remove(world.grid[xCoord, yCoord].position);
+                world.grid[xCoord, yCoord] = new FloorBlock(xPos, yPos);
+                Minimap.Map.DirtyFlag = true;
+            }
+
+
+            base.OnCollision(world, xCoord, yCoord);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Parapanic
         public Vector2 origin;
 
         public double speed { get; protected set; }
+        private double lastSpeed;
         public double topSpeed { get; protected set; }
         protected double acceleration;
         protected double friction;
@@ -21,8 +22,7 @@ namespace Parapanic
         protected double[] cornerAngles;
         protected double diagonal;
 
-        protected const double MAX_TURN_RATE = 0.07;
-
+        
         public Car(int x, int y, double speed, float direction, double topSpeed, double acceleration, double friction)
         {
             scale = 0.25f;
@@ -48,7 +48,12 @@ namespace Parapanic
 
         public virtual void Update(World world)
         {
-            Vector2 speedV = new Vector2((float)(Math.Cos(direction)*speed), (float)(Math.Sin(direction)*speed));
+            //friction!!
+            if (speed == lastSpeed)
+                speed *= friction;
+
+
+            Vector2 speedV = new Vector2((float)(Math.Cos(direction) * speed), (float)(Math.Sin(direction) * speed));
 
             int[] newX = new int[4];
             int[] newY = new int[4];
@@ -66,25 +71,97 @@ namespace Parapanic
 
             Rectangle boundingBox = new Rectangle(boundX, boundY, boundWidth, boundHeight);
 
-            foreach (Block b in world.grid)
+            for (int x = 0; x < world.grid.GetLength(0); x++)
             {
-                if (b.GetType().Equals(typeof(WallBlock)))
-
+                for (int y = 0; y < world.grid.GetLength(1); y++)
                 {
-                    if ((position.X > b.position.X && position.X < b.position.X + Block.size) && Utilities.CheckCollisionY(boundingBox, b.boundary))
+                    if (world.grid[x, y].solid && boundingBox.Intersects(world.grid[x,y].boundary))
                     {
-                        speedV.Y = 0;
-                        Console.WriteLine("X " + Math.Max(boundingBox.Left, b.boundary.Left) + " " + Math.Min(boundingBox.Right, b.boundary.Right));
+                        bool collisionCalled = false;
+                        if ((position.X > world.grid[x, y].position.X && position.X < world.grid[x, y].position.X + Block.size)
+                          && Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary))
+                        {
+                            OnCollision(world, x, y);
+                            collisionCalled = true;
+                            speedV.Y = 0;
+                        }
+                        if ((position.Y > world.grid[x, y].position.Y && position.Y < world.grid[x, y].position.Y + Block.size)
+                         && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
+                        {
+                            if (!collisionCalled)
+                                OnCollision(world, x, y);
+                            speedV.X = 0;
+                        }
                     }
-                    if ((position.Y > b.position.Y && position.Y < b.position.Y + Block.size) && Utilities.CheckCollisionX(boundingBox, b.boundary))
+                    else if (Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary)
+                            && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
                     {
-                        speedV.X = 0;
-                        Console.WriteLine("Y " + Math.Max(boundingBox.Left, b.boundary.Left) + " " + Math.Min(boundingBox.Right, b.boundary.Right));
+                        OnCollision(world, x, y);
                     }
+                    /*if (world.grid[x, y].GetType().Equals(typeof(PatientBlock))
+                        && (Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary)
+                        && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary)))
+                    {
+                        hasPatient = true;
+                        int xPos = (int)world.grid[x, y].position.X;
+                        int yPos = (int)world.grid[x, y].position.Y;
+                        world.pointsOfInterest.Remove(world.grid[x, y].position);
+                        world.grid[x, y] = new FloorBlock(xPos, yPos);
+                        Minimap.Map.DirtyFlag = true;
+                    }
+                    else if (world.grid[x, y].GetType().Equals(typeof(HospitalBlock))
+                        && (Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary)
+                        && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
+                        && hasPatient)
+                    {
+                        hasPatient = false;
+                        int xPos = (int)world.grid[x, y].position.X;
+                        int yPos = (int)world.grid[x, y].position.Y;
+                        world.pointsOfInterest.Remove(world.grid[x, y].position);
+                        world.grid[x, y] = new FloorBlock(xPos, yPos);
+                        Minimap.Map.DirtyFlag = true;
+                    }
+                    else if (world.grid[x, y].GetType().Equals(typeof(WallBlock)))
+                    {
+                        if ((position.X > world.grid[x, y].position.X && position.X < world.grid[x, y].position.X + Block.size)
+                            && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
+                        {
+                            speedV.Y = 0;
+                            intersected = true;
+                        }
+                        if ((position.Y > world.grid[x, y].position.Y && position.Y < world.grid[x, y].position.Y + Block.size)
+                         && Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary))
+                        {
+                            speedV.X = 0;
+                            intersected = true;
+                        }
+                    }*/
                 }
             }
-            position.X += speedV.X;
-            position.Y += speedV.Y;
+
+            //Console.WriteLine(intersected);
+
+            position.X += Utilities.Round(speedV.X, 2);
+            position.Y += Utilities.Round(speedV.Y, 2);
+
+            Console.WriteLine(position.X + " " + position.Y);
+            Console.WriteLine(speedV.X + " " + speedV.Y);
+            Console.WriteLine(Utilities.Round(speedV.X, 3) + " " + Utilities.Round(speedV.Y, 3));
+            
+
+            //Console.WriteLine(position.X + " " + position.Y);
+            //Console.WriteLine(Utilities.round(101.12345f, 4));
+
+            //Console.WriteLine(speedV.X + " " + speedV.Y);
+            speed = (speed > 0) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X);
+            
+            
+            lastSpeed = speed;
+        }
+
+        protected virtual void OnCollision(World world, int xCoord, int yCoord)
+        {
+            world.grid[xCoord, yCoord].OnCollision(world, this);
         }
     }
 }

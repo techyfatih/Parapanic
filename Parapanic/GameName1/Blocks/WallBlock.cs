@@ -10,6 +10,7 @@ namespace Parapanic
         public WallBlock(int x, int y) : base(x, y) 
         {
             depth = Parapanic.Random.Next(1, 10);
+            solid = true;
         }
     }
 }

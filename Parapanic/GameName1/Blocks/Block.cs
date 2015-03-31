@@ -12,6 +12,7 @@ namespace Parapanic
         public static int size = 64;
         public Vector2 position;
         public Rectangle boundary;
+        public bool solid = false;
 
         public Block(int x, int y)
         {
@@ -21,5 +22,9 @@ namespace Parapanic
 
         //used for 3D code
         public int depth = 0;
+
+        public virtual void OnCollision(World world, Car car)
+        {
+        }
     }
 }
