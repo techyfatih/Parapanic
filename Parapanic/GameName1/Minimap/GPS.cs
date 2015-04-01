@@ -29,10 +29,10 @@ namespace Parapanic.Minimap
         public void Draw(SpriteBatch batch, Parapanic game, World world)
         {
             Rectangle gameBounds = new Rectangle();
-            gameBounds.X = (int)(Camera.position.X - gamePortWidth * (gamePortScale - gamePortScale / 2));
-            gameBounds.Y = (int)(Camera.position.Y - gamePortHeight * (gamePortScale - gamePortScale / 2));
-            gameBounds.Width = (int)(gamePortWidth * (gamePortScale + 1));
-            gameBounds.Height = (int)(gamePortHeight * (gamePortScale + 1));
+            gameBounds.X = (int)(((Camera.position.X - gamePortWidth * (gamePortScale - gamePortScale / 2)) / Block.size) * map.xScale);
+            gameBounds.Y = (int)(((Camera.position.Y - gamePortHeight * (gamePortScale - gamePortScale / 2)) / Block.size) * map.yScale);
+            gameBounds.Width = (int)(((gamePortWidth * (gamePortScale + 1)) / Block.size) * map.xScale);
+            gameBounds.Height = (int)(((gamePortHeight * (gamePortScale + 1)) / Block.size) * map.yScale);
 
             Texture2D gpsBackground = game.Content.Load<Texture2D>("gps");
             
