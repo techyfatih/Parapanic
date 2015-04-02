@@ -7,8 +7,10 @@ namespace Parapanic
 {
     class PatientBlock : Block
     {
-        public PatientBlock(int x, int y) : base(x, y) 
+        public PointOfInterest POIHandle;
+        public PatientBlock(int x, int y, PointOfInterest poi) : base(x, y) 
         {
+            POIHandle = poi;
             solid = false;
         }
     }

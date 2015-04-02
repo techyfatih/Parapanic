@@ -6,17 +6,29 @@ using Microsoft.Xna.Framework;
 
 namespace Parapanic
 {
+    public struct PointOfInterest
+    {
+        public enum Types
+        {
+            Hospital, Patient
+        }
+
+        public Types Type;
+        public Vector2 Position;
+    }
+
     class World
     {
         public Block[,] grid;
         public int Width;
         public int Height;
-        public List<Vector2> pointsOfInterest;
+        public List<PointOfInterest> pointsOfInterest;
 
         const int BORDERWIDTH = 5;
         const int BORDERHEIGHT = 5;
         const int CITYBLOCKWIDTH = 5;
         const int CITYBLOCKHEIGHT = 2;
+
 
         public World(int width, int height)
         {
@@ -25,7 +37,7 @@ namespace Parapanic
             grid = new Block[width + 2 * BORDERWIDTH, height + 2 * BORDERHEIGHT];
             Width = (width + 2*BORDERWIDTH)*Block.size; //For camera
             Height = (height + 2*BORDERHEIGHT)* Block.size; //For camera
-            pointsOfInterest = new List<Vector2>();
+            pointsOfInterest = new List<PointOfInterest>();
 
             Rectangle[] outerRegions = 
                 new Rectangle[4] {new Rectangle(0, 0, (int)(0.1*width), (int)(0.9*height)),
@@ -49,18 +61,24 @@ namespace Parapanic
                 new Vector2(BORDERWIDTH + r.Next(outerRegions[patientRegion].Left, BORDERWIDTH + outerRegions[patientRegion].Right),
                             BORDERHEIGHT + r.Next(outerRegions[patientRegion].Top, BORDERHEIGHT + outerRegions[patientRegion].Bottom));
 
+            PointOfInterest patientPoi = new PointOfInterest() 
+                { Position = patient * Block.size, Type = PointOfInterest.Types.Patient };
+
             grid[(int)patient.X, (int)patient.Y] =
-                new PatientBlock((int)patient.X * Block.size, (int)patient.Y * Block.size);
-            pointsOfInterest.Add(patient * Block.size);
+                new PatientBlock((int)patient.X * Block.size, (int)patient.Y * Block.size, patientPoi);
+            pointsOfInterest.Add(patientPoi);
 
             int hospitalRegion = (patientRegion + 2) % 4;
             Vector2 hospital =
                 new Vector2(BORDERWIDTH + r.Next(outerRegions[hospitalRegion].Left, BORDERWIDTH + outerRegions[hospitalRegion].Right),
                             BORDERHEIGHT + r.Next(outerRegions[hospitalRegion].Top, BORDERHEIGHT + outerRegions[hospitalRegion].Bottom));
 
+            PointOfInterest hospitalPoi = new PointOfInterest() 
+                { Position = hospital * Block.size, Type = PointOfInterest.Types.Hospital };
+
             grid[(int)hospital.X, (int)hospital.Y] =
-                new HospitalBlock((int)hospital.X * Block.size, (int)hospital.Y * Block.size);
-            pointsOfInterest.Add(hospital * Block.size);
+                new HospitalBlock((int)hospital.X * Block.size, (int)hospital.Y * Block.size, hospitalPoi);
+            pointsOfInterest.Add(hospitalPoi);
 
             //Create node pairs and connections
             for (int i = 0; i < 20; i++)

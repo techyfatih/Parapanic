@@ -86,7 +86,7 @@ namespace Parapanic
                 hasPatient = true;
                 int xPos = (int)world.grid[xCoord, yCoord].position.X;
                 int yPos = (int)world.grid[xCoord, yCoord].position.Y;
-                world.pointsOfInterest.Remove(world.grid[xCoord, yCoord].position);
+                world.pointsOfInterest.Remove(((PatientBlock)block).POIHandle);
                 world.grid[xCoord, yCoord] = new FloorBlock(xPos, yPos);
                 Minimap.Map.DirtyFlag = true;
             }
@@ -96,7 +96,7 @@ namespace Parapanic
                 hasPatient = false;
                 int xPos = (int)world.grid[xCoord, yCoord].position.X;
                 int yPos = (int)world.grid[xCoord, yCoord].position.Y;
-                world.pointsOfInterest.Remove(world.grid[xCoord, yCoord].position);
+                world.pointsOfInterest.Remove(((HospitalBlock)block).POIHandle);
                 world.grid[xCoord, yCoord] = new FloorBlock(xPos, yPos);
                 Minimap.Map.DirtyFlag = true;
             }

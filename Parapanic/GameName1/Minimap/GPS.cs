@@ -47,16 +47,32 @@ namespace Parapanic.Minimap
             //we probably don't need to keep reloading this texture every frame.
             //todo: look into speed impacts of reloading this vs memory impact of keeping a reference
             Texture2D alertTex = game.Content.Load<Texture2D>("alert");
+            Texture2D hospitalTex = game.Content.Load<Texture2D>("hospital_icon");
             Vector2 origin = new Vector2(alertTex.Width/2, alertTex.Height/2);
 
-            foreach (Vector2 i in world.pointsOfInterest)
+            foreach (PointOfInterest i in world.pointsOfInterest)
             {
                 Vector2 posToDraw = new Vector2();
-                posToDraw.X = MathHelper.Clamp(i.X - gameBounds.X, 0, gameBounds.Width) / gameBounds.Width * screenPort.Width;
-                posToDraw.Y = MathHelper.Clamp(i.Y - gameBounds.Y, 0, gameBounds.Height) / gameBounds.Height * screenPort.Height;
+                Texture2D texture;
+
+                switch (i.Type)
+                {
+                    case PointOfInterest.Types.Hospital:
+                        texture = hospitalTex;
+                        break;
+                    case PointOfInterest.Types.Patient:
+                        texture = alertTex;
+                        break;
+                    default:
+                        texture = alertTex;
+                        break;
+                }
+
+                posToDraw.X = MathHelper.Clamp(i.Position.X / Block.size * map.xScale - gameBounds.X, 0, gameBounds.Width) / gameBounds.Width * screenPort.Width;
+                posToDraw.Y = MathHelper.Clamp(i.Position.Y / Block.size * map.xScale - gameBounds.Y, 0, gameBounds.Height) / gameBounds.Height * screenPort.Height;
                 posToDraw += screenPort.Location.ToVector2();
 
-                batch.Draw(alertTex, posToDraw, null, Color.White, 0, origin, .25f, SpriteEffects.None, 0);
+                batch.Draw(texture, posToDraw, null, Color.White, 0, origin, .25f, SpriteEffects.None, 0);
             }
 
         }
