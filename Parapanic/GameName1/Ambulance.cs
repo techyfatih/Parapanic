@@ -57,7 +57,8 @@ namespace Parapanic
             double mouseDirection = Utilities.NormAngle(Math.Atan2(mouse.Y - position.Y + Camera.position.Y,
                                                                    mouse.X - position.X + Camera.position.X));
 
-            if (Math.Abs(mouseDirection - direction) > turnrate && !intersected)
+            if (Math.Abs(mouseDirection - direction) > turnrate //&& !intersected)
+                )
             {
                 double refDir = direction;
                 if (direction >= Math.PI)

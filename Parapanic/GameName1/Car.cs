@@ -17,11 +17,16 @@ namespace Parapanic
         public double topSpeed { get; protected set; }
         protected double acceleration;
         protected double friction;
+        protected float crashFriction = 0.95f;
         public float scale { get; protected set; }
 
         protected double[] cornerAngles;
         protected double diagonal;
 
+        protected bool collisionLeft = false;
+        protected bool collisionRight = false;
+        protected bool collisionUp = false;
+        protected bool collisionDown = false;
         
         public Car(int x, int y, double speed, float direction, double topSpeed, double acceleration, double friction)
         {
@@ -71,76 +76,54 @@ namespace Parapanic
 
             Rectangle boundingBox = new Rectangle(boundX, boundY, boundWidth, boundHeight);
 
+
+            bool topLeftCollision = false;
+            bool bottomLeftCollision = false;
+            bool topRightCollision = false;
+            bool bottomRightCollision = false;
+
             for (int x = 0; x < world.grid.GetLength(0); x++)
             {
                 for (int y = 0; y < world.grid.GetLength(1); y++)
                 {
                     if (world.grid[x, y].solid && boundingBox.Intersects(world.grid[x,y].boundary))
                     {
-                        bool collisionCalled = false;
-                        if ((position.X > world.grid[x, y].position.X && position.X < world.grid[x, y].position.X + Block.size)
-                          && Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary))
-                        {
-                            OnCollision(world, x, y);
-                            collisionCalled = true;
-                            speedV.Y = 0;
-                        }
-                        if ((position.Y > world.grid[x, y].position.Y && position.Y < world.grid[x, y].position.Y + Block.size)
-                         && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
-                        {
-                            if (!collisionCalled)
-                                OnCollision(world, x, y);
-                            speedV.X = 0;
-                        }
+                        OnCollision(world, x, y);
+                        speedV *= crashFriction;
+
+                        topLeftCollision = Utilities.CheckCollision(boundingBox.Location, world.grid[x, y].boundary) || topLeftCollision;
+                        bottomLeftCollision =
+                            Utilities.CheckCollision(new Point(boundingBox.X, boundingBox.Y + boundingBox.Height), world.grid[x, y].boundary) || bottomLeftCollision;
+                        topRightCollision =
+                            Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y), world.grid[x, y].boundary) || topRightCollision;
+                        bottomRightCollision =
+                            Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y + boundingBox.Height), world.grid[x, y].boundary) || bottomRightCollision;
+
+
                     }
-                    else if (Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary)
-                            && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
+                    else if (boundingBox.Intersects(world.grid[x,y].boundary))
                     {
                         OnCollision(world, x, y);
                     }
-                    /*if (world.grid[x, y].GetType().Equals(typeof(PatientBlock))
-                        && (Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary)
-                        && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary)))
-                    {
-                        hasPatient = true;
-                        int xPos = (int)world.grid[x, y].position.X;
-                        int yPos = (int)world.grid[x, y].position.Y;
-                        world.pointsOfInterest.Remove(world.grid[x, y].position);
-                        world.grid[x, y] = new FloorBlock(xPos, yPos);
-                        Minimap.Map.DirtyFlag = true;
-                    }
-                    else if (world.grid[x, y].GetType().Equals(typeof(HospitalBlock))
-                        && (Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary)
-                        && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
-                        && hasPatient)
-                    {
-                        hasPatient = false;
-                        int xPos = (int)world.grid[x, y].position.X;
-                        int yPos = (int)world.grid[x, y].position.Y;
-                        world.pointsOfInterest.Remove(world.grid[x, y].position);
-                        world.grid[x, y] = new FloorBlock(xPos, yPos);
-                        Minimap.Map.DirtyFlag = true;
-                    }
-                    else if (world.grid[x, y].GetType().Equals(typeof(WallBlock)))
-                    {
-                        if ((position.X > world.grid[x, y].position.X && position.X < world.grid[x, y].position.X + Block.size)
-                            && Utilities.CheckCollisionY(boundingBox, world.grid[x, y].boundary))
-                        {
-                            speedV.Y = 0;
-                            intersected = true;
-                        }
-                        if ((position.Y > world.grid[x, y].position.Y && position.Y < world.grid[x, y].position.Y + Block.size)
-                         && Utilities.CheckCollisionX(boundingBox, world.grid[x, y].boundary))
-                        {
-                            speedV.X = 0;
-                            intersected = true;
-                        }
-                    }*/
                 }
             }
 
-            //Console.WriteLine(intersected);
+            bool leftCollision = topLeftCollision && bottomLeftCollision;
+            bool rightCollision = topRightCollision && bottomRightCollision;
+            bool topCollision = topRightCollision && topLeftCollision;
+            bool bottomCollision = bottomRightCollision && bottomLeftCollision;
 
+            if (leftCollision)
+                speedV.X = Math.Max(0, speedV.X);
+            if (rightCollision)
+                speedV.X = Math.Min(0, speedV.X);
+            if (topCollision)
+                speedV.Y = Math.Max(0, speedV.Y);
+            if (bottomCollision)
+                speedV.Y = Math.Min(0, speedV.Y);
+
+
+            
             position.X += Utilities.Round(speedV.X, 2);
             position.Y += Utilities.Round(speedV.Y, 2);
 
@@ -149,12 +132,7 @@ namespace Parapanic
             Console.WriteLine(Utilities.Round(speedV.X, 3) + " " + Utilities.Round(speedV.Y, 3));
             
 
-            //Console.WriteLine(position.X + " " + position.Y);
-            //Console.WriteLine(Utilities.round(101.12345f, 4));
-
-            //Console.WriteLine(speedV.X + " " + speedV.Y);
             speed = (speed > 0) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X);
-            
             
             lastSpeed = speed;
         }

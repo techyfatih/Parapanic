@@ -50,6 +50,22 @@ namespace Parapanic
             return top < bottom;
         }
 
+        public static bool CheckCollisionX(int num, Rectangle r)
+        {
+            return (num > r.Left) && (num < r.Right);
+        }
+
+        public static bool CheckCollisionY(int num, Rectangle r)
+        {
+            return (num > r.Top) && (num < r.Bottom);
+        }
+
+        public static bool CheckCollision(Point p, Rectangle r)
+        {
+            return (p.X >= r.Left && p.X <= r.Right) &&
+                   (p.Y >= r.Top && p.Y <= r.Bottom);
+        }
+
         public static float Round(float x, int places)
         {
             int tempf = (int)(x * (float)Math.Pow(10, places));
