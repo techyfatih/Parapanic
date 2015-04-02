@@ -28,19 +28,19 @@ namespace Parapanic
             pointsOfInterest = new List<Vector2>();
 
             Rectangle[] outerRegions = 
-                new Rectangle[4] {new Rectangle(0, 0, (int)(0.2*width), (int)(0.8*height)),
-                                  new Rectangle((int)(0.2*width), 0, (int)(0.8*width), (int)(0.2*height)),
-                                  new Rectangle((int)(0.8*width), (int)(0.2*height), (int)(0.2*width), (int)(0.8*height)),
-                                  new Rectangle(0, (int)(0.8*height), (int)(0.8*width), (int)(0.2*height))};
+                new Rectangle[4] {new Rectangle(0, 0, (int)(0.1*width), (int)(0.9*height)),
+                                  new Rectangle((int)(0.1*width), 0, (int)(0.9*width), (int)(0.1*height)),
+                                  new Rectangle((int)(0.9*width), (int)(0.1*height), (int)(0.1*width), (int)(0.9*height)),
+                                  new Rectangle(0, (int)(0.9*height), (int)(0.9*width), (int)(0.1*height))};
 
-            int innerWidth = (int)(0.3 * width);
-            int innerHeight = (int)(0.3 * height);
+            int innerWidth = (int)(0.4 * width);
+            int innerHeight = (int)(0.4 * height);
             Rectangle[] innerRegions = 
-                new Rectangle[4] {new Rectangle((int)(0.2*width), (int)(0.2*height), innerWidth, innerHeight),
-                                  new Rectangle(width/2, (int)(0.2*height), innerWidth, innerHeight),
-                                  new Rectangle((int)(0.2*width), height/2, innerWidth, innerHeight),
+                new Rectangle[4] {new Rectangle((int)(0.1*width), (int)(0.1*height), innerWidth, innerHeight),
+                                  new Rectangle(width/2, (int)(0.1*height), innerWidth, innerHeight),
+                                  new Rectangle((int)(0.1*width), height/2, innerWidth, innerHeight),
                                   new Rectangle(width/2, height/2, innerWidth, innerHeight)};
-            Vector2[,] nodePairs = new Vector2[3,2];
+            Vector2[,] nodePairs = new Vector2[20,2];
             List<Vector2[]> connections = new List<Vector2[]>();
 
             //Patient and hospital points
@@ -63,7 +63,7 @@ namespace Parapanic
             pointsOfInterest.Add(hospital * Block.size);
 
             //Create node pairs and connections
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 20; i++)
             {
                 int region1 = r.Next(4);
                 Vector2 node1 =
@@ -78,9 +78,9 @@ namespace Parapanic
                                 BORDERHEIGHT + r.Next(innerRegions[region2].Top, BORDERHEIGHT + innerRegions[region2].Bottom));
                 nodePairs[i, 1] = node2;
 
-                connections.Add(new Vector2[] { patient, node1 - patient });
-                connections.Add(new Vector2[] { node1, node2 - node1 });
-                connections.Add(new Vector2[] { node2, hospital - node2 });
+                connections.Add(new Vector2[] { patient, hospital });
+                connections.Add(new Vector2[] { node1, node2 });
+                connections.Add(new Vector2[] { node2, hospital });
             }
 
             //Put connections in grid
@@ -91,25 +91,63 @@ namespace Parapanic
                 bool horizontalFirst = Convert.ToBoolean(r.Next(2)); //Draw horizontally or vertically first
                 int xi = (int)connection[0].X;
                 int yi = (int)connection[0].Y;
-                int xf = xi + (int)connection[1].X;
-                int yf = yi + (int)connection[1].Y;
+                int xf = (int)connection[1].X;
+                int yf = (int)connection[1].Y;
+                int deltaX = xf - xi;
+                int deltaY = yf - yi;
                 if (horizontalFirst)
                 {
-                    for (int x = xi; x < xf; x++)
-                        if (grid[x, yi] == null)
-                            grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
-                    for (int y = yi; y < yf; y++)
-                        if (grid[xf, y] == null)
-                            grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                    if (deltaX > 0)
+                    {
+                        for (int x = xi; x <= xf; x++)
+                            if (grid[x, yi] == null)
+                                grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
+                    }
+                    else
+                    {
+                        for (int x = xi; x >= xf; x--)
+                            if (grid[x, yi] == null)
+                                grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
+                    }
+                    if (deltaY > 0)
+                    {
+                        for (int y = yi; y <= yf; y++)
+                            if (grid[xf, y] == null)
+                                grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                    }
+                    else
+                    {
+                        for (int y = yi; y >= yf; y--)
+                            if (grid[xf, y] == null)
+                                grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                    }
                 }
                 else
                 {
-                    for (int y = yi; y < yf; y++)
-                        if (grid[xi, y] == null)
-                            grid[xi, y] = new FloorBlock(xi * Block.size, y * Block.size);
-                    for (int x = xi; x < xf; x++)
-                        if (grid[x, yf] == null)
-                            grid[x, yf] = new FloorBlock(x * Block.size, yf * Block.size);
+                    if (deltaY > 0)
+                    {
+                        for (int y = yi; y <= yf; y++)
+                            if (grid[xf, y] == null)
+                                grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                    }
+                    else
+                    {
+                        for (int y = yi; y >= yf; y--)
+                            if (grid[xf, y] == null)
+                                grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                    }
+                    if (deltaX > 0)
+                    {
+                        for (int x = xi; x <= xf; x++)
+                            if (grid[x, yi] == null)
+                                grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
+                    }
+                    else
+                    {
+                        for (int x = xi; x >= xf; x--)
+                            if (grid[x, yi] == null)
+                                grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
+                    }
                 }
             }
 

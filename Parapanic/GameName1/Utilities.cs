@@ -82,5 +82,10 @@ namespace Parapanic
         {
             return (float)((positive) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X));
         }
+
+        public static Vector2 AbsVector(Vector2 v)
+        {
+            return new Vector2(Math.Abs(v.X), Math.Abs(v.Y));
+        }
     }
 }
