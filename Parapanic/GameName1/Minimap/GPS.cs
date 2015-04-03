@@ -48,7 +48,7 @@ namespace Parapanic.Minimap
             //todo: look into speed impacts of reloading this vs memory impact of keeping a reference
             Texture2D alertTex = game.Content.Load<Texture2D>("alert");
             Texture2D hospitalTex = game.Content.Load<Texture2D>("hospital_icon");
-            Vector2 origin = new Vector2(alertTex.Width/2, alertTex.Height/2);
+            Vector2 origin = new Vector2(8, 8);
 
             foreach (PointOfInterest i in world.pointsOfInterest)
             {
@@ -72,7 +72,7 @@ namespace Parapanic.Minimap
                 posToDraw.Y = MathHelper.Clamp(i.Position.Y / Block.size * map.xScale - gameBounds.Y, 0, gameBounds.Height) / gameBounds.Height * screenPort.Height;
                 posToDraw += screenPort.Location.ToVector2();
 
-                batch.Draw(texture, posToDraw, null, Color.White, 0, origin, .25f, SpriteEffects.None, 0);
+                batch.Draw(texture, posToDraw, null, Color.White, 0, origin, 1f, SpriteEffects.None, 0);
             }
 
         }

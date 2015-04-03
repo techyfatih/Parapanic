@@ -17,7 +17,7 @@ namespace Parapanic
         public double topSpeed { get; protected set; }
         protected double acceleration;
         protected double friction;
-        protected float crashFriction = 0.95f;
+        protected float crashFriction = 0.97f;
         public float scale { get; protected set; }
 
         protected double[] cornerAngles;
@@ -78,9 +78,13 @@ namespace Parapanic
 
 
             bool topLeftCollision = false;
+            bool topMiddleCollision = false;
             bool bottomLeftCollision = false;
+            bool bottomMiddleCollision = false;
             bool topRightCollision = false;
+            bool rightMiddleCollision = false;
             bool bottomRightCollision = false;
+            bool leftMiddleCollision = false;
 
             for (int x = 0; x < world.grid.GetLength(0); x++)
             {
@@ -98,7 +102,19 @@ namespace Parapanic
                             Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y), world.grid[x, y].boundary) || topRightCollision;
                         bottomRightCollision =
                             Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y + boundingBox.Height), world.grid[x, y].boundary) || bottomRightCollision;
-
+                        bottomMiddleCollision =
+                            Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width/2, boundingBox.Y + boundingBox.Height),
+                                                     world.grid[x, y].boundary) || bottomMiddleCollision;
+                        topMiddleCollision =
+                            Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width / 2, boundingBox.Y),
+                                                     world.grid[x, y].boundary) || topMiddleCollision;
+                        rightMiddleCollision =
+                            Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y + boundingBox.Height/2),
+                                                     world.grid[x, y].boundary) || rightMiddleCollision;
+                        leftMiddleCollision =
+                            Utilities.CheckCollision(new Point(boundingBox.X, boundingBox.Y + boundingBox.Height/2),
+                                                     world.grid[x, y].boundary) || leftMiddleCollision;
+                        
 
                     }
                     else if (boundingBox.Intersects(world.grid[x,y].boundary))
@@ -108,10 +124,18 @@ namespace Parapanic
                 }
             }
 
-            bool leftCollision = topLeftCollision && bottomLeftCollision;
-            bool rightCollision = topRightCollision && bottomRightCollision;
-            bool topCollision = topRightCollision && topLeftCollision;
-            bool bottomCollision = bottomRightCollision && bottomLeftCollision;
+            bool leftCollision = (topLeftCollision && bottomLeftCollision) || 
+                (topLeftCollision && leftMiddleCollision) || 
+                (bottomLeftCollision && leftMiddleCollision);
+            bool rightCollision = (topRightCollision && bottomRightCollision) ||
+                (topRightCollision && rightMiddleCollision) ||
+                (bottomRightCollision && rightMiddleCollision);
+            bool topCollision = (topRightCollision && topLeftCollision) ||
+                (topRightCollision && topMiddleCollision) ||
+                (topLeftCollision && topMiddleCollision);
+            bool bottomCollision = (bottomRightCollision && bottomLeftCollision) ||
+                (bottomLeftCollision && bottomMiddleCollision) ||
+                (bottomRightCollision && bottomMiddleCollision);
 
             if (leftCollision)
                 speedV.X = Math.Max(0, speedV.X);

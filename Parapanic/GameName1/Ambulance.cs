@@ -14,7 +14,7 @@ namespace Parapanic
     {
         bool hasPatient;
         bool intersected;
-        const double MAX_TURN_RATE = 0.07;
+        const double MAX_TURN_RATE = 0.12;
 
         public Ambulance(int x, int y, float direction, double topSpeed, double acceleration, double friction)
             : base(x, y, 0, direction, topSpeed, acceleration, friction) { hasPatient = false; }

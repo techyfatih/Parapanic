@@ -17,11 +17,11 @@ namespace Parapanic
 
         public static void LoadContent(ContentManager Content)
         {
-            ambulance = Content.Load<Texture2D>("Ambulance.png");
-            floor = Content.Load<Texture2D>("floor.png");
-            wall = Content.Load<Texture2D>("building.png");
-            patient = Content.Load<Texture2D>("Patient.png");
-            hospital = Content.Load<Texture2D>("Hospital.png");
+            ambulance = Content.Load<Texture2D>("Ambulance");
+            floor = Content.Load<Texture2D>("floor");
+            wall = Content.Load<Texture2D>("building");
+            patient = Content.Load<Texture2D>("Patient");
+            hospital = Content.Load<Texture2D>("Hospital");
         }
     }
 }
