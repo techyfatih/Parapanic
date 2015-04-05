@@ -87,12 +87,42 @@ namespace Parapanic
                     Color c = Color.White;
                     if (b.GetType().Equals(typeof(WallBlock)))
                         texture = Textures.wall;
+                    else if (b is Road)
+                        switch (((Road)b).Type)
+                        {
+                            case RoadTypes.Vertical:
+                                texture = game.Content.Load<Texture2D>("vertical");
+                                break;
+                            case RoadTypes.Horizontal:
+                                texture = game.Content.Load<Texture2D>("horizontal");
+                                break;
+                            case RoadTypes.FourWay:
+                                texture = game.Content.Load<Texture2D>("FourWay");
+                                break;
+                            case RoadTypes.EndD:
+                                texture = game.Content.Load<Texture2D>("EndD");
+                                break;
+                            case RoadTypes.EndL:
+                                texture = game.Content.Load<Texture2D>("EndL");
+                                break;
+                            case RoadTypes.EndU:
+                                texture = game.Content.Load<Texture2D>("EndU");
+                                break;
+                            case RoadTypes.EndR:
+                                texture = game.Content.Load<Texture2D>("EndR");
+                                break;
+
+                            default:
+                                texture = Textures.floor;
+                                break;
+                        }
                     else if (b.GetType().Equals(typeof(FloorBlock)))
                         texture = Textures.floor;
                     else if (b.GetType().Equals(typeof(PatientBlock)))
                         texture = Textures.patient;
                     else if (b.GetType().Equals(typeof(HospitalBlock)))
                         texture = Textures.hospital;
+
 
 
                     Vector3 rearTopLeft = new Vector3(0, 0, 0) + new Vector3(b.position, 0);
@@ -107,7 +137,8 @@ namespace Parapanic
 
                     VertexPositionColorTexture[] vs;
 
-                    if (b.depth != 0)
+                    if (false)
+                        //b.depth != 0)
                     {
                         vs = new VertexPositionColorTexture[36];
                         vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);
@@ -209,15 +240,69 @@ namespace Parapanic
                     * itemWorld
                     ).Translation;
 
-                vs[0] = new VertexPositionColorTexture(v2 + new Vector3(0, 0, -.1f), c, BottomLeft);
-                vs[1] = new VertexPositionColorTexture(v1 + new Vector3(0, 0, -.1f), c, TopLeft);
-                vs[2] = new VertexPositionColorTexture(v3 + new Vector3(0, 0, -.1f), c, BottomRight);
-                vs[3] = new VertexPositionColorTexture(v4 + new Vector3(0, 0, -.1f), c, TopRight);
+                vs[0] = new VertexPositionColorTexture(v2 + new Vector3(0, 0, -.2f), c, BottomLeft);
+                vs[1] = new VertexPositionColorTexture(v1 + new Vector3(0, 0, -.2f), c, TopLeft);
+                vs[2] = new VertexPositionColorTexture(v3 + new Vector3(0, 0, -.2f), c, BottomRight);
+                vs[3] = new VertexPositionColorTexture(v4 + new Vector3(0, 0, -.2f), c, TopRight);
                 vs[4] = vs[2];
                 vs[5] = vs[1];
 
                 RenderItem r = new RenderItem() { Verts = vs, Texture = texture };
                 renderItems.Add(r);
+            }
+            foreach(Car car in world.Cars)
+            {
+                if (Math.Abs((car.position - position).LengthSquared()) < 2000000)
+                {
+                    Color c = Color.White;
+                    Texture2D texture = Textures.ambulance;
+                    Vector2 p1 = new Vector2(-texture.Width / 2, -texture.Height / 2);
+                    Vector2 p2 = new Vector2(-texture.Width / 2, texture.Height / 2);
+                    Vector2 p3 = new Vector2(texture.Width / 2, texture.Height / 2);
+                    Vector2 p4 = new Vector2(texture.Width / 2, -texture.Height / 2);
+
+                    Matrix itemWorld = Matrix.CreateTranslation(new Vector3(car.position, 0));
+
+
+
+                    VertexPositionColorTexture[] vs = new VertexPositionColorTexture[6];
+                    Matrix rotationMatrix = Matrix.CreateRotationZ(car.direction);
+
+                    Vector3 v1 = (Matrix.Identity
+                        * Matrix.CreateTranslation(new Vector3(p1, 0))
+                        * Matrix.CreateScale(car.scale)
+                        * rotationMatrix
+                        * itemWorld
+                        ).Translation;
+                    Vector3 v2 = (Matrix.Identity
+                        * Matrix.CreateTranslation(new Vector3(p2, 0))
+                        * Matrix.CreateScale(car.scale)
+                        * rotationMatrix
+                        * itemWorld
+                        ).Translation;
+                    Vector3 v3 = (Matrix.Identity
+                        * Matrix.CreateTranslation(new Vector3(p3, 0))
+                        * Matrix.CreateScale(car.scale)
+                        * rotationMatrix
+                        * itemWorld
+                        ).Translation;
+                    Vector3 v4 = (Matrix.Identity
+                        * Matrix.CreateTranslation(new Vector3(p4, 0))
+                        * Matrix.CreateScale(car.scale)
+                        * rotationMatrix
+                        * itemWorld
+                        ).Translation;
+
+                    vs[0] = new VertexPositionColorTexture(v2 + new Vector3(0, 0, -.1f), c, BottomLeft);
+                    vs[1] = new VertexPositionColorTexture(v1 + new Vector3(0, 0, -.1f), c, TopLeft);
+                    vs[2] = new VertexPositionColorTexture(v3 + new Vector3(0, 0, -.1f), c, BottomRight);
+                    vs[3] = new VertexPositionColorTexture(v4 + new Vector3(0, 0, -.1f), c, TopRight);
+                    vs[4] = vs[2];
+                    vs[5] = vs[1];
+
+                    RenderItem r = new RenderItem() { Verts = vs, Texture = texture };
+                    renderItems.Add(r);
+                }
             }
             
 

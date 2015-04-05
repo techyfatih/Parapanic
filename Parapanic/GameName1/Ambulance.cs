@@ -22,6 +22,7 @@ namespace Parapanic
         public override void Update(World world)
         {
             intersected = false;
+            frictionEnabled = true;
             MouseState mouse = Mouse.GetState();
             //Left Click - Acceleration
             if (mouse.LeftButton == ButtonState.Pressed)
@@ -30,6 +31,9 @@ namespace Parapanic
                     speed += acceleration;
                 else
                     speed = topSpeed;
+
+                if (speed > 0)
+                    frictionEnabled = false;
             }
 
             //Right Click - Brake/Reverse
@@ -44,6 +48,9 @@ namespace Parapanic
                     else
                         speed = -topSpeed / 2;
                 }
+
+                if (speed < 0)
+                    frictionEnabled = false;
             }
 
 

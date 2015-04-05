@@ -13,10 +13,10 @@ namespace Parapanic
         public Vector2 origin;
 
         public double speed { get; protected set; }
-        private double lastSpeed;
         public double topSpeed { get; protected set; }
         protected double acceleration;
         protected double friction;
+        protected bool frictionEnabled = false;
         protected float crashFriction = 0.97f;
         public float scale { get; protected set; }
 
@@ -54,7 +54,7 @@ namespace Parapanic
         public virtual void Update(World world)
         {
             //friction!!
-            if (speed == lastSpeed)
+            if (frictionEnabled)
                 speed *= friction;
 
 
@@ -157,8 +157,6 @@ namespace Parapanic
             
 
             speed = (speed > 0) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X);
-            
-            lastSpeed = speed;
         }
 
         protected virtual void OnCollision(World world, int xCoord, int yCoord)

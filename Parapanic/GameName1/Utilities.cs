@@ -23,6 +23,14 @@ namespace Parapanic
             return b;
         }
 
+        public static float NormAnglePiToPi(float a)
+        {
+            a %= MathHelper.TwoPi;
+            if (a >= MathHelper.Pi)
+                a = -(MathHelper.TwoPi - a);
+            return a;
+        }
+
         public static int Minimum(int[] arr)
         {
             int min = arr[0];

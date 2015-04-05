@@ -30,6 +30,8 @@ namespace Parapanic
         {
             ambulance.Update(world);
             Camera.Update(ambulance, world);
+            foreach (Car c in world.Cars)
+                c.Update(world);
         }
 
         public void Draw(SpriteBatch spriteBatch, Parapanic game)
