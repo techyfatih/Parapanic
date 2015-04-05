@@ -151,9 +151,9 @@ namespace Parapanic
             position.X += Utilities.Round(speedV.X, 2);
             position.Y += Utilities.Round(speedV.Y, 2);
 
-            Console.WriteLine(position.X + " " + position.Y);
+            /*Console.WriteLine(position.X + " " + position.Y);
             Console.WriteLine(speedV.X + " " + speedV.Y);
-            Console.WriteLine(Utilities.Round(speedV.X, 3) + " " + Utilities.Round(speedV.Y, 3));
+            Console.WriteLine(Utilities.Round(speedV.X, 3) + " " + Utilities.Round(speedV.Y, 3));*/
             
 
             speed = (speed > 0) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X);

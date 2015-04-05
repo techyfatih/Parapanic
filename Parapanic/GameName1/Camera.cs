@@ -36,6 +36,21 @@ namespace Parapanic
             view.Y = newY;
         }
 
+        public static void Update(VectorAmbulance ambulance, World world)
+        {
+            int newX = (int)ambulance.position.X - view.Width / 2;
+            if (newX < 0) newX = 0;
+            if (newX > world.Width - view.Width) newX = world.Width - view.Width;
+            position.X = newX;
+            view.X = newX;
+
+            int newY = (int)ambulance.position.Y - view.Height / 2;
+            if (newY < 0) newY = 0;
+            if (newY > world.Height - view.Height) newY = world.Height - view.Height;
+            position.Y = newY;
+            view.Y = newY;
+        }
+
         struct RenderItem
         {
             public VertexPositionColorTexture[] Verts;
@@ -182,7 +197,7 @@ namespace Parapanic
 
 
                 VertexPositionColorTexture[] vs = new VertexPositionColorTexture[6];
-                Matrix rotationMatrix = Matrix.CreateRotationZ(ambulance.direction);
+                Matrix rotationMatrix = Matrix.CreateRotationZ(ambulance.drawDirection);
 
                 Vector3 v1 = (Matrix.Identity
                     * Matrix.CreateTranslation(new Vector3(p1, 0)) 
@@ -232,5 +247,8 @@ namespace Parapanic
                 }
             }
         }
+
+
+
     }
 }

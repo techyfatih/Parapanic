@@ -70,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Textures.cs" />
     <Compile Include="Blocks\WallBlock.cs" />
+    <Compile Include="VectorAmbulance.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
