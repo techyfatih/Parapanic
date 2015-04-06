@@ -14,6 +14,7 @@ namespace Parapanic
         public static Texture2D wall;
         public static Texture2D patient;
         public static Texture2D hospital;
+        public static Texture2D patientFace;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -22,6 +23,7 @@ namespace Parapanic
             wall = Content.Load<Texture2D>("building");
             patient = Content.Load<Texture2D>("Patient");
             hospital = Content.Load<Texture2D>("Hospital");
+            patientFace = Content.Load<Texture2D>("PatientPlaceholder");
         }
     }
 }

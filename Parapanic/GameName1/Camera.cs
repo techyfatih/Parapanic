@@ -176,8 +176,7 @@ namespace Parapanic
 
                     VertexPositionColorTexture[] vs;
 
-                    if (false)
-                        //b.depth != 0)
+                    if (b.depth != 0)
                     {
                         vs = new VertexPositionColorTexture[36];
                         vs[0] = new VertexPositionColorTexture(rearBottomLeft, c, BottomLeft);

@@ -60,6 +60,7 @@
     <Compile Include="Car.cs" />
     <Compile Include="Blocks\FloorBlock.cs" />
     <Compile Include="Road.cs" />
+    <Compile Include="Patient.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Blocks\HospitalBlock.cs" />
     <Compile Include="Level.cs" />

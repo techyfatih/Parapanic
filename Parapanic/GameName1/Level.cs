@@ -14,10 +14,14 @@ namespace Parapanic
         World world;
         Minimap.GPS minimap;
 
+        int width;
+        int height;
+
         public Level(GraphicsDeviceManager g)
         {
-            int width = g.PreferredBackBufferWidth;
-            int height = g.PreferredBackBufferHeight;
+            width = g.PreferredBackBufferWidth;
+            height = g.PreferredBackBufferHeight;
+
 
             world = new World(100, 100);
             Vector2 empty = world.EmptySpace();
@@ -46,6 +50,13 @@ namespace Parapanic
             if (Minimap.Map.DirtyFlag)
                 minimap.Draw(spriteBatch, game, world);
             Camera.DrawScreen(game, ambulance, world);
+
+            if(ambulance.hasPatient)
+            {
+                spriteBatch.Draw(Textures.patientFace, new Rectangle(110, height - 200, 120, 160), Color.White);
+
+            }
+
             minimap.Draw(spriteBatch, game, world);
         }
     }

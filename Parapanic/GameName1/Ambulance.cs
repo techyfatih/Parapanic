@@ -12,7 +12,7 @@ namespace Parapanic
 {
     class Ambulance : Car
     {
-        bool hasPatient;
+        public bool hasPatient;
         bool intersected;
         const double MAX_TURN_RATE = 0.12;
 
