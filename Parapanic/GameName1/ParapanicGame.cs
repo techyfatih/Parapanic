@@ -40,6 +40,8 @@ namespace Parapanic
         /// </summary>
         protected override void Initialize()
         {
+            graphics.PreferMultiSampling = true;
+            graphics.ApplyChanges();
             this.IsMouseVisible = true;
             level = new Level(graphics);
             base.Initialize();

@@ -59,6 +59,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Car.cs" />
     <Compile Include="Blocks\FloorBlock.cs" />
+    <Compile Include="Road.cs" />
     <Compile Include="Patient.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Blocks\HospitalBlock.cs" />
@@ -82,7 +83,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\PatientPlaceholder.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

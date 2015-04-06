@@ -28,7 +28,7 @@ namespace Parapanic
         const int BORDERHEIGHT = 5;
         const int CITYBLOCKWIDTH = 5;
         const int CITYBLOCKHEIGHT = 2;
-
+        public List<Car> Cars = new List<Car>();
 
         public World(int width, int height)
         {
@@ -119,25 +119,25 @@ namespace Parapanic
                     {
                         for (int x = xi; x <= xf; x++)
                             if (grid[x, yi] == null)
-                                grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
+                                grid[x, yi] = new RoadBlock(x * Block.size, yi * Block.size);
                     }
                     else
                     {
                         for (int x = xi; x >= xf; x--)
                             if (grid[x, yi] == null)
-                                grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
+                                grid[x, yi] = new RoadBlock(x * Block.size, yi * Block.size);
                     }
                     if (deltaY > 0)
                     {
                         for (int y = yi; y <= yf; y++)
                             if (grid[xf, y] == null)
-                                grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                                grid[xf, y] = new RoadBlock(xf * Block.size, y * Block.size);
                     }
                     else
                     {
                         for (int y = yi; y >= yf; y--)
                             if (grid[xf, y] == null)
-                                grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                                grid[xf, y] = new RoadBlock(xf * Block.size, y * Block.size);
                     }
                 }
                 else
@@ -146,25 +146,25 @@ namespace Parapanic
                     {
                         for (int y = yi; y <= yf; y++)
                             if (grid[xf, y] == null)
-                                grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                                grid[xf, y] = new RoadBlock(xf * Block.size, y * Block.size);
                     }
                     else
                     {
                         for (int y = yi; y >= yf; y--)
                             if (grid[xf, y] == null)
-                                grid[xf, y] = new FloorBlock(xf * Block.size, y * Block.size);
+                                grid[xf, y] = new RoadBlock(xf * Block.size, y * Block.size);
                     }
                     if (deltaX > 0)
                     {
                         for (int x = xi; x <= xf; x++)
                             if (grid[x, yi] == null)
-                                grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
+                                grid[x, yi] = new RoadBlock(x * Block.size, yi * Block.size);
                     }
                     else
                     {
                         for (int x = xi; x >= xf; x--)
                             if (grid[x, yi] == null)
-                                grid[x, yi] = new FloorBlock(x * Block.size, yi * Block.size);
+                                grid[x, yi] = new RoadBlock(x * Block.size, yi * Block.size);
                     }
                 }
             }
@@ -198,7 +198,7 @@ namespace Parapanic
                     if ((i - BORDERWIDTH) % (CITYBLOCKWIDTH + 1) == 0 || (u - BORDERHEIGHT) % (CITYBLOCKHEIGHT + 1) == 0
                         || i == width - BORDERWIDTH - 1 || u == height - BORDERHEIGHT - 1)
                     {
-                        grid[i, u] = new FloorBlock(i * Block.size, u * Block.size);
+                        grid[i, u] = new RoadBlock(i * Block.size, u * Block.size);
                     }
                     else
                     {
@@ -211,7 +211,7 @@ namespace Parapanic
             for (int i = 0; i < grid.GetLength(0); i++)
                 for (int u = 0; u < grid.GetLength(1); u++)
                     if (grid[i, u] == null)
-                        grid[i, u] = new FloorBlock(i * Block.size, u * Block.size);*/
+                        grid[i, u] = new RoadBlock(i * Block.size, u * Block.size);*/
             
             /*int patientX = r.Next(width/2);
             int patientY = r.Next(height);
@@ -228,9 +228,20 @@ namespace Parapanic
                     else if (x == hospitalX && y == hospitalY)
                         grid[x, y] = new HospitalBlock(x * Block.size, y * Block.size);
                     else
-                        grid[x, y] = new FloorBlock(x * Block.size, y * Block.size);
+                        grid[x, y] = new RoadBlock(x * Block.size, y * Block.size);
                 }
             }*/
+
+
+            foreach (Block b in grid)
+                if (b is RoadBlock)
+                    ((RoadBlock)b).InitializeType(this);
+
+            foreach (Block b in grid)
+            {
+                if (b is FloorBlock)
+                    Cars.Add(new AiCar((int)b.position.X, (int)b.position.Y, 1, 1, 1, this));
+            }
         }
 
         public Vector2 EmptySpace()
@@ -238,7 +249,7 @@ namespace Parapanic
             Random r = new Random();
             List<Vector2> empties = new List<Vector2>();
             foreach (Block b in grid)
-                if (b.GetType().Equals(typeof(FloorBlock))) empties.Add(b.position);
+                if (b is RoadBlock) empties.Add(b.position);
             return empties[r.Next(empties.Count)];
         }
     }

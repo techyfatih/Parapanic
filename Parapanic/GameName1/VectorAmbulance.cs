@@ -122,26 +122,26 @@ namespace Parapanic
         {
             Block block = world.grid[xCoord, yCoord];
 
-            if (block.GetType().Equals(typeof(WallBlock)))
+            if (block is WallBlock)
                 intersected = true;
-            else if (block.GetType().Equals(typeof(PatientBlock)) &&
+            else if (block is PatientBlock &&
                      !hasPatient)
             {
                 hasPatient = true;
                 int xPos = (int)world.grid[xCoord, yCoord].position.X;
                 int yPos = (int)world.grid[xCoord, yCoord].position.Y;
                 world.pointsOfInterest.Remove(((PatientBlock)block).POIHandle);
-                world.grid[xCoord, yCoord] = new FloorBlock(xPos, yPos);
+                world.grid[xCoord, yCoord] = new RoadBlock(xPos, yPos);
                 Minimap.Map.DirtyFlag = true;
             }
-            else if (block.GetType().Equals(typeof(HospitalBlock)) &&
+            else if (block is HospitalBlock &&
                      hasPatient)
             {
                 hasPatient = false;
                 int xPos = (int)world.grid[xCoord, yCoord].position.X;
                 int yPos = (int)world.grid[xCoord, yCoord].position.Y;
                 world.pointsOfInterest.Remove(((HospitalBlock)block).POIHandle);
-                world.grid[xCoord, yCoord] = new FloorBlock(xPos, yPos);
+                world.grid[xCoord, yCoord] = new RoadBlock(xPos, yPos);
                 Minimap.Map.DirtyFlag = true;
             }
 
