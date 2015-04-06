@@ -37,6 +37,8 @@ namespace Parapanic
             gridX = x / Block.size;
             gridY = y / Block.size;
 
+            diagonal = Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2)) / 2.5;
+
             bool rightRoadBlock = false;
             bool leftRoadBlock = false;
             bool upRoadBlock = false;
@@ -101,7 +103,22 @@ namespace Parapanic
 
         public override void Update(World world)
         {
-            
+            int[] newX = new int[4];
+            int[] newY = new int[4];
+            for (int i = 0; i < 4; i++)
+            {
+                cornerAngles[i] = Utilities.NormAngle(cornerAngles[i] + direction);
+                newX[i] = (int)(Math.Cos(cornerAngles[i]) * diagonal + position.X);
+                newY[i] = (int)(Math.Sin(cornerAngles[i]) * diagonal + position.Y);
+            }
+
+            int boundX = Utilities.Minimum(newX);
+            int boundY = Utilities.Minimum(newY);
+            int boundWidth = Utilities.Maximum(newX) - boundX;
+            int boundHeight = Utilities.Maximum(newY) - boundY;
+
+            boundingBox = new Rectangle(boundX, boundY, boundWidth, boundHeight);
+
             if (!turning)
             {
                 Vector2 vSpeed = new Vector2((float)Math.Cos(direction), (float)Math.Sin(direction));

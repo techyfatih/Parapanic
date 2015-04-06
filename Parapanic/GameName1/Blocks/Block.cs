@@ -9,7 +9,7 @@ namespace Parapanic
 {
     abstract class Block
     {
-        public const int size = 96;
+        public const int size = 128;
         public Vector2 position;
         public Rectangle boundary;
         public bool solid = false;

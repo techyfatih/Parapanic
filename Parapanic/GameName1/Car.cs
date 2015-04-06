@@ -19,6 +19,8 @@ namespace Parapanic
         protected bool frictionEnabled = false;
         protected float crashFriction = 0.97f;
         public float scale { get; protected set; }
+        protected int width;
+        protected int height;
 
         protected double[] cornerAngles;
         protected double diagonal;
@@ -27,12 +29,13 @@ namespace Parapanic
         protected bool collisionRight = false;
         protected bool collisionUp = false;
         protected bool collisionDown = false;
+        protected Rectangle boundingBox;
         
         public Car(int x, int y, double speed, float direction, double topSpeed, double acceleration, double friction)
         {
             scale = 0.25f;
-            int width = (int)(96*scale);
-            int height = (int)(64*scale);
+            width = (int)(96*scale);
+            height = (int)(64*scale);
 
             position = new Vector2(x, y);
             this.direction = direction;
@@ -48,7 +51,7 @@ namespace Parapanic
             cornerAngles[1] = Math.Atan((double)height / -width) + 2*Math.PI;
             cornerAngles[2] = cornerAngles[1] + Math.PI;
             cornerAngles[3] = cornerAngles[0] + Math.PI;
-            diagonal = Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2)) / 2;
+            diagonal = Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2)) / 2.5;
         }
 
         public virtual void Update(World world)
@@ -74,7 +77,7 @@ namespace Parapanic
             int boundWidth = Utilities.Maximum(newX) - boundX;
             int boundHeight = Utilities.Maximum(newY) - boundY;
 
-            Rectangle boundingBox = new Rectangle(boundX, boundY, boundWidth, boundHeight);
+            boundingBox = new Rectangle(boundX, boundY, boundWidth, boundHeight);
 
 
             bool topLeftCollision = false;
@@ -95,13 +98,15 @@ namespace Parapanic
                         OnCollision(world, x, y);
                         speedV *= crashFriction;
 
-                        topLeftCollision = Utilities.CheckCollision(boundingBox.Location, world.grid[x, y].boundary) || topLeftCollision;
+                        topLeftCollision = 
+                            Utilities.CheckCollision(boundingBox.Location, world.grid[x, y].boundary) || topLeftCollision;
                         bottomLeftCollision =
                             Utilities.CheckCollision(new Point(boundingBox.X, boundingBox.Y + boundingBox.Height), world.grid[x, y].boundary) || bottomLeftCollision;
                         topRightCollision =
                             Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y), world.grid[x, y].boundary) || topRightCollision;
                         bottomRightCollision =
                             Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y + boundingBox.Height), world.grid[x, y].boundary) || bottomRightCollision;
+                        
                         bottomMiddleCollision =
                             Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width/2, boundingBox.Y + boundingBox.Height),
                                                      world.grid[x, y].boundary) || bottomMiddleCollision;
@@ -121,6 +126,37 @@ namespace Parapanic
                     {
                         OnCollision(world, x, y);
                     }
+                }
+            }
+            for (int i = 0; i < world.Cars.Count; i++)
+            {
+                if (boundingBox.Intersects(world.Cars[i].boundingBox))
+                {
+                    speedV *= crashFriction;
+
+                    topLeftCollision =
+                        Utilities.CheckCollision(boundingBox.Location, world.Cars[i].boundingBox) || topLeftCollision;
+                    bottomLeftCollision =
+                        Utilities.CheckCollision(new Point(boundingBox.X, boundingBox.Y + boundingBox.Height), world.Cars[i].boundingBox) || bottomLeftCollision;
+                    topRightCollision =
+                        Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y), world.Cars[i].boundingBox) || topRightCollision;
+                    bottomRightCollision =
+                        Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y + boundingBox.Height), world.Cars[i].boundingBox) || bottomRightCollision;
+
+                    bottomMiddleCollision =
+                        Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width / 2, boundingBox.Y + boundingBox.Height),
+                                                 world.Cars[i].boundingBox) || bottomMiddleCollision;
+                    topMiddleCollision =
+                        Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width / 2, boundingBox.Y),
+                                                 world.Cars[i].boundingBox) || topMiddleCollision;
+                    rightMiddleCollision =
+                        Utilities.CheckCollision(new Point(boundingBox.X + boundingBox.Width, boundingBox.Y + boundingBox.Height / 2),
+                                                 world.Cars[i].boundingBox) || rightMiddleCollision;
+                    leftMiddleCollision =
+                        Utilities.CheckCollision(new Point(boundingBox.X, boundingBox.Y + boundingBox.Height / 2),
+                                                 world.Cars[i].boundingBox) || leftMiddleCollision;
+
+
                 }
             }
 

@@ -20,7 +20,6 @@ namespace Parapanic
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Level level;
-        DateTime lastDateTime;
 
         public Parapanic()
             : base()
@@ -29,7 +28,6 @@ namespace Parapanic
             graphics.PreferredBackBufferWidth = 1000;
             graphics.PreferredBackBufferHeight = 600;
             Content.RootDirectory = "Content";
-            lastDateTime = DateTime.Now;
         }
 
         /// <summary>
@@ -40,7 +38,6 @@ namespace Parapanic
         /// </summary>
         protected override void Initialize()
         {
-            graphics.PreferMultiSampling = true;
             graphics.ApplyChanges();
             this.IsMouseVisible = true;
             level = new Level(graphics);
@@ -98,14 +95,6 @@ namespace Parapanic
             level.Draw(spriteBatch, this);
             spriteBatch.End();
             base.Draw(gameTime);
-
-            DateTime endDateTime = DateTime.Now;
-            long nanoSecCounter = endDateTime.Ticks - lastDateTime.Ticks;
-            float fps = 10000000 / (float)nanoSecCounter;
-            float msecCounter = (float)nanoSecCounter / 10000;
-
-            //Console.WriteLine("{0} fps @ {1} ms", fps, msecCounter);
-            lastDateTime = endDateTime;
         }
     }
 }

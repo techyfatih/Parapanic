@@ -93,7 +93,7 @@ namespace Parapanic
 
             base.Update(world);
 
-            Console.WriteLine(intersected);
+            //Console.WriteLine(intersected);
             
             //Mouse Direction - Turning
             double turnrate = (Math.Abs(speed) > 1) ? ((MAX_TURN_RATE / topSpeed) * Math.Abs(speed)) : 0; //Don't turn when not moving
