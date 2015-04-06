@@ -54,7 +54,10 @@ namespace Parapanic
             if(ambulance.hasPatient)
             {
                 spriteBatch.Draw(Textures.patientFace, new Rectangle(110, height - 200, 120, 160), Color.White);
+                spriteBatch.Draw(Textures.black, new Rectangle(110, height - 200, 120, 160), Color.White * (ambulance.patientTimer/ambulance.maxTime));
 
+                spriteBatch.Draw(Textures.white, new Rectangle(110, height - 25, 120, 25), Color.Red);
+                spriteBatch.Draw(Textures.white, new Rectangle(110 + (int)(120 * (ambulance.patientTimer / ambulance.maxTime)), height - 25, 120 - (int)(120 * (ambulance.patientTimer / ambulance.maxTime)), 25), Color.Green);
             }
 
             minimap.Draw(spriteBatch, game, world);
