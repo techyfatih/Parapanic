@@ -100,10 +100,10 @@ namespace Parapanic
                 {
                     Texture2D texture = Textures.ambulance;
                     Color c = Color.White;
-                    if (b.GetType().Equals(typeof(WallBlock)))
+                    if (b is WallBlock)
                         texture = Textures.wall;
-                    else if (b is Road)
-                        switch (((Road)b).Type)
+                    else if (b is RoadBlock)
+                        switch (((RoadBlock)b).Type)
                         {
                             case RoadTypes.Vertical:
                                 texture = game.Content.Load<Texture2D>("vertical");
@@ -126,16 +126,40 @@ namespace Parapanic
                             case RoadTypes.EndR:
                                 texture = game.Content.Load<Texture2D>("EndR");
                                 break;
+                            case RoadTypes.TwoWayLD:
+                                texture = game.Content.Load<Texture2D>("TwoWayLD");
+                                break;
+                            case RoadTypes.TwoWayLU:
+                                texture = game.Content.Load<Texture2D>("TwoWayLU");
+                                break;
+                            case RoadTypes.TwoWayRD:
+                                texture = game.Content.Load<Texture2D>("TwoWayRD");
+                                break;
+                            case RoadTypes.TwoWayRU:
+                                texture = game.Content.Load<Texture2D>("TwoWayRU");
+                                break;
+                            case RoadTypes.ThreeWayDLR:
+                                texture = game.Content.Load<Texture2D>("ThreeWayDLR");
+                                break;
+                            case RoadTypes.ThreeWayUDL:
+                                texture = game.Content.Load<Texture2D>("ThreeWayUDL");
+                                break;
+                            case RoadTypes.ThreeWayUDR:
+                                texture = game.Content.Load<Texture2D>("ThreeWayUDR");
+                                break;
+                            case RoadTypes.ThreeWayULR:
+                                texture = game.Content.Load<Texture2D>("ThreeWayULR");
+                                break;
 
                             default:
                                 texture = Textures.floor;
                                 break;
                         }
-                    else if (b.GetType().Equals(typeof(FloorBlock)))
+                    else if (b is FloorBlock)
                         texture = Textures.floor;
-                    else if (b.GetType().Equals(typeof(PatientBlock)))
+                    else if (b is PatientBlock)
                         texture = Textures.patient;
-                    else if (b.GetType().Equals(typeof(HospitalBlock)))
+                    else if (b is HospitalBlock)
                         texture = Textures.hospital;
 
 

@@ -82,19 +82,19 @@ namespace Parapanic.Minimap
                 drawArea.Width = xScale;
                 drawArea.Height = yScale;
 
-                if (b.GetType().Equals(typeof(WallBlock)))
+                if (b is WallBlock)
                 {
                     batch.Draw(texToDraw, drawArea, Color.Green);
                 }
-                else if (b.GetType().Equals(typeof(FloorBlock)))
+                else if (b is FloorBlock)
                 {
                     batch.Draw(texToDraw, drawArea, Color.Blue);
                 }
-                else if (b.GetType().Equals(typeof(HospitalBlock)))
+                else if (b is HospitalBlock)
                 {
                     batch.Draw(texToDraw, drawArea, Color.Yellow);
                 }
-                else if (b.GetType().Equals(typeof(PatientBlock)))
+                else if (b is PatientBlock)
                 {
                     batch.Draw(texToDraw, drawArea, Color.Pink);
                 }

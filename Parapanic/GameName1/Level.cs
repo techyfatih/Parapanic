@@ -34,12 +34,17 @@ namespace Parapanic
             Camera.Update(ambulance, world);
             foreach (Car c in world.Cars)
                 c.Update(world);
+
+            if (Minimap.Map.DirtyFlag)
+                foreach (Block block in world.grid)
+                    if (block is RoadBlock)
+                        ((RoadBlock)block).InitializeType(world);
         }
 
         public void Draw(SpriteBatch spriteBatch, Parapanic game)
         {
-            minimap.Draw(spriteBatch, game, world); //fixes screen flicker when the map is changed.
-                                                    //will make a better solution later
+            if (Minimap.Map.DirtyFlag)
+                minimap.Draw(spriteBatch, game, world);
             Camera.DrawScreen(game, ambulance, world);
             minimap.Draw(spriteBatch, game, world);
         }

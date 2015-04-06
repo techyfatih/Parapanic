@@ -37,32 +37,32 @@ namespace Parapanic
             gridX = x / Block.size;
             gridY = y / Block.size;
 
-            bool rightRoad = false;
-            bool leftRoad = false;
-            bool upRoad = false;
-            bool downRoad = false;
+            bool rightRoadBlock = false;
+            bool leftRoadBlock = false;
+            bool upRoadBlock = false;
+            bool downRoadBlock = false;
 
 
             if (gridX + 1 < world.grid.GetLength(0) && world.grid[gridX + 1, gridY] is FloorBlock)
             {
-                rightRoad = true;
+                rightRoadBlock = true;
             }
             if (gridX > 0 && world.grid[gridX - 1, gridY] is FloorBlock)
             {
-                leftRoad = true;
+                leftRoadBlock = true;
             }
             if (gridY + 1 < world.grid.GetLength(1) && world.grid[gridX, gridY + 1] is FloorBlock)
             {
-                downRoad = true;
+                downRoadBlock = true;
             }
             if (gridY > 0 && world.grid[gridX, gridY - 1] is FloorBlock)
             {
-                upRoad = true;
+                upRoadBlock = true;
             }
 
-            while (!upRoad || !leftRoad || !downRoad || !rightRoad)
+            while (!upRoadBlock || !leftRoadBlock || !downRoadBlock || !rightRoadBlock)
             {
-                if (upRoad && turningNumber % 4 == Up)
+                if (upRoadBlock && turningNumber % 4 == Up)
                 {
                     aiDir = Up;
                     position.Y = gridY * Block.size + Block.size / 2;
@@ -70,7 +70,7 @@ namespace Parapanic
                     direction = -MathHelper.PiOver2;
                     break;
                 }
-                if (leftRoad && turningNumber % 4 == Left)
+                if (leftRoadBlock && turningNumber % 4 == Left)
                 {
                     aiDir = Left;
                     position.Y = gridY * Block.size + closeSide;
@@ -78,7 +78,7 @@ namespace Parapanic
                     direction = MathHelper.Pi;
                     break;
                 }
-                if (downRoad && turningNumber % 4 == Down)
+                if (downRoadBlock && turningNumber % 4 == Down)
                 {
                     aiDir = Down;
                     position.Y = gridY * Block.size + Block.size / 2;
@@ -86,7 +86,7 @@ namespace Parapanic
                     direction = MathHelper.PiOver2;
                     break;
                 }
-                if (rightRoad && turningNumber % 4 == Right)
+                if (rightRoadBlock && turningNumber % 4 == Right)
                 {
                     aiDir = Right;
                     position.Y = gridY * Block.size + farSide;
@@ -113,10 +113,10 @@ namespace Parapanic
                     gridY = (int)(position.Y / Block.size);
                     turning = true;
 
-                    bool rightRoad = false;
-                    bool leftRoad = false;
-                    bool upRoad = false;
-                    bool downRoad = false;
+                    bool rightRoadBlock = false;
+                    bool leftRoadBlock = false;
+                    bool upRoadBlock = false;
+                    bool downRoadBlock = false;
 
                     int gWidth = world.grid.GetLength(0);
                     int gHeight = world.grid.GetLength(1);
@@ -124,29 +124,29 @@ namespace Parapanic
                     if (gridX + 1 < gWidth && gridX >= 0 && gridY >= 0 && gridY < gHeight &&
                         world.grid[gridX + 1, gridY] is FloorBlock)
                     {
-                        rightRoad = true;
+                        rightRoadBlock = true;
                     }
                     if (gridX > 0 && gridX - 1 < gWidth && gridY >= 0 && gridY < gHeight &&
                         world.grid[gridX - 1, gridY] is FloorBlock)
                     {
-                        leftRoad = true;
+                        leftRoadBlock = true;
                     }
                     if (gridY + 1 < gHeight && gridY >= -1 && gridX >= 0 && gridX < gWidth &&
                         world.grid[gridX, gridY + 1] is FloorBlock)
                     {
-                        downRoad = true;
+                        downRoadBlock = true;
                     }
                     if (gridY > 0 && gridY - 1 < gHeight && gridX >= 0 && gridX < gWidth &&
                         world.grid[gridX, gridY - 1] is FloorBlock)
                     {
-                        upRoad = true;
+                        upRoadBlock = true;
                     }
 
                     switch (aiDir)
                     {
                         case Left:
                         {
-                            if (leftRoad)
+                            if (leftRoadBlock)
                             {
                                 lastAiDir = aiDir;
                                 aiDir = Left;
@@ -156,7 +156,7 @@ namespace Parapanic
                         } break;
                         case Right:
                         {
-                            if (rightRoad)
+                            if (rightRoadBlock)
                             {
                                 lastAiDir = aiDir;
                                 aiDir = Right;
@@ -166,7 +166,7 @@ namespace Parapanic
                         } break;
                         case Up:
                         {
-                            if (upRoad)
+                            if (upRoadBlock)
                             {
                                 lastAiDir = aiDir;
                                 aiDir = Up;
@@ -176,7 +176,7 @@ namespace Parapanic
                         } break;
                         case Down:
                         {
-                            if (downRoad)
+                            if (downRoadBlock)
                             {
                                 lastAiDir = aiDir;
                                 aiDir = Down;
@@ -186,11 +186,11 @@ namespace Parapanic
                         } break;
                     }
 
-                    while (upRoad || leftRoad || downRoad || rightRoad)
+                    while (upRoadBlock || leftRoadBlock || downRoadBlock || rightRoadBlock)
                     {
                         ++turningNumber;
 
-                        if (upRoad && turningNumber % 4 == Up)
+                        if (upRoadBlock && turningNumber % 4 == Up)
                         {
                             lastAiDir = aiDir;
                             aiDir = Up;
@@ -233,7 +233,7 @@ namespace Parapanic
                             turningNumber += (byte)Parapanic.Random.Next(255);
                             break;
                         }
-                        if (leftRoad && turningNumber % 4 == Left)
+                        if (leftRoadBlock && turningNumber % 4 == Left)
                         {
                             lastAiDir = aiDir;
                             aiDir = Left;
@@ -276,7 +276,7 @@ namespace Parapanic
                             turningNumber += (byte)Parapanic.Random.Next(255);
                             break;
                         }
-                        if (downRoad && turningNumber % 4 == Down)
+                        if (downRoadBlock && turningNumber % 4 == Down)
                         {
                             lastAiDir = aiDir;
                             aiDir = Down;
@@ -319,7 +319,7 @@ namespace Parapanic
                             turningNumber += (byte)Parapanic.Random.Next(255);
                             break;
                         }
-                        if (rightRoad && turningNumber % 4 == Right)
+                        if (rightRoadBlock && turningNumber % 4 == Right)
                         {
                             lastAiDir = aiDir;
                             aiDir = Right;

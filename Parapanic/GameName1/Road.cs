@@ -15,11 +15,11 @@ namespace Parapanic
         Unknown
     }
 
-    class Road : FloorBlock
+    class RoadBlock : FloorBlock
     {
         public RoadTypes Type;
         
-        public Road(int x, int y)
+        public RoadBlock(int x, int y)
             : base(x, y)
         { }
 
@@ -28,10 +28,10 @@ namespace Parapanic
             int gridX = (int)(position.X / Block.size);
             int gridY = (int)(position.Y / Block.size);
 
-            bool rightRoad = false;
-            bool leftRoad = false;
-            bool upRoad = false;
-            bool downRoad = false;
+            bool rightRoadBlock = false;
+            bool leftRoadBlock = false;
+            bool upRoadBlock = false;
+            bool downRoadBlock = false;
 
             int gWidth = world.grid.GetLength(0);
             int gHeight = world.grid.GetLength(1);
@@ -39,40 +39,56 @@ namespace Parapanic
             if (gridX + 1 < gWidth && gridX >= 0 && gridY >= 0 && gridY < gHeight &&
                 world.grid[gridX + 1, gridY] is FloorBlock)
             {
-                rightRoad = true;
+                rightRoadBlock = true;
             }
             if (gridX > 0 && gridX - 1 < gWidth && gridY >= 0 && gridY < gHeight &&
                 world.grid[gridX - 1, gridY] is FloorBlock)
             {
-                leftRoad = true;
+                leftRoadBlock = true;
             }
             if (gridY + 1 < gHeight && gridY >= -1 && gridX >= 0 && gridX < gWidth &&
                 world.grid[gridX, gridY + 1] is FloorBlock)
             {
-                downRoad = true;
+                downRoadBlock = true;
             }
             if (gridY > 0 && gridY - 1 < gHeight && gridX >= 0 && gridX < gWidth &&
                 world.grid[gridX, gridY - 1] is FloorBlock)
             {
-                upRoad = true;
+                upRoadBlock = true;
             }
 
             Type = RoadTypes.Unknown;
 
-            if (leftRoad && rightRoad && !upRoad && !downRoad)
+            if (leftRoadBlock && rightRoadBlock && !upRoadBlock && !downRoadBlock)
                 Type = RoadTypes.Horizontal;
-            else if (!leftRoad && !rightRoad && upRoad && downRoad)
+            else if (!leftRoadBlock && !rightRoadBlock && upRoadBlock && downRoadBlock)
                 Type = RoadTypes.Vertical;
-            else if (leftRoad && rightRoad && upRoad && downRoad)
+            else if (leftRoadBlock && rightRoadBlock && upRoadBlock && downRoadBlock)
                 Type = RoadTypes.FourWay;
-            else if (!leftRoad && rightRoad && !upRoad && !downRoad)
+            else if (!leftRoadBlock && rightRoadBlock && !upRoadBlock && !downRoadBlock)
                 Type = RoadTypes.EndL;
-            else if (leftRoad && !rightRoad && !upRoad && !downRoad)
+            else if (leftRoadBlock && !rightRoadBlock && !upRoadBlock && !downRoadBlock)
                 Type = RoadTypes.EndR;
-            else if (!leftRoad && !rightRoad && !upRoad && downRoad)
+            else if (!leftRoadBlock && !rightRoadBlock && !upRoadBlock && downRoadBlock)
                 Type = RoadTypes.EndD;
-            else if (!leftRoad && !rightRoad && upRoad && !downRoad)
+            else if (!leftRoadBlock && !rightRoadBlock && upRoadBlock && !downRoadBlock)
                 Type = RoadTypes.EndU;
+            else if (!leftRoadBlock && rightRoadBlock && upRoadBlock && !downRoadBlock)
+                Type = RoadTypes.TwoWayRU;
+            else if (!leftRoadBlock && rightRoadBlock && !upRoadBlock && downRoadBlock)
+                Type = RoadTypes.TwoWayRD;
+            else if (leftRoadBlock && !rightRoadBlock && upRoadBlock && !downRoadBlock)
+                Type = RoadTypes.TwoWayLU;
+            else if (leftRoadBlock && !rightRoadBlock && !upRoadBlock && downRoadBlock)
+                Type = RoadTypes.TwoWayLD;
+            else if (leftRoadBlock && rightRoadBlock && upRoadBlock && !downRoadBlock)
+                Type = RoadTypes.ThreeWayULR;
+            else if (!leftRoadBlock && rightRoadBlock && upRoadBlock && downRoadBlock)
+                Type = RoadTypes.ThreeWayUDR;
+            else if (leftRoadBlock && !rightRoadBlock && upRoadBlock && downRoadBlock)
+                Type = RoadTypes.ThreeWayUDL;
+            else if (leftRoadBlock && rightRoadBlock && !upRoadBlock && downRoadBlock)
+                Type = RoadTypes.ThreeWayDLR;
         }
     }
 }
