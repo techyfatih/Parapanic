@@ -81,14 +81,19 @@ namespace Parapanic
 
         }
 
-        public static Vector2 speedToVector(float speed, float direction)
+        public static Vector2 floatToVector(float speed, float direction)
         {
             return new Vector2((float)(Math.Cos(direction) * speed), (float)(Math.Sin(direction) * speed));
         }
 
-        public static float speedToFloat(Vector2 speedV, bool positive)
+        public static float vectorToFloat(Vector2 speedV, bool positive)
         {
             return (float)((positive) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X));
+        }
+
+        public static float vectorToDirection(Vector2 speedV)
+        {
+            return (float)Math.Atan2(speedV.Y,speedV.X);
         }
 
         public static Vector2 AbsVector(Vector2 v)

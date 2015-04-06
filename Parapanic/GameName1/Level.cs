@@ -10,6 +10,7 @@ namespace Parapanic
     class Level
     {
         Ambulance ambulance;
+        //VectorAmbulance vambulance;
         World world;
         Minimap.GPS minimap;
 
@@ -20,7 +21,8 @@ namespace Parapanic
 
             world = new World(100, 100);
             Vector2 empty = world.EmptySpace();
-            ambulance = new Ambulance((int)empty.X + Block.size/2, (int)empty.Y + Block.size/2, 0, 10, 0.1, 0.95);
+            //ambulance = new Ambulance((int)empty.X + Block.size/2, (int)empty.Y + Block.size/2, 0, 10, 0.1, 0.95);
+            ambulance = new Ambulance((int)empty.X + Block.size / 2, (int)empty.Y + Block.size / 2, 0, 10, 0.1, 0.95);
             Camera.Initialize(width, height);
 
             minimap = new Minimap.GPS(width, height, 2f, new Rectangle(width - 150, height - 120, 120, 90));

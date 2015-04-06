@@ -10,91 +10,75 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Parapanic
 {
-    class Ambulance : Car
+    class VectorAmbulance : Car
     {
         bool hasPatient;
         bool intersected;
         const double MAX_TURN_RATE = 0.12;
 
+        Vector2 speedV = new Vector2(0,0);
+        Vector2 driftV = new Vector2(0,0);
+        bool forwards = true;
+        float drawDirection;
         bool drifting = false;
+        const float driftCoeff = .94f;
 
-        const float driftCoeff = .98f;
-        const float driftRate = .005f;
-
-        float currentDrift = driftCoeff;
-
-        public float drawDirection;
-
-        public Ambulance(int x, int y, float direction, double topSpeed, double acceleration, double friction)
-            : base(x, y, 0, direction, topSpeed, acceleration, friction) { hasPatient = false; drawDirection = direction;}
+        public VectorAmbulance(int x, int y, float direction, double topSpeed, double acceleration, double friction)
+            : base(x, y, 0, direction, topSpeed, acceleration, friction) { hasPatient = false; drawDirection = direction; }
 
         public override void Update(World world)
         {
+            
+
             intersected = false;
-            frictionEnabled = true;
             MouseState mouse = Mouse.GetState();
+
             //Left Click - Acceleration
             if (mouse.LeftButton == ButtonState.Pressed)
             {
+                
                 if (speed + acceleration < topSpeed)
-                    speed += acceleration;
+                    speed += (float)acceleration;
                 else
-                    speed = topSpeed;
+                    speed = (float)topSpeed;
 
-                if (speed > 0)
-                    frictionEnabled = false;
+                speedV = Utilities.floatToVector((float)speed, direction);
             }
 
             //Right Click - Brake/Reverse
             if (mouse.RightButton == ButtonState.Pressed)
             {
                 if (speed - acceleration > 0)
-                    speed -= acceleration;
+                    speed -= (float)acceleration;
                 else
                 {
                     if (speed - acceleration > -topSpeed / 2)
-                        speed -= acceleration / 2;
+                        speed -= (float)acceleration / 2;
                     else
-                        speed = -topSpeed / 2;
+                        speed = -(float)topSpeed / 2;
                 }
 
-                if (speed < 0)
-                    frictionEnabled = false;
+                speedV = Utilities.floatToVector((float)speed, direction);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 drifting = true;
-
-                //driftV = speedV * ((1 - driftCoeff)) / 2;
-
-                if (currentDrift - driftRate > .05 * driftCoeff)
-                {
-                    currentDrift -= driftRate;
-                }
-                else
-                {
-                    currentDrift = 0;
-                }
-                
-                speed *= currentDrift;
+                driftV = speedV * ((1 - driftCoeff)) / 2;
+                speedV *= driftCoeff;
             }
-            else
+            else 
             {
-                //driftV = new Vector2(0, 0);
-                if(drifting)
-                {
-                    direction = drawDirection;
-                    drifting = false;
-                    currentDrift = driftCoeff;
-                }
+                driftV = new Vector2(0, 0);
+                drifting = false;
             }
 
+            forwards = (speed >= 0 )? true : false;
 
-            base.Update(world);
+            //base.Update(world);
 
-            Console.WriteLine(intersected);
-            
+            //Console.WriteLine(intersected);
+
             //Mouse Direction - Turning
             double turnrate = (Math.Abs(speed) > 1) ? ((MAX_TURN_RATE / topSpeed) * Math.Abs(speed)) : 0; //Don't turn when not moving
 
@@ -111,17 +95,26 @@ namespace Parapanic
                     mouseDirection = Utilities.NormAngle(mouseDirection - Math.PI);
                 }
                 if (mouseDirection > refDir && mouseDirection < refDir + Math.PI)
-                {
-                    direction = (float)Utilities.NormAngle(direction + turnrate);
-                    drawDirection = drifting?((float)Utilities.NormAngle(drawDirection + 1.3*turnrate)):direction;
-
-                }
+                    drawDirection = (float)Utilities.NormAngle(direction + turnrate);
                 else
-                { 
-                    direction = (float)Utilities.NormAngle(direction - turnrate);
-                    drawDirection = drifting ? ((float)Utilities.NormAngle(drawDirection - 1.3 * turnrate)) : direction;
-                }
+                    drawDirection = (float)Utilities.NormAngle(direction - turnrate);
             }
+            Vector2 finalV = speedV + driftV;
+
+            if(!drifting)
+            {
+                direction = drawDirection;
+            }
+            else
+            {
+                direction = Utilities.vectorToDirection(finalV);
+            }
+
+            speed = Utilities.vectorToFloat(finalV,forwards);
+
+            base.Update(world);
+
+            speedV = Utilities.floatToVector((float)speed, (float)direction);
 
         }
 
