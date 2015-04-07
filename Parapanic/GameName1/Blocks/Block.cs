@@ -13,6 +13,7 @@ namespace Parapanic
         public Vector2 position;
         public Rectangle boundary;
         public bool solid = false;
+        public int carsInside = 0;
 
         public Block(int x, int y)
         {

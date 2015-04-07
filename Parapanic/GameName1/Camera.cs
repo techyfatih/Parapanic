@@ -39,14 +39,14 @@ namespace Parapanic
         public static void Update(VectorAmbulance ambulance, World world)
         {
             int newX = (int)ambulance.position.X - view.Width / 2;
-            if (newX < 0) newX = 0;
-            if (newX > world.Width - view.Width) newX = world.Width - view.Width;
+            //if (newX < 0) newX = 0;
+            //if (newX > world.Width - view.Width) newX = world.Width - view.Width;
             position.X = newX;
             view.X = newX;
 
             int newY = (int)ambulance.position.Y - view.Height / 2;
-            if (newY < 0) newY = 0;
-            if (newY > world.Height - view.Height) newY = world.Height - view.Height;
+            //if (newY < 0) newY = 0;
+            //if (newY > world.Height - view.Height) newY = world.Height - view.Height;
             position.Y = newY;
             view.Y = newY;
         }

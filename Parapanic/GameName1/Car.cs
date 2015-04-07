@@ -29,7 +29,7 @@ namespace Parapanic
         protected bool collisionRight = false;
         protected bool collisionUp = false;
         protected bool collisionDown = false;
-        protected Rectangle boundingBox;
+        public Rectangle boundingBox;
         
         public Car(int x, int y, double speed, float direction, double topSpeed, double acceleration, double friction)
         {
@@ -54,15 +54,8 @@ namespace Parapanic
             diagonal = Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2)) / 2.5;
         }
 
-        public virtual void Update(World world)
+        protected Rectangle RecalculateBoundingBox(Vector2 speedV = new Vector2())
         {
-            //friction!!
-            if (frictionEnabled)
-                speed *= friction;
-
-
-            Vector2 speedV = new Vector2((float)(Math.Cos(direction) * speed), (float)(Math.Sin(direction) * speed));
-
             int[] newX = new int[4];
             int[] newY = new int[4];
             for (int i = 0; i < 4; i++)
@@ -77,8 +70,18 @@ namespace Parapanic
             int boundWidth = Utilities.Maximum(newX) - boundX;
             int boundHeight = Utilities.Maximum(newY) - boundY;
 
-            boundingBox = new Rectangle(boundX, boundY, boundWidth, boundHeight);
+            return new Rectangle(boundX, boundY, boundWidth, boundHeight);
+        }
 
+        public virtual void Update(World world)
+        {
+            //friction!!
+            if (frictionEnabled)
+                speed *= friction;
+            
+            Vector2 speedV = new Vector2((float)(Math.Cos(direction) * speed), (float)(Math.Sin(direction) * speed));
+
+            boundingBox = RecalculateBoundingBox(speedV);
 
             bool topLeftCollision = false;
             bool topMiddleCollision = false;
@@ -193,6 +196,8 @@ namespace Parapanic
             
 
             speed = (speed > 0) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X);
+
+            boundingBox = RecalculateBoundingBox();
         }
 
         protected virtual void OnCollision(World world, int xCoord, int yCoord)
