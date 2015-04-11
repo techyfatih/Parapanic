@@ -106,5 +106,11 @@ namespace Parapanic
         {
             return new Vector2(Math.Abs(v.X), Math.Abs(v.Y));
         }
+
+        public static double distance(Vector2 initial, Vector2 final)
+        {
+
+            return Math.Sqrt(Math.Pow((final.X - initial.X), 2) + Math.Pow((final.Y - initial.Y), 2));
+        }
     }
 }
