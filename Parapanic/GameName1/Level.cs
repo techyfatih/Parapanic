@@ -53,12 +53,12 @@ namespace Parapanic
                         ((RoadBlock)block).InitializeType(world);
         }
 
-        const int numCarsOnMap = 200;
+        const int numCarsOnMap = 160;
         void ReplaceCars()
         {
             for (int i = 0; i < world.Cars.Count; i++)
             {
-                if ((ambulance.position - world.Cars[i].position).LengthSquared() > 2000000)
+                if ((ambulance.position - world.Cars[i].position).LengthSquared() > 1000000)
                 {
                     world.Cars.Remove(world.Cars[i--]);
                 }
@@ -69,8 +69,8 @@ namespace Parapanic
             foreach (Block b in world.grid)
             {
                 if (b is RoadBlock &&
-                   (ambulance.position - b.position).LengthSquared() > 300000 &&
-                   (ambulance.position - b.position).LengthSquared() < 1000000 &&
+                   (ambulance.position - b.position).LengthSquared() > 400000 &&
+                   (ambulance.position - b.position).LengthSquared() < 800000 &&
                     b.carsInside == 0)
                     roadsInRange.Add(b);
             }
