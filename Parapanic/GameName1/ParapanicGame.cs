@@ -20,6 +20,9 @@ namespace Parapanic
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Level level;
+        Menu menu;
+
+        public int gameState;
 
         public Parapanic()
             : base()
@@ -40,7 +43,9 @@ namespace Parapanic
         {
             graphics.ApplyChanges();
             this.IsMouseVisible = true;
+            menu = new Menu(GraphicsDevice,this);
             level = new Level(graphics);
+            gameState = 0;
             base.Initialize();
         }
 
@@ -73,12 +78,23 @@ namespace Parapanic
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
 
-            if (IsActive) //Primitive way to pause the game on minimize, would like to improve later
+            if (IsActive && gameState == 0)
+            {
+                menu.Update();
+                base.Update(gameTime);
+            }
+
+            if (IsActive && gameState == 1) //Primitive way to pause the game on minimize, would like to improve later
             {
                 level.Update();
+                if(level.ambulance.toMenu)
+                {
+                    gameState = 0;
+                    level.ambulance.toMenu = false;
+                }
                 base.Update(gameTime);
             }
         }
@@ -92,7 +108,15 @@ namespace Parapanic
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            level.Draw(spriteBatch, this);
+            if(gameState == 0)
+            { 
+                menu.Draw(spriteBatch, this);
+            }
+            if (gameState == 1)
+            {
+                level.Draw(spriteBatch, this);
+            }
+
             spriteBatch.End();
             base.Draw(gameTime);
         }

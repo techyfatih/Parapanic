@@ -56,9 +56,11 @@
     <Compile Include="AiCar.cs" />
     <Compile Include="Ambulance.cs" />
     <Compile Include="Blocks\Block.cs" />
+    <Compile Include="Button.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Car.cs" />
     <Compile Include="Blocks\FloorBlock.cs" />
+    <Compile Include="Menu.cs" />
     <Compile Include="Road.cs" />
     <Compile Include="Patient.cs" />
     <Compile Include="Utilities.cs" />

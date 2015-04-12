@@ -9,7 +9,7 @@ namespace Parapanic
 {
     class Level
     {
-        Ambulance ambulance;
+        public Ambulance ambulance;
         //VectorAmbulance vambulance;
         World world;
         Minimap.GPS minimap;

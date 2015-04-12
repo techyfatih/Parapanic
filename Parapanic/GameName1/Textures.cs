@@ -17,6 +17,9 @@ namespace Parapanic
         public static Texture2D patientFace;
         public static Texture2D black;
         public static Texture2D white;
+        public static Texture2D testMenu;
+        public static Texture2D startButton;
+        public static Texture2D startButton_highlighted;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -28,6 +31,9 @@ namespace Parapanic
             patientFace = Content.Load<Texture2D>("PatientPlaceholder");
             black = Content.Load<Texture2D>("Black");
             white = Content.Load<Texture2D>("white");
+            testMenu = Content.Load<Texture2D>("TestMenuBackground");
+            startButton = Content.Load<Texture2D>("StartButton");
+            startButton_highlighted = Content.Load<Texture2D>("StartButton_highlighted");
         }
     }
 }

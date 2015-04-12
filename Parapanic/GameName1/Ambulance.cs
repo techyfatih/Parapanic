@@ -26,7 +26,9 @@ namespace Parapanic
         public float drawDirection;
 
         public int patientTimer = 0;
-        public float maxTime = 800;
+        public float maxTime = 2400;
+
+        public bool toMenu;
 
         public Ambulance(int x, int y, float direction, double topSpeed, double acceleration, double friction)
             : base(x, y, 0, direction, topSpeed, acceleration, friction) { hasPatient = false; drawDirection = direction;}
@@ -102,6 +104,10 @@ namespace Parapanic
                 }
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                toMenu = true;
+            }
 
             base.Update(world);
 
