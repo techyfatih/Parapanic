@@ -23,6 +23,7 @@ namespace Parapanic
         Menu menu;
 
         public int gameState;
+        public bool inProgress = false;
 
         public Parapanic()
             : base()

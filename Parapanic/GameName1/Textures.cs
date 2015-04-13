@@ -20,6 +20,8 @@ namespace Parapanic
         public static Texture2D testMenu;
         public static Texture2D startButton;
         public static Texture2D startButton_highlighted;
+        public static Texture2D continueButton;
+        public static Texture2D continueButton_highlighted;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -34,6 +36,9 @@ namespace Parapanic
             testMenu = Content.Load<Texture2D>("TestMenuBackground");
             startButton = Content.Load<Texture2D>("StartButton");
             startButton_highlighted = Content.Load<Texture2D>("StartButton_highlighted");
+            continueButton = Content.Load<Texture2D>("ContinueButton");
+            continueButton_highlighted = Content.Load<Texture2D>("ContinueButton_highlighted");
+
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Parapanic
         Parapanic game;
 
         Button startButton;
+        Button continueButton;
         Button infoButton;
         Button creditsButton;
         Button quitButton;
@@ -33,14 +34,22 @@ namespace Parapanic
 
             game = game1;
 
-            startButton = new Button((int)((width / 2f) - (buttonWidth/2f)), (int)(height * .3),buttonWidth, buttonHeight);
+            startButton = new Button((int)((width / 2f) - (buttonWidth/2f)), (int)(height * .5),buttonWidth, buttonHeight);
+            continueButton = new Button((int)((width / 2f) - (buttonWidth / 2f)), (int)(height * .3), buttonWidth, buttonHeight);
+
         }
 
         public void Update()
         {
             MouseState mouse = Mouse.GetState();
 
-            if(startButton.highlighted() && mouse.LeftButton == ButtonState.Pressed)
+            if(startButton.highlighted() && mouse.LeftButton == ButtonState.Pressed && !game.inProgress)
+            {
+                game.gameState = 1;
+                game.inProgress = true;
+            }
+
+            if (continueButton.highlighted() && mouse.LeftButton == ButtonState.Pressed && game.inProgress)
             {
                 game.gameState = 1;
             }
@@ -53,7 +62,7 @@ namespace Parapanic
 
             spriteBatch.Draw(!startButton.highlighted()?Textures.startButton:Textures.startButton_highlighted, startButton.rectangle, Color.White);
 
-
+            spriteBatch.Draw(!continueButton.highlighted() ? Textures.continueButton : Textures.continueButton_highlighted, continueButton.rectangle, game.inProgress?Color.White:Color.Gray);
 
         }
 
