@@ -34,9 +34,10 @@ namespace Parapanic
 
             game = game1;
 
-            startButton = new Button((int)((width / 2f) - (buttonWidth/2f)), (int)(height * .5),buttonWidth, buttonHeight);
-            continueButton = new Button((int)((width / 2f) - (buttonWidth / 2f)), (int)(height * .3), buttonWidth, buttonHeight);
-
+            startButton = new Button((int)((width / 2f) - (buttonWidth/2f)), (int)(height * .4),buttonWidth, buttonHeight);
+            continueButton = new Button((int)((width / 2f) - (buttonWidth / 2f)), (int)(height * .2), buttonWidth, buttonHeight);
+            infoButton = new Button((int)((width / 2f) - (buttonWidth / 2f)), (int)(height * .6), buttonWidth, buttonHeight);
+            quitButton = new Button((int)((width / 2f) - (buttonWidth / 2f)), (int)(height * .8), buttonWidth, buttonHeight);
         }
 
         public void Update()
@@ -53,6 +54,11 @@ namespace Parapanic
             {
                 game.gameState = 1;
             }
+
+            if (quitButton.highlighted() && mouse.LeftButton == ButtonState.Pressed && game.inProgress)
+            {
+                game.Exit();
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, Parapanic game)
@@ -63,6 +69,10 @@ namespace Parapanic
             spriteBatch.Draw(!startButton.highlighted()?Textures.startButton:Textures.startButton_highlighted, startButton.rectangle, Color.White);
 
             spriteBatch.Draw(!continueButton.highlighted() ? Textures.continueButton : Textures.continueButton_highlighted, continueButton.rectangle, game.inProgress?Color.White:Color.Gray);
+
+            spriteBatch.Draw(!infoButton.highlighted() ? Textures.infoButton : Textures.infoButton_highlighted, infoButton.rectangle, Color.White);
+
+            spriteBatch.Draw(!quitButton.highlighted() ? Textures.quitButton : Textures.quitButton_highlighted, quitButton.rectangle, Color.White);
 
         }
 
