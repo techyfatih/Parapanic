@@ -31,9 +31,14 @@ namespace Parapanic
         int gridX;
         int gridY;
 
-        public AiCar(int x, int y, double topSpeed, double acceleration, double friction, World world)
+
+        public AiCar(int x, int y, double topSpeed, double acceleration, double friction, World world, Color color)
             : base(0, 0, 0, 0, topSpeed, acceleration, friction)
         {
+
+
+            carColor = color;
+
             frictionEnabled = false;
             gridX = x / Block.size;
             gridY = y / Block.size;

@@ -17,6 +17,9 @@ namespace Parapanic
         int width;
         int height;
 
+        Color[] colors = { Color.Blue, Color.White, Color.Red, Color.Green, Color.Yellow };
+        Random r = new Random();
+
         public Level(GraphicsDeviceManager g)
         {
             width = g.PreferredBackBufferWidth;
@@ -83,7 +86,7 @@ namespace Parapanic
                 roadsInRange.Remove(spawnBlock);
 
                 world.Cars.Add(new AiCar((int)spawnBlock.position.X, (int)spawnBlock.position.Y,
-                                         1, 0.05, 1, world));
+                                         1, 0.05, 1, world,colors[r.Next(colors.Length)]));
             }
         }
 
