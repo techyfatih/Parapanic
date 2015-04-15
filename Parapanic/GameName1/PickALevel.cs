@@ -51,7 +51,7 @@ namespace Parapanic
                 game.gameState = Parapanic.State.Game;
                 game.Level = l2;
             }
-            if (mouse.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(mouse.Position, b2))
+            if (mouse.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(mouse.Position, b3))
             {
                 game.gameState = Parapanic.State.Game;
                 game.Level = l3;
