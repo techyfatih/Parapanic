@@ -19,7 +19,13 @@ namespace Parapanic
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Level level;
+
+        Level realLevel;
+
+        Level level1;
+        Level level2;
+        Level level3;
+
         Menu menu;
 
         public int gameState;
@@ -45,7 +51,11 @@ namespace Parapanic
             graphics.ApplyChanges();
             this.IsMouseVisible = true;
             menu = new Menu(GraphicsDevice,this);
-            level = new Level(graphics);
+
+            level1 = new Level(graphics);
+            level2 = new Level(graphics);
+            level3 = new Level(graphics);
+
             gameState = 0;
             base.Initialize();
         }
@@ -88,13 +98,13 @@ namespace Parapanic
                 base.Update(gameTime);
             }
 
-            if (IsActive && gameState == 1) //Primitive way to pause the game on minimize, would like to improve later
+            if (IsActive && gameState == 2) //Primitive way to pause the game on minimize, would like to improve later
             {
-                level.Update();
-                if(level.ambulance.toMenu)
+                level1.Update();
+                if(level1.ambulance.toMenu)
                 {
                     gameState = 0;
-                    level.ambulance.toMenu = false;
+                    level1.ambulance.toMenu = false;
                 }
                 base.Update(gameTime);
             }
@@ -115,7 +125,12 @@ namespace Parapanic
             }
             if (gameState == 1)
             {
-                level.Draw(spriteBatch, this);
+                level1.Draw(spriteBatch, this);
+            }
+
+            if (gameState == 1)
+            {
+                spriteBatch.Draw(level1.minimap.map.GetMapTexture(),)
             }
 
             spriteBatch.End();
