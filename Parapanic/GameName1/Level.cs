@@ -12,7 +12,7 @@ namespace Parapanic
         public Ambulance ambulance;
         //VectorAmbulance vambulance;
         World world;
-        Minimap.GPS minimap;
+        public Minimap.GPS minimap;
 
         int width;
         int height;
