@@ -239,7 +239,7 @@ namespace Parapanic
                 }
             }
             {
-                Color c = Color.White;
+                Color c = ambulance.color;
                 Texture2D texture = Textures.ambulance;
                 Vector2 p1 = new Vector2(-texture.Width / 2, -texture.Height / 2);
                 Vector2 p2 = new Vector2(-texture.Width / 2, texture.Height / 2);
@@ -292,7 +292,7 @@ namespace Parapanic
             {
                 if (Math.Abs((car.position - position).LengthSquared()) < 2000000)
                 {
-                    Color c = Color.White;
+                    Color c = car.color;
                     Texture2D texture = Textures.ambulance;
                     Vector2 p1 = new Vector2(-texture.Width / 2, -texture.Height / 2);
                     Vector2 p2 = new Vector2(-texture.Width / 2, texture.Height / 2);

@@ -89,6 +89,7 @@ namespace Parapanic
 
         public void Draw(SpriteBatch spriteBatch, Parapanic game)
         {
+            SpriteFont font = game.Content.Load<SpriteFont>("font");
             if (Minimap.Map.DirtyFlag)
                 minimap.Draw(spriteBatch, game, world);
             Camera.DrawScreen(game, ambulance, world);
@@ -96,11 +97,14 @@ namespace Parapanic
             if(ambulance.hasPatient)
             {
                 spriteBatch.Draw(Textures.patientFace, new Rectangle(110, height - 200, 120, 160), Color.White);
-                spriteBatch.Draw(Textures.black, new Rectangle(110, height - 200, 120, 160), Color.White * (ambulance.patientTimer/ambulance.maxTime));
+                spriteBatch.Draw(Textures.black, new Rectangle(110, height - 200, 120, 160), Color.White * ((float)ambulance.patientTimer/ambulance.maxTime));
 
                 spriteBatch.Draw(Textures.white, new Rectangle(110, height - 25, 120, 25), Color.Red);
-                spriteBatch.Draw(Textures.white, new Rectangle(110 + (int)(120 * (ambulance.patientTimer / ambulance.maxTime)), height - 25, 120 - (int)(120 * (ambulance.patientTimer / ambulance.maxTime)), 25), Color.Green);
+                spriteBatch.Draw(Textures.white, new Rectangle(110 + (int)(120 * ((float)ambulance.patientTimer / ambulance.maxTime)), height - 25, 120 - (int)(120 * ((float)ambulance.patientTimer / ambulance.maxTime)), 25), Color.Green);
             }
+
+            spriteBatch.Draw(Textures.white, new Rectangle(15, 15, 200, 30), Color.DarkGray);
+            spriteBatch.DrawString(font, "Score : " + ambulance.Score, new Vector2(20, 20), Color.White);
 
             minimap.Draw(spriteBatch, game, world);
         }

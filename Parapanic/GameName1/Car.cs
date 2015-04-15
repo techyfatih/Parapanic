@@ -30,6 +30,7 @@ namespace Parapanic
         protected bool collisionUp = false;
         protected bool collisionDown = false;
         public Rectangle boundingBox;
+        public Color color = Color.White;
         
         public Car(int x, int y, double speed, float direction, double topSpeed, double acceleration, double friction)
         {
@@ -198,6 +199,11 @@ namespace Parapanic
             speed = (speed > 0) ? Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X) : -Math.Sqrt(speedV.Y * speedV.Y + speedV.X * speedV.X);
 
             boundingBox = RecalculateBoundingBox();
+        }
+
+        protected virtual void OnCollision(World world, Car car)
+        {
+            car.OnCollision(world, this);
         }
 
         protected virtual void OnCollision(World world, int xCoord, int yCoord)

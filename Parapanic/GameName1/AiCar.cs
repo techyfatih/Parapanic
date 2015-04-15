@@ -15,6 +15,7 @@ namespace Parapanic
         const int farSide = Block.size * 3 / 4;
         const int closeSide = Block.size / 4;
         const int lookAheadDistance = 32;
+        const int lookSidewaysDistance = 5;
 
         static byte turningNumber = 0;
         byte aiDir;
@@ -31,9 +32,26 @@ namespace Parapanic
         int gridX;
         int gridY;
 
+        Rectangle turningBoundingBox;
+        public bool proceedThroughCollision = false;
+        public Car carToIgnore;
+
         public AiCar(int x, int y, double topSpeed, double acceleration, double friction, World world)
             : base(0, 0, 0, 0, topSpeed, acceleration, friction)
         {
+            int colorIndex = Parapanic.Random.Next(10);
+            switch (colorIndex)
+            {
+                case 0: color = Color.Blue; break;
+                case 1: color = Color.Red; break;
+                case 2: color = Color.DarkGreen; break;
+                case 4: color = Color.DarkGray; break;
+                case 5: color = Color.DarkBlue; break;
+                case 6: color = Color.Brown; break;
+                case 7: color = Color.LightSlateGray; break;
+                case 8: color = Color.White; break;
+                case 9: color = Color.WhiteSmoke; break;
+            }
             frictionEnabled = false;
             gridX = x / Block.size;
             gridY = y / Block.size;
@@ -119,16 +137,24 @@ namespace Parapanic
                     case Left:
                     futureBounds.X += (int)vSpeed.X * lookAheadDistance;
                     futureBounds.Width -= (int)vSpeed.X * lookAheadDistance;
+                    futureBounds.Y -= lookSidewaysDistance;
+                    futureBounds.Height += 2 * lookSidewaysDistance;
                     break;
                     case Right:
                     futureBounds.Width += (int)vSpeed.X * lookAheadDistance;
+                    futureBounds.Y -= lookSidewaysDistance;
+                    futureBounds.Height += 2 * lookSidewaysDistance;
                     break;
                     case Up:
                     futureBounds.Y += (int)vSpeed.Y * lookAheadDistance;
                     futureBounds.Height -= (int)vSpeed.Y * lookAheadDistance;
+                    futureBounds.X -= lookSidewaysDistance;
+                    futureBounds.Width += 2 * lookSidewaysDistance;
                     break;
                     case Down:
                     futureBounds.Height += (int)vSpeed.Y * lookAheadDistance;
+                    futureBounds.X -= lookSidewaysDistance;
+                    futureBounds.Width += 2 * lookSidewaysDistance;
                     break;
                 }
 
@@ -136,8 +162,16 @@ namespace Parapanic
 
                 foreach (Car car in world.Cars)
                 {
-                    if ((AiCar)car != this && futureBounds.Intersects(car.boundingBox))
+                    if (proceedThroughCollision && car == carToIgnore)
+                    {
+                        if (!futureBounds.Intersects(car.boundingBox))
+                            proceedThroughCollision = false;
+                    }
+                    else if ((AiCar)car != this && futureBounds.Intersects(car.boundingBox))
+                    {
                         futureBoundsCrash = true;
+                        OnCollision(world, car); //TODO: i know this doesn't really detect collisions, just potential future ones, but it fits our purposes
+                    }
                 }
 
                 if (futureBoundsCrash)
@@ -162,13 +196,31 @@ namespace Parapanic
 
             if (turning)
             {
-                turningAngle += turningAngleChange;
-                position = turningAngleOrigin + new Vector2((float)Math.Cos(turningAngle), -(float)Math.Sin(turningAngle)) * turningAngleRadius;
-                direction += directionChange;
-                if (Math.Abs(turningAngleTarget - turningAngle) < 0.1f)
+                bool potentialCrash = world.ambulance.boundingBox.Intersects(turningBoundingBox);
+                foreach (Car c in world.Cars)
                 {
-                    turning = false;
-                    direction = targetDirection;
+                    if (proceedThroughCollision && c == carToIgnore)
+                    {
+                        if (!turningBoundingBox.Intersects(c.boundingBox))
+                            proceedThroughCollision = false;
+                    }
+                    else if (c != this && c.boundingBox.Intersects(turningBoundingBox))
+                    {
+                        potentialCrash = true;
+                        OnCollision(world, c);
+                    }
+                }
+
+                if (!potentialCrash)
+                {
+                    turningAngle += turningAngleChange;
+                    position = turningAngleOrigin + new Vector2((float)Math.Cos(turningAngle), -(float)Math.Sin(turningAngle)) * turningAngleRadius;
+                    direction += directionChange;
+                    if (Math.Abs(turningAngleTarget - turningAngle) < 0.1f)
+                    {
+                        turning = false;
+                        direction = targetDirection;
+                    }
                 }
             }
 
@@ -270,6 +322,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2(gridX * Block.size, gridY * Block.size);
                             turningAngleRadius = Block.size * 3 / 4;
                             directionChange = Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
 
                         case Left:
@@ -281,6 +334,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2((gridX + 1) * Block.size, gridY * Block.size);
                             turningAngleRadius = Block.size / 4;
                             directionChange = Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
 
                         case Down:
@@ -292,6 +346,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2(gridX * Block.size + Block.size / 2, gridY * Block.size);
                             turningAngleRadius = Block.size / 4;
                             directionChange = -Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
                     }
                     turningNumber += (byte)Parapanic.Random.Next(255);
@@ -313,6 +368,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2(gridX * Block.size, gridY * Block.size + Block.size / 2);
                             turningAngleRadius = Block.size / 4;
                             directionChange = -Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
 
                         case Up:
@@ -324,6 +380,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2(gridX * Block.size, (gridY + 1) * Block.size);
                             turningAngleRadius = Block.size * 3 / 4;
                             directionChange = Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
 
                         case Down:
@@ -335,6 +392,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2(gridX * Block.size, gridY * Block.size);
                             turningAngleRadius = Block.size / 4;
                             directionChange = Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
                     }
                     turningNumber += (byte)Parapanic.Random.Next(255);
@@ -356,6 +414,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2(gridX * Block.size, (gridY + 1) * Block.size);
                             turningAngleRadius = Block.size / 4;
                             directionChange = Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
 
                         case Left:
@@ -367,6 +426,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2((gridX + 1) * Block.size, (gridY + 1) * Block.size);
                             turningAngleRadius = Block.size * 3 / 4;
                             directionChange = Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
 
                         case Up:
@@ -378,6 +438,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2(gridX * Block.size + Block.size / 2, (gridY + 1) * Block.size);
                             turningAngleRadius = Block.size / 4;
                             directionChange = -Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
                     }
                     turningNumber += (byte)Parapanic.Random.Next(255);
@@ -399,6 +460,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2((gridX + 1) * Block.size, gridY * Block.size + Block.size / 2);
                             turningAngleRadius = Block.size / 4;
                             directionChange = -Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
 
                         case Up:
@@ -410,6 +472,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2((gridX + 1) * Block.size, (gridY + 1) * Block.size);
                             turningAngleRadius = Block.size / 4;
                             directionChange = Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
 
                         case Down:
@@ -421,6 +484,7 @@ namespace Parapanic
                             turningAngleOrigin = new Vector2((gridX + 1) * Block.size, gridY * Block.size);
                             turningAngleRadius = Block.size * 3 / 4;
                             directionChange = Utilities.NormAnglePiToPi(targetDirection - direction) / timeToTurn;
+                            turningBoundingBox = new Rectangle(gridX * Block.size, gridY * Block.size, Block.size, Block.size);
                         } break;
                     }
                     turningNumber += (byte)Parapanic.Random.Next(255);
@@ -430,9 +494,13 @@ namespace Parapanic
             return;
         }
 
-        private void CalculateDirection(World world)
+        protected override void OnCollision(World world, Car car)
         {
-
+            if (car is AiCar)
+            {
+                ((AiCar)car).proceedThroughCollision = true;
+                ((AiCar)car).carToIgnore = this;
+            }
         }
 
         protected override void OnCollision(World world, int xCoord, int yCoord)

@@ -15,7 +15,7 @@ namespace Parapanic.Minimap
         float gamePortScale;
         Rectangle screenPort;
 
-        Map map;
+        public Map map;
 
         public GPS(int gamePortWidth, int gamePortHeight, float gamePortScale, Rectangle screenPort)
         {

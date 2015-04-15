@@ -24,6 +24,7 @@ namespace Parapanic
         public int Height;
         public List<PointOfInterest> pointsOfInterest;
         public Ambulance ambulance;
+        public Vector2 hospitalPosition;
 
         const int BORDERWIDTH = 5;
         const int BORDERHEIGHT = 5;
@@ -80,6 +81,8 @@ namespace Parapanic
             grid[(int)hospital.X, (int)hospital.Y] =
                 new HospitalBlock((int)hospital.X * Block.size, (int)hospital.Y * Block.size, hospitalPoi);
             pointsOfInterest.Add(hospitalPoi);
+
+            hospitalPosition = hospital * Block.size;
 
             //Create node pairs and connections
             for (int i = 0; i < 20; i++)

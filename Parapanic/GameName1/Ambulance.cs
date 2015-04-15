@@ -12,6 +12,9 @@ namespace Parapanic
 {
     class Ambulance : Car
     {
+        public int Score = 0;
+        public int ScoreMultiplier = 1;
+
         public bool hasPatient;
         bool intersected;
         const double MAX_TURN_RATE = 0.12;
@@ -26,7 +29,9 @@ namespace Parapanic
         public float drawDirection;
 
         public int patientTimer = 0;
-        public float maxTime = 2400;
+        public int maxTime = 2400;
+        const int maxTimeMultiplier = 40;
+        const int maxTimeDivider = 100;
 
         public bool toMenu;
 
@@ -37,7 +42,7 @@ namespace Parapanic
         {
             if(hasPatient)
             {
-                patientTimer += (patientTimer < maxTime) ? 1 : 0;
+                patientTimer++;
             }
             else
             {
@@ -119,8 +124,7 @@ namespace Parapanic
             double mouseDirection = Utilities.NormAngle(Math.Atan2(mouse.Y - position.Y + Camera.position.Y,
                                                                    mouse.X - position.X + Camera.position.X));
 
-            if (Math.Abs(mouseDirection - direction) > turnrate //&& !intersected)
-                )
+            if (Math.Abs(mouseDirection - direction) > turnrate)
             {
                 double refDir = direction;
                 if (direction >= Math.PI)
@@ -132,7 +136,6 @@ namespace Parapanic
                 {
                     direction = (float)Utilities.NormAngle(direction + turnrate);
                     drawDirection = drifting?((float)Utilities.NormAngle(drawDirection + 1.3*turnrate)):direction;
-
                 }
                 else
                 { 
@@ -158,6 +161,8 @@ namespace Parapanic
                 world.pointsOfInterest.Remove(((PatientBlock)block).POIHandle);
                 world.grid[xCoord, yCoord] = new RoadBlock(xPos, yPos);
                 Minimap.Map.DirtyFlag = true;
+                patientTimer = 0;
+                maxTime = (int)(world.hospitalPosition - position).Length() * maxTimeMultiplier / maxTimeDivider;
             }
             else if (block is HospitalBlock &&
                      hasPatient)
@@ -168,6 +173,7 @@ namespace Parapanic
                 world.pointsOfInterest.Remove(((HospitalBlock)block).POIHandle);
                 world.grid[xCoord, yCoord] = new RoadBlock(xPos, yPos);
                 Minimap.Map.DirtyFlag = true;
+                Score += maxTime - patientTimer;
             }
 
 
