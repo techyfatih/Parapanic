@@ -60,7 +60,7 @@ namespace Parapanic.Minimap
             yScale = maxTextureSize * Block.size / world.Height;
 
             game.GraphicsDevice.Flush();
-            RenderTarget2D render = new RenderTarget2D(game.GraphicsDevice, maxTextureSize, maxTextureSize);
+            RenderTarget2D render = new RenderTarget2D(game.GraphicsDevice, xScale * world.Width / Block.size, yScale * world.Height / Block.size);
             game.GraphicsDevice.SetRenderTarget(render);
             game.GraphicsDevice.Clear(Color.White);
 

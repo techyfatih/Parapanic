@@ -13,22 +13,21 @@ namespace Parapanic
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Parapanic : Game
+    class Parapanic : Game
     {
+        public enum State
+        {
+            Menu, Game, Pause, PickALevel
+        }
+
         public static Random Random = new Random();
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Level realLevel;
+        public Level Level;
 
-        Level level1;
-        Level level2;
-        Level level3;
-
-        Menu menu;
-
-        public int gameState;
+        public State gameState;
         public bool inProgress = false;
 
         public Parapanic()
@@ -50,11 +49,12 @@ namespace Parapanic
         {
             graphics.ApplyChanges();
             this.IsMouseVisible = true;
-            menu = new Menu(GraphicsDevice,this);
+            Level = new Menu(GraphicsDevice, this);
+            //menu = new Menu(GraphicsDevice,this);
 
-            level1 = new Level(graphics);
-            level2 = new Level(graphics);
-            level3 = new Level(graphics);
+            //level1 = new Level(graphics);
+            //level2 = new Level(graphics);
+            //level3 = new Level(graphics);
 
             gameState = 0;
             base.Initialize();
@@ -92,20 +92,16 @@ namespace Parapanic
             //if (/*GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||*/ Keyboard.GetState().IsKeyDown(Keys.Escape))
             //    Exit();
 
-            if (IsActive && gameState == 0)
+            if (IsActive)
             {
-                menu.Update();
-                base.Update(gameTime);
-            }
-
-            if (IsActive && gameState == 2) //Primitive way to pause the game on minimize, would like to improve later
-            {
-                level1.Update();
-                if(level1.ambulance.toMenu)
-                {
-                    gameState = 0;
-                    level1.ambulance.toMenu = false;
-                }
+                Level.Update();
+                if (gameState == State.Game)
+                    if(((GameLevel)Level).ambulance.toMenu)
+                    {
+                        gameState = State.Pause;
+                        ((GameLevel)Level).ambulance.toMenu = false;
+                        Level = new PauseMenu(GraphicsDevice, this, Level);
+                    }
                 base.Update(gameTime);
             }
         }
@@ -119,19 +115,8 @@ namespace Parapanic
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            if(gameState == 0)
-            { 
-                menu.Draw(spriteBatch, this);
-            }
-            if (gameState == 1)
-            {
-                level1.Draw(spriteBatch, this);
-            }
-
-            if (gameState == 1)
-            {
-                spriteBatch.Draw(level1.minimap.map.GetMapTexture(),)
-            }
+            
+            Level.Draw(spriteBatch, this);
 
             spriteBatch.End();
             base.Draw(gameTime);

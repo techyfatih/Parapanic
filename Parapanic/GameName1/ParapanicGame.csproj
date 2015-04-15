@@ -60,7 +60,9 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Car.cs" />
     <Compile Include="Blocks\FloorBlock.cs" />
+    <Compile Include="GameLevel.cs" />
     <Compile Include="Menu.cs" />
+    <Compile Include="PickALevel.cs" />
     <Compile Include="Road.cs" />
     <Compile Include="Patient.cs" />
     <Compile Include="Utilities.cs" />
