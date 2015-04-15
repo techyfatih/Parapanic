@@ -107,7 +107,7 @@ namespace Parapanic
             }
 
             spriteBatch.Draw(Textures.white, new Rectangle(15, 15, 200, 30), Color.DarkGray);
-            spriteBatch.DrawString(font, "Score : " + ambulance.Score, new Vector2(20, 20), Color.White);
+            spriteBatch.DrawString(font, "Score : " + ambulance.Score, new Vector2(20, 15), Color.White);
 
             minimap.Draw(spriteBatch, game, world);
         }
