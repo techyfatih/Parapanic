@@ -17,6 +17,9 @@ namespace Parapanic
         int width;
         int height;
 
+        Color[] colors = { Color.Blue, Color.White, Color.Red, Color.Green, Color.Yellow };
+        Random r = new Random();
+
         public Level(GraphicsDeviceManager g)
         {
             width = g.PreferredBackBufferWidth;

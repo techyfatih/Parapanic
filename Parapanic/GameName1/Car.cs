@@ -12,6 +12,8 @@ namespace Parapanic
         public float direction;
         public Vector2 origin;
 
+        public Color carColor;
+
         public double speed { get; protected set; }
         public double topSpeed { get; protected set; }
         protected double acceleration;
