@@ -293,7 +293,7 @@ namespace Parapanic
                 if (Math.Abs((car.position - position).LengthSquared()) < 2000000)
                 {
                     Color c = car.color;
-                    Texture2D texture = Textures.ambulance;
+                    Texture2D texture = Textures.aicar;
                     Vector2 p1 = new Vector2(-texture.Width / 2, -texture.Height / 2);
                     Vector2 p2 = new Vector2(-texture.Width / 2, texture.Height / 2);
                     Vector2 p3 = new Vector2(texture.Width / 2, texture.Height / 2);
