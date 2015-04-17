@@ -191,7 +191,7 @@ namespace Parapanic
 
             for (int x = 0; x < grid.GetLength(0); x++)
                 for (int y = 0; y < grid.GetLength(1); y++)
-                    if (grid[x, y] == null) grid[x, y] = new WallBlock(x * Block.size, y * Block.size) { Color = level.Color };
+                    if (grid[x, y] == null) grid[x, y] = new WallBlock(x * Block.size, y * Block.size, level.Color);
 
 
             foreach (Block b in grid)

@@ -88,8 +88,14 @@ namespace Parapanic
             spriteBatch.DrawString(font, "X" + game.ScoreMultiplier, new Vector2(400, 250), multiplierColor,
                                    0, Vector2.Zero, 1, SpriteEffects.None, 0);
 
+
+            spriteBatch.DrawString(font, l1.Name, new Vector2(50, 500), Color.Black);
             spriteBatch.Draw(l1.minimap.map.GetMapTexture(game, l1.world), b1, Color.White);
+
+            spriteBatch.DrawString(font, l2.Name, new Vector2(400, 500), Color.Black);
             spriteBatch.Draw(l2.minimap.map.GetMapTexture(game, l2.world), b2, Color.White);
+
+            spriteBatch.DrawString(font, l3.Name, new Vector2(750, 500), Color.Black);
             spriteBatch.Draw(l3.minimap.map.GetMapTexture(game, l3.world), b3, Color.White);
 
             base.Draw(spriteBatch, game);
