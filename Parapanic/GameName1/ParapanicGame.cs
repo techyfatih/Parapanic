@@ -17,7 +17,7 @@ namespace Parapanic
     {
         public enum State
         {
-            Menu, Game, Pause, PickALevel
+            Menu, Game, Pause, PickALevel, Lose
         }
 
         public static Random Random = new Random();
@@ -96,14 +96,24 @@ namespace Parapanic
 
             if (IsActive)
             {
+
                 Level.Update();
                 if (gameState == State.Game)
-                    if(((GameLevel)Level).ambulance.toMenu)
+                {
+                    if (((GameLevel)Level).ambulance.toMenu)
                     {
                         gameState = State.Pause;
                         ((GameLevel)Level).ambulance.toMenu = false;
                         Level = new PauseMenu(GraphicsDevice, this, Level);
                     }
+                    if (((GameLevel)Level).ambulance.lost && gameState != State.Lose)
+                    {
+                        gameState = State.Lose;
+                        Level = new LoseScreen(GraphicsDevice,this,0,"Leeroy Jenkins");
+                    }
+
+                }
+               
                 base.Update(gameTime);
             }
         }

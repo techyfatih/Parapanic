@@ -26,6 +26,7 @@ namespace Parapanic
         public static Texture2D infoButton_highlighted;
         public static Texture2D quitButton;
         public static Texture2D quitButton_highlighted;
+        public static Texture2D loseScreen;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -46,6 +47,7 @@ namespace Parapanic
             infoButton_highlighted = Content.Load<Texture2D>("infoButton_highlighted");
             quitButton = Content.Load<Texture2D>("quitButton");
             quitButton_highlighted = Content.Load<Texture2D>("quitButton_highlighted");
+            loseScreen = Content.Load<Texture2D>("loseScreen");
 
         }
     }

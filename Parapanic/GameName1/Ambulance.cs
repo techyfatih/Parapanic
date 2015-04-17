@@ -33,6 +33,7 @@ namespace Parapanic
         const int maxTimeDivider = 100;
 
         public bool toMenu;
+        public bool lost = false;
 
         const int MaxPatients = 2;
         int patientsSaved = 0;
@@ -50,6 +51,11 @@ namespace Parapanic
             if(hasPatient)
             {
                 patientTimer++;
+
+                if(patientTimer >= maxTime)
+                {
+                    lost = true;
+                }
             }
             else
             {
