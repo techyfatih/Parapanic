@@ -14,6 +14,7 @@ namespace Parapanic
         public Rectangle boundary;
         public bool solid = false;
         public int carsInside = 0;
+        public Color Color = Color.White;
 
         public Block(int x, int y)
         {

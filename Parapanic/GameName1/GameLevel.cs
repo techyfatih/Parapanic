@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,10 @@ namespace Parapanic
         //VectorAmbulance vambulance;
         public World world;
         public Minimap.GPS minimap;
+        public string Name;
+        public string PatientOneName;
+        public string PatientTwoName;
+        public Color Color = Color.Red;
 
         int width;
         int height;
@@ -28,7 +33,7 @@ namespace Parapanic
             height = g.Viewport.Height;
 
 
-            world = new World(100, 100);
+            world = new World(100, 100, this);
             Vector2 empty = world.EmptySpace();
             //ambulance = new Ambulance((int)empty.X + Block.size/2, (int)empty.Y + Block.size/2, 0, 10, 0.1, 0.95);
             ambulance = new Ambulance((int)empty.X + Block.size / 2, (int)empty.Y + Block.size / 2, 0, 7, 0.1, 0.95, game);
@@ -56,6 +61,16 @@ namespace Parapanic
                 foreach (Block block in world.grid)
                     if (block is RoadBlock)
                         ((RoadBlock)block).InitializeType(world);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                game.Level = new PauseMenu(game.GraphicsDevice, game, this);
+            }
+
+            if (ambulance.lost)
+            {
+                game.Level = new LoseScreen(game.GraphicsDevice, game, 0, "Leeroy Jenkins");
+            }
         }
 
         const int numCarsOnMap = 160;

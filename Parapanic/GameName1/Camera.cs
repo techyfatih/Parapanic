@@ -99,7 +99,7 @@ namespace Parapanic
                 if (Math.Abs((b.position - position).LengthSquared()) < 2000000)
                 {
                     Texture2D texture = Textures.ambulance;
-                    Color c = Color.White;
+                    Color c = b.Color;
                     if (b is WallBlock)
                         texture = Textures.wall;
                     else if (b is RoadBlock)
