@@ -109,7 +109,7 @@ namespace Parapanic
                     if (((GameLevel)Level).ambulance.lost && gameState != State.Lose)
                     {
                         gameState = State.Lose;
-                        Level = new LoseScreen(GraphicsDevice,this,0,"Leeroy Jenkins");
+                        Level = new LoseScreen(GraphicsDevice,this,0,"Leeroy Jenkins", Score);
                     }
 
                 }
