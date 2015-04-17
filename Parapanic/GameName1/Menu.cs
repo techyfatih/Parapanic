@@ -42,13 +42,13 @@ namespace Parapanic
         {
             MouseState mouse = Mouse.GetState();
 
-            if(startButton.highlighted() && mouse.LeftButton == ButtonState.Pressed && !game.inProgress)
+            if(startButton.highlighted() && mouse.LeftButton == ButtonState.Pressed)
             {
                 game.gameState = Parapanic.State.PickALevel;
                 game.Level = new PickALevel(game);
             }
 
-            if (quitButton.highlighted() && mouse.LeftButton == ButtonState.Pressed && game.inProgress)
+            if (quitButton.highlighted() && mouse.LeftButton == ButtonState.Pressed)
             {
                 game.Exit();
             }

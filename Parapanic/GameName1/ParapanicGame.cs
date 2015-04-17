@@ -72,6 +72,8 @@ namespace Parapanic
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            Content.Load<SpriteFont>("font");
+            Content.Load<Texture2D>("TestPicture");
             Textures.LoadContent(Content);
         }
 
@@ -96,24 +98,7 @@ namespace Parapanic
 
             if (IsActive)
             {
-
                 Level.Update();
-                if (gameState == State.Game)
-                {
-                    if (((GameLevel)Level).ambulance.toMenu)
-                    {
-                        gameState = State.Pause;
-                        ((GameLevel)Level).ambulance.toMenu = false;
-                        Level = new PauseMenu(GraphicsDevice, this, Level);
-                    }
-                    if (((GameLevel)Level).ambulance.lost && gameState != State.Lose)
-                    {
-                        gameState = State.Lose;
-                        Level = new LoseScreen(GraphicsDevice,this,0,"Leeroy Jenkins", Score);
-                    }
-
-                }
-               
                 base.Update(gameTime);
             }
         }

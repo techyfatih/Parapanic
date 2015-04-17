@@ -19,6 +19,7 @@ namespace Parapanic
 
     class World
     {
+        public GameLevel level;
         public Block[,] grid;
         public int Width;
         public int Height;
@@ -32,10 +33,11 @@ namespace Parapanic
         const int CITYBLOCKHEIGHT = 2;
         public List<Car> Cars = new List<Car>();
 
-        public World(int width, int height)
+        public World(int width, int height, GameLevel level)
         {
+            this.level = level;
             //Variables
-            Random r = new Random();
+            Random r = Parapanic.Random;
             grid = new Block[width + 2 * BORDERWIDTH, height + 2 * BORDERHEIGHT];
             Width = (width + 2*BORDERWIDTH)*Block.size; //For camera
             Height = (height + 2*BORDERHEIGHT)* Block.size; //For camera
@@ -189,7 +191,7 @@ namespace Parapanic
 
             for (int x = 0; x < grid.GetLength(0); x++)
                 for (int y = 0; y < grid.GetLength(1); y++)
-                    if (grid[x, y] == null) grid[x, y] = new WallBlock(x * Block.size, y * Block.size);
+                    if (grid[x, y] == null) grid[x, y] = new WallBlock(x * Block.size, y * Block.size) { Color = level.Color };
 
 
             foreach (Block b in grid)
