@@ -21,6 +21,8 @@ namespace Parapanic
         }
 
         public static Random Random = new Random();
+        public int Score = 0;
+        public int ScoreMultiplier = 1;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;

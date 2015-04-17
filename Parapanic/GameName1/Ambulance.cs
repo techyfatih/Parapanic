@@ -12,8 +12,7 @@ namespace Parapanic
 {
     class Ambulance : Car
     {
-        public int Score = 0;
-        public int ScoreMultiplier = 1;
+        Parapanic game;
 
         public bool hasPatient;
         bool intersected;
@@ -35,8 +34,16 @@ namespace Parapanic
 
         public bool toMenu;
 
-        public Ambulance(int x, int y, float direction, double topSpeed, double acceleration, double friction)
-            : base(x, y, 0, direction, topSpeed, acceleration, friction) { hasPatient = false; drawDirection = direction;}
+        const int MaxPatients = 2;
+        int patientsSaved = 0;
+
+        public Ambulance(int x, int y, float direction, double topSpeed, double acceleration, double friction, Parapanic game)
+            : base(x, y, 0, direction, topSpeed, acceleration, friction) 
+        { 
+            hasPatient = false; 
+            drawDirection = direction;
+            this.game = game;
+        }
 
         public override void Update(World world)
         {
@@ -170,10 +177,18 @@ namespace Parapanic
                 hasPatient = false;
                 int xPos = (int)world.grid[xCoord, yCoord].position.X;
                 int yPos = (int)world.grid[xCoord, yCoord].position.Y;
-                world.pointsOfInterest.Remove(((HospitalBlock)block).POIHandle);
-                world.grid[xCoord, yCoord] = new RoadBlock(xPos, yPos);
+                game.Score += (maxTime - patientTimer) * game.ScoreMultiplier;
+
+                if (++patientsSaved == MaxPatients)
+                {
+                    game.gameState = Parapanic.State.PickALevel;
+                    game.Level = new PickALevel(game);
+                    game.ScoreMultiplier++;
+                }
+
+                //world.pointsOfInterest.Remove(((HospitalBlock)block).POIHandle);
+                //world.grid[xCoord, yCoord] = new RoadBlock(xPos, yPos);
                 Minimap.Map.DirtyFlag = true;
-                Score += maxTime - patientTimer;
             }
 
 

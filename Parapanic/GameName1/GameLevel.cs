@@ -9,6 +9,7 @@ namespace Parapanic
 {
     class GameLevel : Level
     {
+        Parapanic game;
         public Ambulance ambulance;
         //VectorAmbulance vambulance;
         public World world;
@@ -20,8 +21,9 @@ namespace Parapanic
         Color[] colors = { Color.Blue, Color.White, Color.Red, Color.Green, Color.Yellow };
         Random r = new Random();
 
-        public GameLevel(GraphicsDevice g)
+        public GameLevel(GraphicsDevice g, Parapanic game)
         {
+            this.game = game;
             width = g.Viewport.Width;
             height = g.Viewport.Height;
 
@@ -29,7 +31,7 @@ namespace Parapanic
             world = new World(100, 100);
             Vector2 empty = world.EmptySpace();
             //ambulance = new Ambulance((int)empty.X + Block.size/2, (int)empty.Y + Block.size/2, 0, 10, 0.1, 0.95);
-            ambulance = new Ambulance((int)empty.X + Block.size / 2, (int)empty.Y + Block.size / 2, 0, 7, 0.1, 0.95);
+            ambulance = new Ambulance((int)empty.X + Block.size / 2, (int)empty.Y + Block.size / 2, 0, 7, 0.1, 0.95, game);
             Camera.Initialize(width, height);
             world.ambulance = ambulance;
 
@@ -107,7 +109,7 @@ namespace Parapanic
             }
 
             spriteBatch.Draw(Textures.white, new Rectangle(15, 15, 200, 30), Color.DarkGray);
-            spriteBatch.DrawString(font, "Score : " + ambulance.Score, new Vector2(20, 15), Color.White);
+            spriteBatch.DrawString(font, "Score : " + game.Score, new Vector2(20, 15), Color.White);
 
             minimap.Draw(spriteBatch, game, world);
         }

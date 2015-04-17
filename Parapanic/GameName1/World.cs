@@ -70,6 +70,19 @@ namespace Parapanic
                 new PatientBlock((int)patient.X * Block.size, (int)patient.Y * Block.size, patientPoi);
             pointsOfInterest.Add(patientPoi);
 
+
+            int patient2Region = r.Next(4);
+            Vector2 patient2 =
+                new Vector2(BORDERWIDTH + r.Next(outerRegions[patientRegion].Left, BORDERWIDTH + outerRegions[patientRegion].Right),
+                            BORDERHEIGHT + r.Next(outerRegions[patientRegion].Top, BORDERHEIGHT + outerRegions[patientRegion].Bottom));
+
+            PointOfInterest patient2Poi = new PointOfInterest() { Position = patient2 * Block.size, Type = PointOfInterest.Types.Patient };
+
+            grid[(int)patient2.X, (int)patient2.Y] =
+                new PatientBlock((int)patient2.X * Block.size, (int)patient2.Y * Block.size, patient2Poi);
+            pointsOfInterest.Add(patient2Poi);
+
+
             int hospitalRegion = (patientRegion + 2) % 4;
             Vector2 hospital =
                 new Vector2(BORDERWIDTH + r.Next(outerRegions[hospitalRegion].Left, BORDERWIDTH + outerRegions[hospitalRegion].Right),
@@ -101,6 +114,7 @@ namespace Parapanic
                 nodePairs[i, 1] = node2;
 
                 connections.Add(new Vector2[] { patient, hospital });
+                connections.Add(new Vector2[] { patient2, hospital });
                 connections.Add(new Vector2[] { node1, node2 });
                 connections.Add(new Vector2[] { node2, hospital });
             }

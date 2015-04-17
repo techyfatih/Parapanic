@@ -22,9 +22,9 @@ namespace Parapanic
         public PickALevel(Parapanic game)
         {
             this.game = game;
-            l1 = new GameLevel(game.GraphicsDevice);
-            l2 = new GameLevel(game.GraphicsDevice);
-            l3 = new GameLevel(game.GraphicsDevice);
+            l1 = new GameLevel(game.GraphicsDevice, game);
+            l2 = new GameLevel(game.GraphicsDevice, game);
+            l3 = new GameLevel(game.GraphicsDevice, game);
 
             l1.minimap.map.GetMapTexture(game, l1.world);
             Minimap.Map.DirtyFlag = true;
@@ -66,6 +66,27 @@ namespace Parapanic
 
             spriteBatch.DrawString(font, "Pick a Level!", new Vector2(200, 60), Color.Black,
                                    0, Vector2.Zero, 5, SpriteEffects.None, 0);
+            spriteBatch.DrawString(font, "Score: " + game.Score, new Vector2(200, 250), Color.Black,
+                                   0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            Color multiplierColor;
+            switch(game.ScoreMultiplier)
+            {
+                case 1: //make invisible
+                        multiplierColor = Color.White; break;
+                case 2:
+                case 3: multiplierColor = Color.Black; break;
+                case 4: multiplierColor = Color.DarkRed; break;
+                case 5: multiplierColor = Color.Red; break;
+                case 6: multiplierColor = Color.OrangeRed; break;
+                case 7: multiplierColor = Color.Orange; break;
+                case 8: multiplierColor = Color.DarkGoldenrod; break;
+                case 9: multiplierColor = Color.Yellow; break;
+                
+                default: multiplierColor = Color.Green; break;
+
+            }
+            spriteBatch.DrawString(font, "X" + game.ScoreMultiplier, new Vector2(400, 250), multiplierColor,
+                                   0, Vector2.Zero, 1, SpriteEffects.None, 0);
 
             spriteBatch.Draw(l1.minimap.map.GetMapTexture(game, l1.world), b1, Color.White);
             spriteBatch.Draw(l2.minimap.map.GetMapTexture(game, l2.world), b2, Color.White);
