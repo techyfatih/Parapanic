@@ -207,6 +207,8 @@ namespace Parapanic
 
                 spriteBatch.Draw(Textures.white, new Rectangle(110, height - 25, 120, 25), Color.Red);
                 spriteBatch.Draw(Textures.white, new Rectangle(110 + (int)(120 * ((float)ambulance.patientTimer / ambulance.maxTime)), height - 25, 120 - (int)(120 * ((float)ambulance.patientTimer / ambulance.maxTime)), 25), Color.Green);
+
+                spriteBatch.DrawString(Textures.font1, (ambulance.patientsSaved == 0) ? (PatientOneName) : (PatientTwoName), new Vector2(120, height - 235), Color.White);
             }
 
             spriteBatch.Draw(Textures.white, new Rectangle(15, 15, 200, 30), Color.DarkGray);
