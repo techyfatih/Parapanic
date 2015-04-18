@@ -48,6 +48,12 @@ namespace Parapanic
                 game.Level = new PickALevel(game);
             }
 
+            if (infoButton.highlighted() && mouse.LeftButton == ButtonState.Pressed)
+            {
+                //game.gameState = Parapanic.State.PickALevel;
+                game.Level = new Info(game);
+            }
+
             if (quitButton.highlighted() && mouse.LeftButton == ButtonState.Pressed)
             {
                 game.Exit();

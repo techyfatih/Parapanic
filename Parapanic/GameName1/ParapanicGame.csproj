@@ -61,6 +61,7 @@
     <Compile Include="Car.cs" />
     <Compile Include="Blocks\FloorBlock.cs" />
     <Compile Include="GameLevel.cs" />
+    <Compile Include="Info.cs" />
     <Compile Include="LoseScreen.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="PickALevel.cs" />
