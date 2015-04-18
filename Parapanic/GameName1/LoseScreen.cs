@@ -17,7 +17,7 @@ namespace Parapanic
 
         int score;
 
-        public LoseScreen(GraphicsDevice g, Parapanic game1, int saved, string patientLost, int score)
+        public LoseScreen(GraphicsDevice g, Parapanic game1, int saved, string patientLost)
         {
             this.saved = saved;
             this.patientLost = patientLost;
@@ -25,7 +25,7 @@ namespace Parapanic
             width = g.Viewport.Width;
             height = g.Viewport.Height;
 
-            this.score = score;
+            this.score = game1.Score;
         }
 
         public override void Update()
