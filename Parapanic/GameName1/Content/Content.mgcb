@@ -503,11 +503,6 @@
 /processorParam:TextureFormat=Color
 /build:DevHospital.png
 
-#begin Content.mgcb.orig
-/importer:
-/processor:
-/build:Content.mgcb.orig
-
 #begin winScreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
