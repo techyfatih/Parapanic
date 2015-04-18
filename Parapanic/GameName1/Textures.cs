@@ -10,6 +10,7 @@ namespace Parapanic
     class Textures
     {
         public static Texture2D ambulance;
+        public static Texture2D aicar;
         public static Texture2D floor;
         public static Texture2D wall;
         public static Texture2D patient;
@@ -27,10 +28,12 @@ namespace Parapanic
         public static Texture2D quitButton;
         public static Texture2D quitButton_highlighted;
         public static Texture2D loseScreen;
+        public static SpriteFont font1;
 
         public static void LoadContent(ContentManager Content)
         {
             ambulance = Content.Load<Texture2D>("Ambulance");
+            aicar = Content.Load<Texture2D>("AiCar");
             floor = Content.Load<Texture2D>("floor");
             wall = Content.Load<Texture2D>("building");
             patient = Content.Load<Texture2D>("Patient");
@@ -48,7 +51,7 @@ namespace Parapanic
             quitButton = Content.Load<Texture2D>("quitButton");
             quitButton_highlighted = Content.Load<Texture2D>("quitButton_highlighted");
             loseScreen = Content.Load<Texture2D>("loseScreen");
-
+            font1 = Content.Load<SpriteFont>("font");
         }
     }
 }

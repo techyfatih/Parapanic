@@ -99,7 +99,6 @@ namespace Parapanic
             if (IsActive)
             {
                 Level.Update();
-
                 base.Update(gameTime);
             }
         }
