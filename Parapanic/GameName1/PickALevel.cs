@@ -91,12 +91,82 @@ namespace Parapanic
 
             spriteBatch.DrawString(font, l1.Name, new Vector2(50, 500), Color.Black);
             spriteBatch.Draw(l1.minimap.map.GetMapTexture(game, l1.world), b1, Color.White);
+            foreach (PointOfInterest poi in l1.world.pointsOfInterest)
+            {
+                Texture2D texture;
+                switch (poi.Type)
+                {
+                    case PointOfInterest.Types.Hospital:
+                    texture = game.Content.Load<Texture2D>("Hospital_Icon");
+                    break;
+                    
+                    default:
+                    texture = game.Content.Load<Texture2D>("alert");
+                    break;
+                }
+                Vector2 posToDraw = new Vector2();
+                posToDraw.X = poi.Position.X * b1.Width / l1.world.Width;
+                posToDraw.Y = poi.Position.Y * b1.Height / l1.world.Height;
+                posToDraw += b1.Location.ToVector2();
+
+                Vector2 origin = texture.Bounds.Center.ToVector2();
+
+                spriteBatch.Draw(texture, posToDraw, null, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+
+            }
+
 
             spriteBatch.DrawString(font, l2.Name, new Vector2(400, 500), Color.Black);
             spriteBatch.Draw(l2.minimap.map.GetMapTexture(game, l2.world), b2, Color.White);
+            foreach (PointOfInterest poi in l2.world.pointsOfInterest)
+            {
+                Texture2D texture;
+                switch (poi.Type)
+                {
+                    case PointOfInterest.Types.Hospital:
+                    texture = game.Content.Load<Texture2D>("Hospital_Icon");
+                    break;
+
+                    default:
+                    texture = game.Content.Load<Texture2D>("alert");
+                    break;
+                }
+                Vector2 posToDraw = new Vector2();
+                posToDraw.X = poi.Position.X * b2.Width / l2.world.Width;
+                posToDraw.Y = poi.Position.Y * b2.Height / l2.world.Height;
+                posToDraw += b2.Location.ToVector2();
+
+                Vector2 origin = texture.Bounds.Center.ToVector2();
+
+                spriteBatch.Draw(texture, posToDraw, null, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+
+            }
 
             spriteBatch.DrawString(font, l3.Name, new Vector2(750, 500), Color.Black);
             spriteBatch.Draw(l3.minimap.map.GetMapTexture(game, l3.world), b3, Color.White);
+            foreach (PointOfInterest poi in l3.world.pointsOfInterest)
+            {
+                Texture2D texture;
+                switch (poi.Type)
+                {
+                    case PointOfInterest.Types.Hospital:
+                    texture = game.Content.Load<Texture2D>("Hospital_Icon");
+                    break;
+
+                    default:
+                    texture = game.Content.Load<Texture2D>("alert");
+                    break;
+                }
+                Vector2 posToDraw = new Vector2();
+                posToDraw.X = poi.Position.X * b3.Width / l3.world.Width;
+                posToDraw.Y = poi.Position.Y * b3.Height / l3.world.Height;
+                posToDraw += b3.Location.ToVector2();
+
+                Vector2 origin = texture.Bounds.Center.ToVector2();
+
+                spriteBatch.Draw(texture, posToDraw, null, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+
+            }
 
             base.Draw(spriteBatch, game);
         }
