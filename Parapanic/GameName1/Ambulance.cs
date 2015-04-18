@@ -34,9 +34,10 @@ namespace Parapanic
 
         public bool toMenu;
         public bool lost = false;
+        public bool won = false;
 
         const int MaxPatients = 2;
-        int patientsSaved = 0;
+        public int patientsSaved = 0;
 
         public Ambulance(int x, int y, float direction, double topSpeed, double acceleration, double friction, Parapanic game)
             : base(x, y, 0, direction, topSpeed, acceleration, friction) 
@@ -176,6 +177,7 @@ namespace Parapanic
                 Minimap.Map.DirtyFlag = true;
                 patientTimer = 0;
                 maxTime = Math.Max((int)(world.hospitalPosition - position).Length() * maxTimeMultiplier / maxTimeDivider, 15 * 60);
+                //maxTime = 0;
             }
             else if (block is HospitalBlock &&
                      hasPatient)
@@ -187,9 +189,16 @@ namespace Parapanic
 
                 if (++patientsSaved == MaxPatients)
                 {
-                    game.gameState = Parapanic.State.PickALevel;
-                    game.Level = new PickALevel(game);
-                    game.ScoreMultiplier++;
+                    if (game.ScoreMultiplier >= game.numLevels)
+                    {
+                        won = true;
+                    }
+                    else
+                    {
+                        game.gameState = Parapanic.State.PickALevel;
+                        game.Level = new PickALevel(game);
+                        game.ScoreMultiplier++;
+                    }
                 }
 
                 //world.pointsOfInterest.Remove(((HospitalBlock)block).POIHandle);

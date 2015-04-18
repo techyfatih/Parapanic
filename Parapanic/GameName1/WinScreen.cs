@@ -7,25 +7,22 @@ using System.Text;
 
 namespace Parapanic
 {
-    class LoseScreen:Level
+    class WinScreen:Level
     {
         int saved;
-        string patientLost;
 
         int width;
         int height;
 
         int score;
 
-        public LoseScreen(GraphicsDevice g, Parapanic game1, int saved, string patientLost)
+        public WinScreen(GraphicsDevice g, Parapanic game1, int saved)
         {
             this.saved = saved;
-            this.patientLost = patientLost;
 
             width = g.Viewport.Width;
             height = g.Viewport.Height;
 
-            this.score = game1.Score;
         }
 
         public override void Update()
@@ -35,12 +32,12 @@ namespace Parapanic
 
         public override void Draw(SpriteBatch spriteBatch, Parapanic game)
         {
-            spriteBatch.Draw(Textures.loseScreen, new Rectangle(0, 0, width, height), Color.White);
-            spriteBatch.DrawString(Textures.font1, "Your score was: " + score, new Vector2(300,400), Color.Red);
+            spriteBatch.Draw(Textures.winScreen, new Rectangle(0, 0, width, height), Color.White);
+            spriteBatch.DrawString(Textures.font1, "Your score was: " + score, new Vector2(300, 400), Color.Red);
             spriteBatch.DrawString(Textures.font1, "You saved: " + saved + " people", new Vector2(300, 450), Color.Red);
-            spriteBatch.DrawString(Textures.font1, "You failed to save " + patientLost, new Vector2(300, 500), Color.Red);
 
             base.Draw(spriteBatch, game);
         }
+
     }
 }

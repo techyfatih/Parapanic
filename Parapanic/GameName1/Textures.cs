@@ -29,6 +29,7 @@ namespace Parapanic
         public static Texture2D quitButton_highlighted;
         public static Texture2D loseScreen;
         public static SpriteFont font1;
+        public static Texture2D winScreen;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -52,6 +53,7 @@ namespace Parapanic
             quitButton_highlighted = Content.Load<Texture2D>("quitButton_highlighted");
             loseScreen = Content.Load<Texture2D>("loseScreen");
             font1 = Content.Load<SpriteFont>("font");
+            winScreen = Content.Load<Texture2D>("winScreen");
         }
     }
 }
