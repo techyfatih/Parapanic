@@ -75,8 +75,8 @@ namespace Parapanic
 
             int patient2Region = r.Next(4);
             Vector2 patient2 =
-                new Vector2(BORDERWIDTH + r.Next(outerRegions[patientRegion].Left, BORDERWIDTH + outerRegions[patientRegion].Right),
-                            BORDERHEIGHT + r.Next(outerRegions[patientRegion].Top, BORDERHEIGHT + outerRegions[patientRegion].Bottom));
+                new Vector2(BORDERWIDTH + r.Next(outerRegions[patient2Region].Left, BORDERWIDTH + outerRegions[patient2Region].Right),
+                            BORDERHEIGHT + r.Next(outerRegions[patient2Region].Top, BORDERHEIGHT + outerRegions[patient2Region].Bottom));
 
             PointOfInterest patient2Poi = new PointOfInterest() { Position = patient2 * Block.size, Type = PointOfInterest.Types.Patient };
 
@@ -85,7 +85,7 @@ namespace Parapanic
             pointsOfInterest.Add(patient2Poi);
 
 
-            int hospitalRegion = (patientRegion + 2) % 4;
+            int hospitalRegion = r.Next(4);
             Vector2 hospital =
                 new Vector2(BORDERWIDTH + r.Next(outerRegions[hospitalRegion].Left, BORDERWIDTH + outerRegions[hospitalRegion].Right),
                             BORDERHEIGHT + r.Next(outerRegions[hospitalRegion].Top, BORDERHEIGHT + outerRegions[hospitalRegion].Bottom));

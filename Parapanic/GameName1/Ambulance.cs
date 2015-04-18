@@ -175,7 +175,7 @@ namespace Parapanic
                 world.grid[xCoord, yCoord] = new RoadBlock(xPos, yPos);
                 Minimap.Map.DirtyFlag = true;
                 patientTimer = 0;
-                maxTime = (int)(world.hospitalPosition - position).Length() * maxTimeMultiplier / maxTimeDivider;
+                maxTime = Math.Max((int)(world.hospitalPosition - position).Length() * maxTimeMultiplier / maxTimeDivider, 15 * 60);
             }
             else if (block is HospitalBlock &&
                      hasPatient)
