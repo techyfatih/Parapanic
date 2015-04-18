@@ -30,6 +30,7 @@ namespace Parapanic
             //background = Textures.testMenu;
             width = g.Viewport.Width;
             height = g.Viewport.Height;
+            Console.WriteLine(new Point(width, height));
 
             game = game1;
 
@@ -62,7 +63,6 @@ namespace Parapanic
         
         public override void Draw(SpriteBatch spriteBatch, Parapanic game)
         {
-
             spriteBatch.Draw(Textures.testMenu,new Rectangle(0,0,width,height),Color.White);
 
             spriteBatch.Draw(!startButton.highlighted()?Textures.startButton:Textures.startButton_highlighted, startButton.rectangle, Color.White);

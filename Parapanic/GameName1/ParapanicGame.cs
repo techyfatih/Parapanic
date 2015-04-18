@@ -39,8 +39,9 @@ namespace Parapanic
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1000;
-            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.ToggleFullScreen();
             Content.RootDirectory = "Content";
         }
 

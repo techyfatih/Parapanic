@@ -65,12 +65,10 @@ namespace Parapanic
         Color[] colors = { Color.Blue, Color.White, Color.Red, Color.Green, Color.Yellow };
         Random r;// = new Random();
 
-        Rectangle pause = new Rectangle(925, 25, 50, 50);
+        Rectangle pause;
 
         public GameLevel(GraphicsDevice g, Parapanic game)
         {
-
-
             r = Parapanic.Random;
             this.game = game;
 
@@ -118,6 +116,7 @@ namespace Parapanic
 
             minimap = new Minimap.GPS(width, height, 2f, new Rectangle(width - 150, height - 120, 120, 90));
             oldM = Mouse.GetState();
+            pause = new Rectangle((int)(.9 * width), (int)(.1 * height), 50, 50);
         }
 
         byte carUpdateTimer = 0;
@@ -200,19 +199,20 @@ namespace Parapanic
                 minimap.Draw(spriteBatch, game, world);
             Camera.DrawScreen(game, ambulance, world);
 
-            if(ambulance.hasPatient)
+            spriteBatch.Draw(Textures.white, new Rectangle((int)(0.05 * width), (int)(0.05 * height), 200, 30), Color.DarkGray);
+            spriteBatch.DrawString(font, "Score : " + game.Score, new Vector2((int)(0.05 * width) + 5, (int)(0.05 * height)), Color.White);
+
+            if (ambulance.hasPatient)
             {
-                spriteBatch.Draw(Textures.patientFace, new Rectangle(110, height - 200, 120, 160), Color.White);
-                spriteBatch.Draw(Textures.black, new Rectangle(110, height - 200, 120, 160), Color.White * ((float)ambulance.patientTimer/ambulance.maxTime));
+                Rectangle patient = new Rectangle((int)(0.05 * width), (int)(0.7 * height), 120, 160);
+                spriteBatch.Draw(Textures.patientFace, patient, Color.White);
+                spriteBatch.Draw(Textures.black, patient, Color.White * ((float)ambulance.patientTimer/ambulance.maxTime));
 
-                spriteBatch.Draw(Textures.white, new Rectangle(110, height - 25, 120, 25), Color.Red);
-                spriteBatch.Draw(Textures.white, new Rectangle(110 + (int)(120 * ((float)ambulance.patientTimer / ambulance.maxTime)), height - 25, 120 - (int)(120 * ((float)ambulance.patientTimer / ambulance.maxTime)), 25), Color.Green);
+                spriteBatch.Draw(Textures.white, new Rectangle((int)(0.05 * width), (int)(.95 * height), 120, 25), Color.Red);
+                spriteBatch.Draw(Textures.white, new Rectangle((int)(0.05 * width) + (int)(120 * ((float)ambulance.patientTimer / ambulance.maxTime)), (int)(.95 * height), 120 - (int)(120 * ((float)ambulance.patientTimer / ambulance.maxTime)), 25), Color.Green);
 
-                spriteBatch.DrawString(Textures.font1, (ambulance.patientsSaved == 0) ? (PatientOneName) : (PatientTwoName), new Vector2(120, height - 235), Color.White);
+                spriteBatch.DrawString(Textures.font1, (ambulance.patientsSaved == 0) ? (PatientOneName) : (PatientTwoName), new Vector2((int)(0.05 * width), (int)(0.6 * height)), Color.White);
             }
-
-            spriteBatch.Draw(Textures.white, new Rectangle(15, 15, 200, 30), Color.DarkGray);
-            spriteBatch.DrawString(font, "Score : " + game.Score, new Vector2(20, 15), Color.White);
 
             minimap.Draw(spriteBatch, game, world);
 
