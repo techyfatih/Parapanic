@@ -10,28 +10,94 @@ namespace Parapanic
 {
     class GameLevel : Level
     {
+        readonly string[] PatientFirstNames = 
+        {
+            "John", "Michael", "Andrew", "Andrei", "Liam", "Noah", "Ethan", "Mason", "Bran", 
+            "Logan", "Lucas", "Mateo", "Luis", "Daniel", "Diego", "Muhammad", "Elijah", "Patrick",
+            "Eliott", "Justin", "Fatih", "Rohan", "Sebastian", "Jack", "Jeremiah", "Amir", "Richie",
+            "Ishaan", "Ashwin", "Kyle", "Richard", "Arman", "Thomas", "William", "Jake", "Eli",
+            "Gabriel", "Rafael", "Juan", "Samuel", "Carlos", "Ian", "Dylan", "Zack", "Rob", "Ned",
+
+            "Alex", "Jordan", "Sam", "Bailey",
+
+            "Kate", "Alexis", "Olivia", "Sophia", "Emma", "Emily", "Chloe", "Ava", "Ashley",
+            "Leah", "Isabella", "Maria", "Zoe", "Grace", "Anya", "Arya", "Sansa", "Madison",
+            "London", "Mary", "Andrea", "Patricia", "Linda", "Barbara", "Nicole", "Natalia",
+            "Natalie", "Shreya", "April", "Abril", "May", "Hannah", "Maya", "Taylor", "Kayla",
+            "Victoria", "Samantha",  "Alexa", "Lily", "Bella", "Ella", "Rosalia", "Charlotte",
+        };
+        readonly string[] PatientLastNames =
+        {
+            "Smith", "Johnson", "Williams", "Martinez", "Brown", "Jones", "Watson",
+            "Miller", "Stark", "Davis", "Anderson", "Lee", "Gonzalez", "Lewis",
+            "Clark", "Perez", "Allen", "King", "Campbell", "Cook", "Rivera", "Bailey",
+            "Cooper", "Bennett", "Ward", "Diaz", "Henderson", "Russo", "Rich", "Noble",
+            "Donovan", "Zuniga", "Harding", "Yu", "Woodward", "Costa", "Stanton", "Bonilla",
+        };
+
+        readonly string[] CityNameFirst =
+        {
+            "Hill", "Beaver", "Lake", "Wilson", "Dimm", "Wheat", "Peter", "Jackson",
+            "Washing", "Spring", "Chester", "Madison", "George", "Ash", "Burling", "Center",
+            "Clay", "Day", "Lexing", "Will", "Cleve", "New",
+        };
+        readonly string[] CityNameLast =
+        {
+            "sboro", "ton", "sville", "town", "burg", "sdale", "opolis", "field", 
+            "view", "land", "ford", "burn", "side", "port",
+        };
+
         Parapanic game;
         public Ambulance ambulance;
         //VectorAmbulance vambulance;
         public World world;
         public Minimap.GPS minimap;
         public string Name;
-        public string PatientOneName;
-        public string PatientTwoName;
+        public string PatientOneName; //These patient names should probably be moved into patientblock, but due to how our code is set
+        public string PatientTwoName; //up its way faster to do it this way. 
         public Color Color = Color.Red;
 
         int width;
         int height;
 
         Color[] colors = { Color.Blue, Color.White, Color.Red, Color.Green, Color.Yellow };
-        Random r = new Random();
+        Random r;// = new Random();
 
         public GameLevel(GraphicsDevice g, Parapanic game)
         {
+            r = Parapanic.Random;
             this.game = game;
             width = g.Viewport.Width;
             height = g.Viewport.Height;
 
+            Name = CityNameFirst[r.Next(CityNameFirst.Length)]
+                 + CityNameLast[r.Next(CityNameLast.Length)];
+
+            PatientOneName = PatientFirstNames[r.Next(PatientFirstNames.Length)] + " "
+                           + PatientLastNames[r.Next(PatientLastNames.Length)];
+            PatientTwoName = PatientFirstNames[r.Next(PatientFirstNames.Length)] + " "
+                           + PatientLastNames[r.Next(PatientLastNames.Length)];
+
+            switch (game.ScoreMultiplier)
+            {
+                case 1:
+                case 2:
+                case 3: 
+                        Color = Color.LightGray; break;
+                case 4:
+                case 5: 
+                        Color = new Color(255, 96, 96); break;
+                case 6: 
+                case 7: 
+                        Color = Color.Orange; break;
+                case 8: Color = Color.DarkGoldenrod; break;
+                case 9: Color = Color.Yellow; break;
+                case 10: Color = Color.LightGreen; break;
+            }
+
+            Color.R = (byte)MathHelper.Clamp(r.Next(-64, 65) + Color.R, 0, 255);
+            Color.G = (byte)MathHelper.Clamp(r.Next(-64, 65) + Color.G, 0, 255);
+            Color.B = (byte)MathHelper.Clamp(r.Next(-64, 65) + Color.B, 0, 255);
 
             world = new World(100, 100, this);
             Vector2 empty = world.EmptySpace();

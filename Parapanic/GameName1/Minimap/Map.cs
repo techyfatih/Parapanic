@@ -68,7 +68,7 @@ namespace Parapanic.Minimap
             SpriteBatch batch = new SpriteBatch(game.GraphicsDevice);
             batch.Begin();
 
-            Texture2D texToDraw = game.Content.Load<Texture2D>("TestPicture"); //just using a test picture for now,
+            Texture2D texToDraw = game.Content.Load<Texture2D>("white"); //just using a test picture for now,
                                                                                //todo: replace test minimap picture with actual
                                                                                //pictures.
             foreach (Block b in world.grid)
@@ -84,7 +84,7 @@ namespace Parapanic.Minimap
 
                 if (b is WallBlock)
                 {
-                    batch.Draw(texToDraw, drawArea, Color.Green);
+                    batch.Draw(texToDraw, drawArea, world.level.Color);
                 }
                 else if (b is FloorBlock)
                 {
