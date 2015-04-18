@@ -57,6 +57,8 @@ namespace Parapanic
         public string PatientTwoName; //up its way faster to do it this way. 
         public Color Color = Color.Red;
 
+        int numCarsOnMap;
+
         int width;
         int height;
 
@@ -65,8 +67,14 @@ namespace Parapanic
 
         public GameLevel(GraphicsDevice g, Parapanic game)
         {
+
+
             r = Parapanic.Random;
             this.game = game;
+
+            numCarsOnMap = game.maxCars/(game.numLevels - game.ScoreMultiplier + 1);
+
+
             width = g.Viewport.Width;
             height = g.Viewport.Height;
 
@@ -135,11 +143,18 @@ namespace Parapanic
 
             if (ambulance.lost)
             {
-                game.Level = new LoseScreen(game.GraphicsDevice, game, 0, "Leeroy Jenkins");
+                game.Level = new LoseScreen(game.GraphicsDevice, game, ambulance.patientsSaved, (ambulance.patientsSaved == 1) ? (PatientTwoName) : (PatientOneName));
             }
+
+            if (ambulance.won)
+            {
+                game.Level = new WinScreen(game.GraphicsDevice, game, ambulance.patientsSaved);
+            }
+
         }
 
-        const int numCarsOnMap = 160;
+       //const int numCarsOnMap = game.maxCars/(game.numLevels - game.ScoreMultiplier + 1);
+
         void ReplaceCars()
         {
             for (int i = 0; i < world.Cars.Count; i++)

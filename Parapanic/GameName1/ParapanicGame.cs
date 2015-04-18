@@ -17,7 +17,7 @@ namespace Parapanic
     {
         public enum State
         {
-            Menu, Game, Pause, PickALevel, Lose
+            Menu, Game, Pause, PickALevel, Lose, Win
         }
 
         public static Random Random = new Random();
@@ -31,6 +31,9 @@ namespace Parapanic
 
         public State gameState;
         public bool inProgress = false;
+
+        public int maxCars = 200;
+        public int numLevels = 1;
 
         public Parapanic()
             : base()
