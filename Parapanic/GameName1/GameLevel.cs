@@ -148,7 +148,7 @@ namespace Parapanic
 
             if (ambulance.lost)
             {
-                game.Level = new LoseScreen(game.GraphicsDevice, game, ambulance.patientsSaved, (ambulance.patientsSaved == 1) ? (PatientTwoName) : (PatientOneName));
+                game.Level = new LoseScreen(game.GraphicsDevice, game, ambulance.patientsSaved, (ambulance.patientsSaved == 1) ? (PatientTwoName) : (PatientOneName),Name);
             }
 
             if (ambulance.won)
