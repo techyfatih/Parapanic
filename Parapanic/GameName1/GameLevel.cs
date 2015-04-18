@@ -18,12 +18,12 @@ namespace Parapanic
             "Ishaan", "Ashwin", "Kyle", "Richard", "Arman", "Thomas", "William", "Jake", "Eli",
             "Gabriel", "Rafael", "Juan", "Samuel", "Carlos", "Ian", "Dylan", "Zack", "Rob", "Ned",
 
-            "Alex", "Jordan", "Sam", "Bailey",
+            "Alex", "Jordan", "Sam", "Bailey", "Taylor", 
 
             "Kate", "Alexis", "Olivia", "Sophia", "Emma", "Emily", "Chloe", "Ava", "Ashley",
             "Leah", "Isabella", "Maria", "Zoe", "Grace", "Anya", "Arya", "Sansa", "Madison",
             "London", "Mary", "Andrea", "Patricia", "Linda", "Barbara", "Nicole", "Natalia",
-            "Natalie", "Shreya", "April", "Abril", "May", "Hannah", "Maya", "Taylor", "Kayla",
+            "Natalie", "Shreya", "April", "Abril", "May", "Hannah", "Maya", "Kayla",
             "Victoria", "Samantha",  "Alexa", "Lily", "Bella", "Ella", "Rosalia", "Charlotte",
         };
         readonly string[] PatientLastNames =
@@ -64,6 +64,8 @@ namespace Parapanic
 
         Color[] colors = { Color.Blue, Color.White, Color.Red, Color.Green, Color.Yellow };
         Random r;// = new Random();
+
+        Rectangle pause = new Rectangle(925, 25, 50, 50);
 
         public GameLevel(GraphicsDevice g, Parapanic game)
         {
@@ -115,9 +117,11 @@ namespace Parapanic
             world.ambulance = ambulance;
 
             minimap = new Minimap.GPS(width, height, 2f, new Rectangle(width - 150, height - 120, 120, 90));
+            oldM = Mouse.GetState();
         }
 
         byte carUpdateTimer = 0;
+        MouseState oldM;
         public override void Update()
         {
             ambulance.Update(world);
@@ -136,7 +140,8 @@ namespace Parapanic
                     if (block is RoadBlock)
                         ((RoadBlock)block).InitializeType(world);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            MouseState m = Mouse.GetState();
+            if (m.LeftButton == ButtonState.Released && oldM.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(m.Position, pause))
             {
                 game.Level = new PauseMenu(game.GraphicsDevice, game, this);
             }
@@ -150,7 +155,7 @@ namespace Parapanic
             {
                 game.Level = new WinScreen(game.GraphicsDevice, game, ambulance.patientsSaved);
             }
-
+            oldM = m;
         }
 
        //const int numCarsOnMap = game.maxCars/(game.numLevels - game.ScoreMultiplier + 1);
@@ -208,6 +213,8 @@ namespace Parapanic
             spriteBatch.DrawString(font, "Score : " + game.Score, new Vector2(20, 15), Color.White);
 
             minimap.Draw(spriteBatch, game, world);
+
+            spriteBatch.Draw(game.Content.Load<Texture2D>("pause"), pause, Color.White);
         }
     }
 }

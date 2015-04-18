@@ -19,6 +19,8 @@ namespace Parapanic
         Rectangle b2;
         Rectangle b3;
 
+        MouseState oldMouseState;
+
         public PickALevel(Parapanic game)
         {
             this.game = game;
@@ -35,28 +37,32 @@ namespace Parapanic
             b1 = new Rectangle(50, 300, 200, 200);
             b2 = new Rectangle(400, 300, 200, 200);
             b3 = new Rectangle(750, 300, 200, 200);
+
+            oldMouseState = Mouse.GetState();
         }
 
         public override void Update()
         {
             MouseState mouse = Mouse.GetState();
 
-            if (mouse.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(mouse.Position, b1))
+            if (mouse.LeftButton == ButtonState.Released && oldMouseState.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(mouse.Position, b1))
             {
                 game.gameState = Parapanic.State.Game;
                 game.Level = l1;
             }
-            if (mouse.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(mouse.Position, b2))
+            if (mouse.LeftButton == ButtonState.Released && oldMouseState.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(mouse.Position, b2))
             {
                 game.gameState = Parapanic.State.Game;
                 game.Level = l2;
             }
-            if (mouse.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(mouse.Position, b3))
+            if (mouse.LeftButton == ButtonState.Released && oldMouseState.LeftButton == ButtonState.Pressed && Utilities.CheckCollision(mouse.Position, b3))
             {
                 game.gameState = Parapanic.State.Game;
                 game.Level = l3;
             }
             base.Update();
+
+            oldMouseState = mouse;
         }
 
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, Parapanic game)

@@ -85,7 +85,7 @@ namespace Parapanic
             pointsOfInterest.Add(patient2Poi);
 
 
-            int hospitalRegion = r.Next(4);
+            int hospitalRegion = (patientRegion + 2) % 4;
             Vector2 hospital =
                 new Vector2(BORDERWIDTH + r.Next(outerRegions[hospitalRegion].Left, BORDERWIDTH + outerRegions[hospitalRegion].Right),
                             BORDERHEIGHT + r.Next(outerRegions[hospitalRegion].Top, BORDERHEIGHT + outerRegions[hospitalRegion].Bottom));
